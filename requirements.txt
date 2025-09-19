@@ -4,4 +4,3 @@ pandas
 matplotlib
 numpy
 scipy
-math
