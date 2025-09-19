@@ -25,14 +25,14 @@ import pandas as pd
 # ==========================
 st.write("Para acciones argentinas agregar '.BA' al final del ticker. Por ejemplo: 'GGAL.BA'\n")
 
-ticker = st.text_input("📌 Ingrese el ticker de la acción (ej: AAPL): ").upper()
-start_date = input("📌 Ingrese la fecha de inicio (YYYY-MM-DD): ")
-end_date   = input("📌 Ingrese la fecha de fin (YYYY-MM-DD): ")
-interval   = input("📌 Ingrese la periodicidad (1d, 1wk, 1mo): ")
+ticker = st.text_st.text_input("📌 Ingrese el ticker de la acción (ej: AAPL): ").upper()
+start_date = st.text_input("📌 Ingrese la fecha de inicio (YYYY-MM-DD): ")
+end_date   = st.text_input("📌 Ingrese la fecha de fin (YYYY-MM-DD): ")
+interval   = st.text_input("📌 Ingrese la periodicidad (1d, 1wk, 1mo): ")
 
-r = float(input("📌 Ingrese la tasa libre de riesgo (ej: 0.05 para 5%): "))
-K = float(input("📌 Ingrese el precio strike: "))
-T = float(input("📌 Ingrese el tiempo al vencimiento (en años, ej: 0.5 = 6 meses): "))
+r = float(st.text_input("📌 Ingrese la tasa libre de riesgo (ej: 0.05 para 5%): "))
+K = float(st.text_input("📌 Ingrese el precio strike: "))
+T = float(st.text_input("📌 Ingrese el tiempo al vencimiento (en años, ej: 0.5 = 6 meses): "))
 
 # ==========================
 # 2. Descargar datos
@@ -49,11 +49,11 @@ returns = data['Return'].dropna()
 mean_return = returns.mean()
 std_return  = returns.std()
 
-print(f"\n📊 Estadísticas de {ticker}")
-print(f"\n— Parámetros —")
-print(f"Promedio retorno: {mean_return:.5f}")
-print(f"Desvío retorno:   {std_return:.5f}")
-print()
+st.write(f"\n📊 Estadísticas de {ticker}")
+st.write(f"\n— Parámetros —")
+st.write(f"Promedio retorno: {mean_return:.5f}")
+st.write(f"Desvío retorno:   {std_return:.5f}")
+st.write()
 
 # ==========================
 # 5. Histograma con campana normal
@@ -91,10 +91,10 @@ asimetria = skew(returns)
 curtosis_val = kurtosis(returns, fisher=False)  # fisher=True → curtosis "exceso" (0 = normal)
 curtosis_total = kurtosis(returns, fisher=True)
 
-print("\n📊 Asimetría y Curtosis de la serie de retornos")
-print(f"Asimetría: {asimetria:.4f}")
-print(f"Curtosis (total): {curtosis_val:.4f}")
-print(f"Curtosis (exceso): {curtosis_total:.4f}")
+st.write("\n📊 Asimetría y Curtosis de la serie de retornos")
+st.write(f"Asimetría: {asimetria:.4f}")
+st.write(f"Curtosis (total): {curtosis_val:.4f}")
+st.write(f"Curtosis (exceso): {curtosis_total:.4f}")
 
 # ==========================
 # 7. Volatilidad histórica y ajuste por intervalo
@@ -115,7 +115,7 @@ else:
 vol_daily = std_return
 vol_annual = vol_daily * np.sqrt(factor)
 
-print(f"\nVolatilidad anualizada: {vol_annual:.5f}")
+st.write(f"\nVolatilidad anualizada: {vol_annual:.5f}")
 
 # ==========================
 # 8. Black-Scholes
@@ -128,11 +128,11 @@ d2 = d1 - sigma * math.sqrt(T)
 Nd1 = norm.cdf(d1)
 Nd2 = norm.cdf(d2)
 
-print(f"\n— Black-Scholes —")
-print(f"d1 = {d1:.4f}")
-print(f"d2 = {d2:.4f}")
-print(f"Nd1 = {Nd1:.4f}")
-print(f"Nd2 = {Nd2:.4f}")
+st.write(f"\n— Black-Scholes —")
+st.write(f"d1 = {d1:.4f}")
+st.write(f"d2 = {d2:.4f}")
+st.write(f"Nd1 = {Nd1:.4f}")
+st.write(f"Nd2 = {Nd2:.4f}")
 
 # ==========================
 # 9. Precios de la opción
@@ -149,17 +149,17 @@ put_intrinsic  = max(K - S, 0)
 call_extrinsic = call_price - call_intrinsic
 put_extrinsic  = put_price - put_intrinsic
 
-print(f"\n💰 Precio Call (BS): {call_price:.2f}")
-print(f"   - Intrínseco: {call_intrinsic:.2f}")
-print(f"   - Extrínseco: {call_extrinsic:.2f}")
+st.write(f"\n💰 Precio Call (BS): {call_price:.2f}")
+st.write(f"   - Intrínseco: {call_intrinsic:.2f}")
+st.write(f"   - Extrínseco: {call_extrinsic:.2f}")
 
-print(f"\n💰 Precio Put  (BS): {put_price:.2f}")
-print(f"   - Intrínseco: {put_intrinsic:.2f}")
-print(f"   - Extrínseco: {put_extrinsic:.2f}")
+st.write(f"\n💰 Precio Put  (BS): {put_price:.2f}")
+st.write(f"   - Intrínseco: {put_intrinsic:.2f}")
+st.write(f"   - Extrínseco: {put_extrinsic:.2f}")
 
 """Volatilidad"""
 
-print("— Cantidad de desvíos —")
+st.write("— Cantidad de desvíos —")
 
 # ==========================
 # 2.1 Calcular Z-scores
@@ -170,9 +170,9 @@ z_scores = (returns - mean_return) / std_return
 mean_z = z_scores.mean()
 std_z  = z_scores.std()
 
-print()
-print(f"Media z-scores: {mean_z:.6f}")
-print(f"Desvío z-scores: {std_z:.6f}")
+st.write()
+st.write(f"Media z-scores: {mean_z:.6f}")
+st.write(f"Desvío z-scores: {std_z:.6f}")
 
 # ==========================
 # 2.3 Histograma de Z-Scores
@@ -205,15 +205,15 @@ plt.show()
 asimetriaz = skew(z_scores)
 curtosisz_val = kurtosis(z_scores, fisher=False)  # fisher=True → curtosis "exceso" (0 = normal)
 
-print("\n📊 Asimetría y Curtosis de la serie de Z-Scores")
-print(f"Asimetría: {asimetria:.4f}")
-print(f"Curtosis: {curtosis_val:.4f}")
+st.write("\n📊 Asimetría y Curtosis de la serie de Z-Scores")
+st.write(f"Asimetría: {asimetria:.4f}")
+st.write(f"Curtosis: {curtosis_val:.4f}")
 
 # ==========================
 # 2.5 Medias móviles
 # ==========================
 
-print("\n— Volatilidad móvil —")
+st.write("\n— Volatilidad móvil —")
 
 # --- Desvíos móviles (ventanas) calculados sobre data['Return'] para preservar índice ---
 std_20 = data['Return'].rolling(window=20).std()    # desvío móvil 20 períodos
@@ -241,10 +241,10 @@ plt.show()
 last_std20 = std_20.dropna().iloc[-1] if std_20.dropna().size>0 else np.nan
 last_std250 = std_250.dropna().iloc[-1] if std_250.dropna().size>0 else np.nan
 # Si annualizás, mostrar:
-print("\n📊 Estadísticas - Volatilidades anualizadas")
-print(f"Último Std 20 (anualizado): {(last_std20*np.sqrt(factor)*100):.6f}%")
-print(f"Último Std 250 (anualizado): {(last_std250*np.sqrt(factor)*100):.6f}%")
-print(f"Volatilidad constante del período (anualizada): {(vol_annual*100):.6f}%")
+st.write("\n📊 Estadísticas - Volatilidades anualizadas")
+st.write(f"Último Std 20 (anualizado): {(last_std20*np.sqrt(factor)*100):.6f}%")
+st.write(f"Último Std 250 (anualizado): {(last_std250*np.sqrt(factor)*100):.6f}%")
+st.write(f"Volatilidad constante del período (anualizada): {(vol_annual*100):.6f}%")
 
 """Value at Risk"""
 
@@ -256,7 +256,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # 1. Preguntar nivel de confianza
-conf = float(input("📌 Ingrese el nivel de confianza (ej: 0.95 para 95%): "))
+conf = float(st.text_input("📌 Ingrese el nivel de confianza (ej: 0.95 para 95%): "))
 alpha = 1 - conf
 
 # 2. Calcular percentil empírico (VaR)
@@ -271,11 +271,11 @@ suma_cola = cola.sum()
 conteo_cola = cola.count()
 CVaR_empirico = cola.mean()
 
-print(f"\n🔹 Nivel de confianza (una cola, izquierda): {conf*100:.1f}%")
-print(f"   ➤ VaR empírico ({alpha*100:.1f}%) = {VaR_empirico:.5f}")
-print(f"   ➤ CVaR empírico (Expected Shortfall) = {CVaR_empirico:.5f}")
-print(f"   ➤ Suma retornos cola = {suma_cola:.5f}")
-print(f"   ➤ Conteo retornos cola = {conteo_cola}")
+st.write(f"\n🔹 Nivel de confianza (una cola, izquierda): {conf*100:.1f}%")
+st.write(f"   ➤ VaR empírico ({alpha*100:.1f}%) = {VaR_empirico:.5f}")
+st.write(f"   ➤ CVaR empírico (Expected Shortfall) = {CVaR_empirico:.5f}")
+st.write(f"   ➤ Suma retornos cola = {suma_cola:.5f}")
+st.write(f"   ➤ Conteo retornos cola = {conteo_cola}")
 
 # 4. Graficar histograma con VaR y sombreado de la cola
 plt.figure(figsize=(10,6))
@@ -310,10 +310,10 @@ plt.grid(alpha=0.3)
 plt.show()
 
 # 5. Mostrar resultados finales
-print(f"\n📊 Resultados VaR y CVaR empírico")
-print(f"Nivel de confianza: {conf*100:.1f}%")
-print(f"En el {alpha*100:.2f}% de los casos, suponiendo una distribución normal de los retornos y bajo condiciones normales de mercado, {ticker} tendrá un rendimiento menor o igual a {VaR_empirico*100:.5f}%.")
-print(f"¿Qué podemos esperar si se rompe el VaR? Para saberlo es útil hacer uso del VaR Condicional (CVaR), que es el promedio de los retornos más allá de esa barrera. Para este caso el CVaR es {CVaR_empirico*100:.5f}%.")
+st.write(f"\n📊 Resultados VaR y CVaR empírico")
+st.write(f"Nivel de confianza: {conf*100:.1f}%")
+st.write(f"En el {alpha*100:.2f}% de los casos, suponiendo una distribución normal de los retornos y bajo condiciones normales de mercado, {ticker} tendrá un rendimiento menor o igual a {VaR_empirico*100:.5f}%.")
+st.write(f"¿Qué podemos esperar si se rompe el VaR? Para saberlo es útil hacer uso del VaR Condicional (CVaR), que es el promedio de los retornos más allá de esa barrera. Para este caso el CVaR es {CVaR_empirico*100:.5f}%.")
 
 """Simulación de Montecarlo"""
 
@@ -396,7 +396,7 @@ plt.axvline(K, color="red", linestyle="--", linewidth=2, label=f"Strike = {K}")
 mean_final = np.mean(final_prices)
 std_final  = np.std(final_prices)
 
-print()
+st.write()
 plt.axvline(mean_final, color="green", linestyle="--", linewidth=2, label=f"Media final: {mean_final:.2f}")
 plt.title(f"Distribución de precios finales - Monte Carlo ({ticker})")
 plt.xlabel("Precio al vencimiento (1 año)")
@@ -404,10 +404,10 @@ plt.ylabel("Frecuencia")
 plt.legend()
 plt.show()
 
-print("\n📊 Resultados Monte Carlo")
-print(f"Precio inicial: {S0:.2f}")
-print(f"Precio medio simulado a 1 año: {mean_final:.2f}")
-print(f"Desvío de precios finales: {std_final:.2f}")
+st.write("\n📊 Resultados Monte Carlo")
+st.write(f"Precio inicial: {S0:.2f}")
+st.write(f"Precio medio simulado a 1 año: {mean_final:.2f}")
+st.write(f"Desvío de precios finales: {std_final:.2f}")
 
 """VI"""
 
@@ -421,15 +421,15 @@ from scipy.optimize import brentq  # búsqueda de raíces
 # 1. Volatilidad Implícita (varios strikes)
 # ==========================
 
-n_opciones = int(input("📌 ¿Cuántas opciones desea ingresar? "))
+n_opciones = int(st.text_input("📌 ¿Cuántas opciones desea ingresar? "))
 
 resultados = []
 
 for i in range(n_opciones):
-    print(f"\n--- Opción {i+1} ---")
-    K_input = float(input("👉 Strike de la opción: "))
-    precio_opcion = float(input("👉 Precio de mercado de la opción: "))
-    tipo = input("👉 Tipo de opción (C para Call / P para Put): ").upper()
+    st.write(f"\n--- Opción {i+1} ---")
+    K_st.text_input = float(st.text_input("👉 Strike de la opción: "))
+    precio_opcion = float(st.text_input("👉 Precio de mercado de la opción: "))
+    tipo = st.text_input("👉 Tipo de opción (C para Call / P para Put): ").upper()
 
     # Función de Black-Scholes
     def black_scholes(S, K, T, r, sigma, tipo="C"):
@@ -442,21 +442,21 @@ for i in range(n_opciones):
 
     # Función objetivo
     def objective(sigma):
-        return black_scholes(S, K_input, T, r, sigma, tipo) - precio_opcion
+        return black_scholes(S, K_st.text_input, T, r, sigma, tipo) - precio_opcion
 
     try:
         iv = brentq(objective, 1e-6, 5)  # rango: 0.01% a 500% anual
-        resultados.append((K_input, tipo, precio_opcion, iv))
-        print(f"✅ Strike {K_input:.2f}, {tipo}: IV ≈ {iv*100:.2f}%")
+        resultados.append((K_st.text_input, tipo, precio_opcion, iv))
+        st.write(f"✅ Strike {K_st.text_input:.2f}, {tipo}: IV ≈ {iv*100:.2f}%")
     except ValueError:
-        print(f"⚠️ No se pudo encontrar IV para Strike {K_input:.2f}")
+        st.write(f"⚠️ No se pudo encontrar IV para Strike {K_st.text_input:.2f}")
 
 # ==========================
 # Mostrar tabla final
 # ==========================
-print("\n📊 Resultados de Volatilidad Implícita")
-for K_input, tipo, precio, iv in resultados:
-    print(f"Strike {K_input:.2f} | {tipo} | Precio {precio:.2f} | IV ≈ {iv*100:.2f}%")
+st.write("\n📊 Resultados de Volatilidad Implícita")
+for K_st.text_input, tipo, precio, iv in resultados:
+    st.write(f"Strike {K_st.text_input:.2f} | {tipo} | Precio {precio:.2f} | IV ≈ {iv*100:.2f}%")
 
 # ==========================
 # Gráfico: Sonrisa de Volatilidad
@@ -504,7 +504,7 @@ plt.show()
 # 3. Correlación explícita
 # ==========================
 correlacion = df_aux['Return'].corr(df_aux['Vol_Change'])
-print(f"\n📊 Correlación Retornos vs Cambio en Volumen: {correlacion:.4f}")
+st.write(f"\n📊 Correlación Retornos vs Cambio en Volumen: {correlacion:.4f}")
 
 
 # ==========================
@@ -515,11 +515,11 @@ vol_desvio = volumen.std()
 vol_max    = volumen.max()
 vol_min    = volumen.min()
 
-print(f"\n📊 Métricas de volumen para {ticker}")
-print(f"Promedio : {vol_media:,.0f}")
-print(f"Desvío   : {vol_desvio:,.0f}")
-print(f"Máximo   : {vol_max:,.0f}")
-print(f"Mínimo   : {vol_min:,.0f}")
+st.write(f"\n📊 Métricas de volumen para {ticker}")
+st.write(f"Promedio : {vol_media:,.0f}")
+st.write(f"Desvío   : {vol_desvio:,.0f}")
+st.write(f"Máximo   : {vol_max:,.0f}")
+st.write(f"Mínimo   : {vol_min:,.0f}")
 
 # ==========================
 # 5. Gráfico de barras de Volumen
@@ -582,8 +582,8 @@ total_lag1_positivo = count_pp + count_pn + count_svarp1
 prob_pp = count_pp / total_lag1_positivo
 prob_pn = count_pn / total_lag1_positivo
 
-print(f"Probabilidad positivo-positivo: {prob_pp*100:.2f}%")
-print(f"Probabilidad positivo-negativo: {prob_pn*100:.2f}%")
+st.write(f"Probabilidad positivo-positivo: {prob_pp*100:.2f}%")
+st.write(f"Probabilidad positivo-negativo: {prob_pn*100:.2f}%")
 
 # Filter momentum_data where 'Return_class' is 'Negativo'
 filtered_momentum_data_negativo = momentum_data[momentum_data['Return_class'] == 'Negativo']
@@ -596,8 +596,8 @@ total_lag1_negativo = count_np + count_nn + count_svarn1
 prob_nn = count_nn / total_lag1_negativo
 prob_np = count_np / total_lag1_negativo
 
-print(f"Probabilidad negativo-negativo: {prob_nn*100:.2f}%")
-print(f"Probabilidad negativo-positivo: {prob_np*100:.2f}%")
+st.write(f"Probabilidad negativo-negativo: {prob_nn*100:.2f}%")
+st.write(f"Probabilidad negativo-positivo: {prob_np*100:.2f}%")
 
 # ------------------------------------------------------------------------LAG2-----------------------------------------------------------------------------------------------
 
@@ -612,8 +612,8 @@ total_lag2_positivo = count_ppp + count_ppn + count_svarpp2
 prob_ppp = count_ppp / total_lag2_positivo
 prob_ppn = count_ppn / total_lag2_positivo
 
-print(f"Probabilidad positivo-positivo-positivo: {prob_ppp*100:.2f}%")
-print(f"Probabilidad positivo-positivo-negativo: {prob_ppn*100:.2f}%")
+st.write(f"Probabilidad positivo-positivo-positivo: {prob_ppp*100:.2f}%")
+st.write(f"Probabilidad positivo-positivo-negativo: {prob_ppn*100:.2f}%")
 
 # Filter momentum_data where 'Return_class' and 'Return_lag1' are 'Negativo'
 filtered_momentum_data_nn = momentum_data[(momentum_data['Return_class'] == 'Negativo') & (momentum_data['Return_lag1'] == 'Negativo')]
@@ -626,8 +626,8 @@ total_lag2_negativo = count_nnp + count_nnn + count_svarnn2
 prob_nnp = count_nnp / total_lag2_negativo
 prob_nnn = count_nnn / total_lag2_negativo
 
-print(f"Probabilidad negativo-negativo-positivo: {prob_nnp*100:.2f}%")
-print(f"Probabilidad negativo-negativo-negativo: {prob_nnn*100:.2f}%")
+st.write(f"Probabilidad negativo-negativo-positivo: {prob_nnp*100:.2f}%")
+st.write(f"Probabilidad negativo-negativo-negativo: {prob_nnn*100:.2f}%")
 
 # ------------------------------------------------------------------------LAG3-----------------------------------------------------------------------------------------------
 
@@ -642,8 +642,8 @@ total_lag3_positivo = count_pppp + count_pppn + count_svarpp3
 prob_pppp = count_pppp / total_lag3_positivo
 prob_pppn = count_pppn / total_lag3_positivo
 
-print(f"Probabilidad positivo-positivo-positivo-positivo: {prob_pppp*100:.2f}%")
-print(f"Probabilidad positivo-positivo-positivo-negativo: {prob_pppn*100:.2f}%")
+st.write(f"Probabilidad positivo-positivo-positivo-positivo: {prob_pppp*100:.2f}%")
+st.write(f"Probabilidad positivo-positivo-positivo-negativo: {prob_pppn*100:.2f}%")
 
 # Filter momentum_data where 'Return_class' and 'Return_lag1' are 'Negativo'
 filtered_momentum_data_nnn = momentum_data[(momentum_data['Return_class'] == 'Negativo') & (momentum_data['Return_lag1'] == 'Negativo') & (momentum_data['Return_lag2'] == 'Negativo')]
@@ -656,8 +656,8 @@ total_lag3_negativo = count_nnnp + count_nnnn + count_svarnn3
 prob_nnnp = count_nnnp / total_lag3_negativo
 prob_nnnn = count_nnnn / total_lag3_negativo
 
-print(f"Probabilidad negativo-negativo-negativo-positivo: {prob_nnnp*100:.2f}%")
-print(f"Probabilidad negativo-negativo-negativo-negativo: {prob_nnnn*100:.2f}%")
+st.write(f"Probabilidad negativo-negativo-negativo-positivo: {prob_nnnp*100:.2f}%")
+st.write(f"Probabilidad negativo-negativo-negativo-negativo: {prob_nnnn*100:.2f}%")
 
 # ------------------------------------------------------------------------LAG4-----------------------------------------------------------------------------------------------
 
@@ -672,8 +672,8 @@ total_lag4_positivo = count_ppppp + count_ppppn + count_svarppp3
 prob_ppppp = count_ppppp / total_lag4_positivo
 prob_ppppn = count_ppppn / total_lag4_positivo
 
-print(f"Probabilidad positivo-positivo-positivo-positivo-positivo: {prob_ppppp*100:.2f}%")
-print(f"Probabilidad positivo-positivo-positivo-positivo-negativo: {prob_ppppn*100:.2f}%")
+st.write(f"Probabilidad positivo-positivo-positivo-positivo-positivo: {prob_ppppp*100:.2f}%")
+st.write(f"Probabilidad positivo-positivo-positivo-positivo-negativo: {prob_ppppn*100:.2f}%")
 
 # Filter momentum_data where 'Return_class' and 'Return_lag1' are 'Negativo'
 filtered_momentum_data_nnnn = momentum_data[(momentum_data['Return_class'] == 'Negativo') & (momentum_data['Return_lag1'] == 'Negativo') & (momentum_data['Return_lag2'] == 'Negativo') & (momentum_data['Return_lag3'] == 'Negativo')]
@@ -686,8 +686,8 @@ total_lag4_negativo = count_nnnnp + count_nnnnn + count_svarnnn3
 prob_nnnnp = count_nnnnp / total_lag4_negativo
 prob_nnnnn = count_nnnnn / total_lag4_negativo
 
-print(f"Probabilidad negativo-negativo-negativo-negativo-positivo: {prob_nnnnp*100:.2f}%")
-print(f"Probabilidad negativo-negativo-negativo-negativo-negativo: {prob_nnnnn*100:.2f}%")
+st.write(f"Probabilidad negativo-negativo-negativo-negativo-positivo: {prob_nnnnp*100:.2f}%")
+st.write(f"Probabilidad negativo-negativo-negativo-negativo-negativo: {prob_nnnnn*100:.2f}%")
 
 momentum_data
 
@@ -713,16 +713,16 @@ import math
 # ==========================
 # 1. Preguntas al usuario
 # ==========================
-print("Para acciones argentinas agregar '.BA' al final del ticker. Por ejemplo: 'GGAL.BA'\n")
+st.write("Para acciones argentinas agregar '.BA' al final del ticker. Por ejemplo: 'GGAL.BA'\n")
 
-ticker = input("📌 Ingrese el ticker de la acción (ej: AAPL): ").upper()
-start_date = input("📌 Ingrese la fecha de inicio (YYYY-MM-DD): ")
-end_date   = input("📌 Ingrese la fecha de fin (YYYY-MM-DD): ")
-interval   = input("📌 Ingrese la periodicidad (1d, 1wk, 1mo): ")
+ticker = st.text_input("📌 Ingrese el ticker de la acción (ej: AAPL): ").upper()
+start_date = st.text_input("📌 Ingrese la fecha de inicio (YYYY-MM-DD): ")
+end_date   = st.text_input("📌 Ingrese la fecha de fin (YYYY-MM-DD): ")
+interval   = st.text_input("📌 Ingrese la periodicidad (1d, 1wk, 1mo): ")
 
-r = float(input("📌 Ingrese la tasa libre de riesgo (ej: 0.05 para 5%): "))
-K = float(input("📌 Ingrese el precio strike: "))
-T = float(input("📌 Ingrese el tiempo al vencimiento (en años, ej: 0.5 = 6 meses): "))
+r = float(st.text_input("📌 Ingrese la tasa libre de riesgo (ej: 0.05 para 5%): "))
+K = float(st.text_input("📌 Ingrese el precio strike: "))
+T = float(st.text_input("📌 Ingrese el tiempo al vencimiento (en años, ej: 0.5 = 6 meses): "))
 
 # ==========================
 # 2. Descargar datos
@@ -739,11 +739,11 @@ returns = data['Return'].dropna()
 mean_return = returns.mean()
 std_return  = returns.std()
 
-print(f"\n📊 Estadísticas de {ticker}")
-print(f"\n— Parámetros —")
-print(f"Promedio retorno: {mean_return:.5f}")
-print(f"Desvío retorno:   {std_return:.5f}")
-print()
+st.write(f"\n📊 Estadísticas de {ticker}")
+st.write(f"\n— Parámetros —")
+st.write(f"Promedio retorno: {mean_return:.5f}")
+st.write(f"Desvío retorno:   {std_return:.5f}")
+st.write()
 
 # ==========================
 # 4. Histograma
@@ -780,7 +780,7 @@ else:
 vol_daily = std_return
 vol_annual = vol_daily * np.sqrt(factor)
 
-print(f"\nVolatilidad anualizada: {vol_annual:.5f}")
+st.write(f"\nVolatilidad anualizada: {vol_annual:.5f}")
 
 # ==========================
 # 7. Black-Scholes
@@ -793,11 +793,11 @@ d2 = d1 - sigma * math.sqrt(T)
 Nd1 = norm.cdf(d1)
 Nd2 = norm.cdf(d2)
 
-print(f"\n— Black-Scholes —")
-print(f"d1 = {d1:.4f}")
-print(f"d2 = {d2:.4f}")
-print(f"Nd1 = {Nd1:.4f}")
-print(f"Nd2 = {Nd2:.4f}")
+st.write(f"\n— Black-Scholes —")
+st.write(f"d1 = {d1:.4f}")
+st.write(f"d2 = {d2:.4f}")
+st.write(f"Nd1 = {Nd1:.4f}")
+st.write(f"Nd2 = {Nd2:.4f}")
 
 # ==========================
 # 8. Precios de la opción
@@ -814,21 +814,21 @@ put_intrinsic  = max(K - S, 0)
 call_extrinsic = call_price - call_intrinsic
 put_extrinsic  = put_price - put_intrinsic
 
-print(f"\n💰 Precio Call (BS): {call_price:.2f}")
-print(f"   - Intrínseco: {call_intrinsic:.2f}")
-print(f"   - Extrínseco: {call_extrinsic:.2f}")
+st.write(f"\n💰 Precio Call (BS): {call_price:.2f}")
+st.write(f"   - Intrínseco: {call_intrinsic:.2f}")
+st.write(f"   - Extrínseco: {call_extrinsic:.2f}")
 
-print(f"\n💰 Precio Put  (BS): {put_price:.2f}")
-print(f"   - Intrínseco: {put_intrinsic:.2f}")
-print(f"   - Extrínseco: {put_extrinsic:.2f}")
-print()
+st.write(f"\n💰 Precio Put  (BS): {put_price:.2f}")
+st.write(f"   - Intrínseco: {put_intrinsic:.2f}")
+st.write(f"   - Extrínseco: {put_extrinsic:.2f}")
+st.write()
 
-print("— Volatilidad —")
+st.write("— Volatilidad —")
 
 # ==========================
 # 10. Pregunta al usuario
 # ==========================
-ver_distribucion = input("\n📌 ¿Desea conocer la distribución de los desvíos (Z-scores)? (s/n): ").lower()
+ver_distribucion = st.text_input("\n📌 ¿Desea conocer la distribución de los desvíos (Z-scores)? (s/n): ").lower()
 
 if ver_distribucion == "s":
    # Calcular media y desvío de los z-scores
@@ -837,9 +837,9 @@ if ver_distribucion == "s":
     z_std = np.std(z_scores)
 
     # Mostrar resultados en consola
-    print("\n📊 Resultados de Z-scores")
-    print(f"Media de z-scores: {z_mean:.4f}")
-    print(f"Desvío estándar de z-scores: {z_std:.4f}\n")
+    st.write("\n📊 Resultados de Z-scores")
+    st.write(f"Media de z-scores: {z_mean:.4f}")
+    st.write(f"Desvío estándar de z-scores: {z_std:.4f}\n")
 
     # Graficar histograma de z-scores
     plt.figure(figsize=(10,6))
@@ -861,5 +861,5 @@ if ver_distribucion == "s":
     plt.show()
 
 else:
-    print("\n✅ Éxitos con las inversiones!")
+    st.write("\n✅ Éxitos con las inversiones!")
 
