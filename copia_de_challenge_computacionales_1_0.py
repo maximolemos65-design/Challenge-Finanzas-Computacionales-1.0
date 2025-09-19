@@ -20,7 +20,7 @@ import pandas as pd
 # ==========================
 # 1. Preguntas al usuario
 # ==========================
-print("Para acciones argentinas agregar '.BA' al final del ticker. Por ejemplo: 'GGAL.BA'\n")
+st.write("Para acciones argentinas agregar '.BA' al final del ticker. Por ejemplo: 'GGAL.BA'\n")
 
 ticker = input("📌 Ingrese el ticker de la acción (ej: AAPL): ").upper()
 start_date = input("📌 Ingrese la fecha de inicio (YYYY-MM-DD): ")
@@ -859,4 +859,4 @@ if ver_distribucion == "s":
 
 else:
     print("\n✅ Éxitos con las inversiones!")
-    st.write("hola")
+
