@@ -25,7 +25,7 @@ import pandas as pd
 # ==========================
 st.write("Para acciones argentinas agregar '.BA' al final del ticker. Por ejemplo: 'GGAL.BA'\n")
 
-ticker = input("📌 Ingrese el ticker de la acción (ej: AAPL): ").upper()
+ticker = st.text_input("📌 Ingrese el ticker de la acción (ej: AAPL): ").upper()
 start_date = input("📌 Ingrese la fecha de inicio (YYYY-MM-DD): ")
 end_date   = input("📌 Ingrese la fecha de fin (YYYY-MM-DD): ")
 interval   = input("📌 Ingrese la periodicidad (1d, 1wk, 1mo): ")
