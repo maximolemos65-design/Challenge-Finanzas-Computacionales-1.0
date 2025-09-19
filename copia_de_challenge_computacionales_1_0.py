@@ -256,7 +256,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # 1. Preguntar nivel de confianza
-conf = float(st.text_input("📌 Ingrese el nivel de confianza (ej: 0.95 para 95%): "))
+conf = st.number_input(st.text_input("📌 Ingrese el nivel de confianza (ej: 0.95 para 95%): "))
 alpha = 1 - conf
 
 # 2. Calcular percentil empírico (VaR)
