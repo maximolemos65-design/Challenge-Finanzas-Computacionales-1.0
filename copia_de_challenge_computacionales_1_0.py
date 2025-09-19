@@ -1,3 +1,6 @@
+import streamlit as st
+
+
 # -*- coding: utf-8 -*-
 """Copia de Challenge Computacionales 1.0
 
