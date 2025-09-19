@@ -3,6 +3,6 @@ yfinance
 pandas
 matplotlib
 numpy
-matplotlib.pyplot
-scipy.stats
+matplotlib
+scipy
 math
