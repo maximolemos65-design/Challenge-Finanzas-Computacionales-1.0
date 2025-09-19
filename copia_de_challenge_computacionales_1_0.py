@@ -859,3 +859,4 @@ if ver_distribucion == "s":
 
 else:
     print("\n✅ Éxitos con las inversiones!")
+    st.write(hola)
