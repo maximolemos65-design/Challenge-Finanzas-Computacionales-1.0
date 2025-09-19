@@ -421,7 +421,7 @@ from scipy.optimize import brentq  # búsqueda de raíces
 # 1. Volatilidad Implícita (varios strikes)
 # ==========================
 
-n_opciones = int(st.text_input("📌 ¿Cuántas opciones desea ingresar? "))
+n_opciones = int(st.number_input("📌 ¿Cuántas opciones desea ingresar? "))
 
 resultados = []
 
