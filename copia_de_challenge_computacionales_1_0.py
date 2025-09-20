@@ -19,6 +19,7 @@ from scipy.stats import norm
 import math
 from scipy.stats import skew, kurtosis
 import pandas as pd
+from datetime import date, timedelta
 
 # ==========================
 # 1. Preguntas al usuario
