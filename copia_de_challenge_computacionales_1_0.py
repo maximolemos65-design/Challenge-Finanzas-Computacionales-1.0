@@ -31,8 +31,8 @@ end_date   = st.text_input("📌 Ingrese la fecha de fin (YYYY-MM-DD): ")
 interval   = st.text_input("📌 Ingrese la periodicidad (1d, 1wk, 1mo): ")
 
 r = float(st.number_input("📌 Ingrese la tasa libre de riesgo (ej: 0.05 para 5%): "))
-K = float(st.text_input("📌 Ingrese el precio strike: "))
-T = float(st.text_input("📌 Ingrese el tiempo al vencimiento (en años, ej: 0.5 = 6 meses): "))
+K = float(st.number_input("📌 Ingrese el precio strike: "))
+T = float(st.number_input("📌 Ingrese el tiempo al vencimiento (en años, ej: 0.5 = 6 meses): "))
 
 # ==========================
 # 2. Descargar datos
