@@ -26,9 +26,9 @@ from datetime import date, timedelta
 # ==========================
 st.write("Para acciones argentinas agregar '.BA' al final del ticker. Por ejemplo: 'GGAL.BA'\n")
 
-ticker = st.text_input("📌 Ingrese el ticker de la acción (ej: AAPL): ").upper()
-start_date = st.text_input("📌 Ingrese la fecha de inicio (YYYY-MM-DD): ")
-end_date   = st.text_input("📌 Ingrese la fecha de fin (YYYY-MM-DD): ")
+ticker = st.text_input("📌 Ingrese el ticker (ej: AAPL o GGAL.BA):", value="AAPL").strip().upper()
+start_date = st.date_input("🗓️ Fecha inicio", value=date.today() - timedelta(days=180))
+end_date   = st.date_input("🗓️ Fecha fin", value=date.today())
 interval   = st.text_input("📌 Ingrese la periodicidad (1d, 1wk, 1mo): ")
 
 r = float(st.number_input("📌 Ingrese la tasa libre de riesgo (ej: 0.05 para 5%): "))
