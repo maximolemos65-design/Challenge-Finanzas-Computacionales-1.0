@@ -68,7 +68,7 @@ if st.button("Calcular"):
     # ==========================
     # 5. Histograma con campana normal
     # ==========================
-    plt.figure(figsize=(8,5))
+   fig, ax = plt.subplots(figsize=(8,5))
     
     # Histograma en densidad
     count, bins, _ = plt.hist(returns, bins=50, density=True, edgecolor='black', alpha=0.7, label="Histograma")
