@@ -24,20 +24,28 @@ from datetime import date, timedelta
 # ==========================
 # 1. Preguntas al usuario
 # ==========================
-st.write("Para acciones argentinas agregar '.BA' al final del ticker. Por ejemplo: 'GGAL.BA'\n")
 
-ticker = st.text_input("📌 Ingrese el ticker (ej: AAPL o GGAL.BA):", value="AAPL").strip().upper()
-start_date = st.date_input("🗓️ Fecha inicio", value=date.today() - timedelta(days=180))
-end_date   = st.date_input("🗓️ Fecha fin", value=date.today())
-interval = st.selectbox(
-    "📌 Ingrese la periodicidad:",
-    ["1d", "1wk", "1mo"],   # opciones
-    index=0
-)
-r = float(st.number_input("📌 Ingrese la tasa libre de riesgo (ej: 0.05 para 5%): "))
-K = float(st.number_input("📌 Ingrese el precio strike: "))
-meses = float(st.number_input("📌 Ingrese el tiempo al vencimiento en meses (ej: para 6 meses ingresar 6): "))
-T = meses / 12
+with st.form("params"):
+  
+    st.write("Para acciones argentinas agregar '.BA' al final del ticker. Por ejemplo: 'GGAL.BA'\n")
+    
+    ticker = st.text_input("📌 Ingrese el ticker (ej: AAPL o GGAL.BA):", value="AAPL").strip().upper()
+    start_date = st.date_input("🗓️ Fecha inicio", value=date.today() - timedelta(days=180))
+    end_date   = st.date_input("🗓️ Fecha fin", value=date.today())
+    interval = st.selectbox(
+        "📌 Ingrese la periodicidad:",
+        ["1d", "1wk", "1mo"],   # opciones
+        index=0
+    )
+    r = float(st.number_input("📌 Ingrese la tasa libre de riesgo (ej: 0.05 para 5%): "))
+    K = float(st.number_input("📌 Ingrese el precio strike: "))
+    meses = float(st.number_input("📌 Ingrese el tiempo al vencimiento en meses (ej: para 6 meses ingresar 6): "))
+    T = meses / 12
+    
+    submitted = st.form_submit_button("Calcular")
+if not submitted:
+    st.info("Cargá los parámetros y hacé clic en **Calcular**.")
+    st.stop()
 
 # --- botón ---
 if st.button("Calcular"):
