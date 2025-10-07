@@ -24,8 +24,6 @@ from datetime import date, timedelta
 # ==========================
 # 1. Preguntas al usuario
 # ==========================
-
-with st.form("params"):
   
     st.write("Para acciones argentinas agregar '.BA' al final del ticker. Por ejemplo: 'GGAL.BA'\n")
     
@@ -42,10 +40,6 @@ with st.form("params"):
     meses = float(st.number_input("📌 Ingrese el tiempo al vencimiento en meses (ej: para 6 meses ingresar 6): "))
     T = meses / 12
     
-    submitted = st.form_submit_button("Calcular")
-if not submitted:
-    st.info("Cargá los parámetros y hacé clic en **Calcular**.")
-    st.stop()
 
 # --- botón ---
 if st.button("Calcular"):
