@@ -39,6 +39,9 @@ K = float(st.number_input("📌 Ingrese el precio strike: "))
 meses = float(st.number_input("📌 Ingrese el tiempo al vencimiento en meses (ej: para 6 meses ingresar 6): "))
 T = meses / 12
 
+# --- botón ---
+if st.button("Calcular"):
+
 # ==========================
 # 2. Descargar datos
 # ==========================
