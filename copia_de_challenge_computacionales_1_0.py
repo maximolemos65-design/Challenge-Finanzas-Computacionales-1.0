@@ -74,34 +74,34 @@ if st.button("Calcular"):
     # ==========================
     # 5. Histograma con campana normal
     # ==========================
-   fig, ax = plt.subplots(figsize=(8,5))
-
-   # Histograma en densidad
-   ax.hist(returns, bins=50, density=True, edgecolor='black', alpha=0.7, label="Histograma")
+      fig, ax = plt.subplots(figsize=(8,5))
    
-   # Rango para la curva normal
-   x = np.linspace(returns.min(), returns.max(), 1000)
-   pdf = norm.pdf(x, mean_return, std_return)
-   
-   # Campana normal
-   ax.plot(x, pdf, 'r-', linewidth=2, label="Normal teórica")
-   
-   # Líneas de media y desviaciones estándar
-   ax.axvline(mean_return, color='blue', linestyle='dashed', linewidth=2, label=f"Media: {mean_return:.4f}")
-   ax.axvline(mean_return + std_return, color='green', linestyle='dashed', linewidth=2, label=f"+1σ: {mean_return+std_return:.4f}")
-   ax.axvline(mean_return - std_return, color='green', linestyle='dashed', linewidth=2, label=f"-1σ: {mean_return-std_return:.4f}")
-   ax.axvline(mean_return + 2*std_return, color='green', linestyle='dashed', linewidth=2, label=f"+2σ: {mean_return+2*std_return:.4f}")
-   ax.axvline(mean_return - 2*std_return, color='green', linestyle='dashed', linewidth=2, label=f"-2σ: {mean_return-2*std_return:.4f}")
-   
-   # Estética
-   ax.set_title(f"Distribución de Retornos - {ticker}")
-   ax.set_xlabel("Retorno logarítmico")
-   ax.set_ylabel("Densidad")
-   ax.legend()
-   fig.tight_layout()
-   
-   # 👇 Mostrar en Streamlit
-   st.pyplot(fig)
+      # Histograma en densidad
+      ax.hist(returns, bins=50, density=True, edgecolor='black', alpha=0.7, label="Histograma")
+      
+      # Rango para la curva normal
+      x = np.linspace(returns.min(), returns.max(), 1000)
+      pdf = norm.pdf(x, mean_return, std_return)
+      
+      # Campana normal
+      ax.plot(x, pdf, 'r-', linewidth=2, label="Normal teórica")
+      
+      # Líneas de media y desviaciones estándar
+      ax.axvline(mean_return, color='blue', linestyle='dashed', linewidth=2, label=f"Media: {mean_return:.4f}")
+      ax.axvline(mean_return + std_return, color='green', linestyle='dashed', linewidth=2, label=f"+1σ: {mean_return+std_return:.4f}")
+      ax.axvline(mean_return - std_return, color='green', linestyle='dashed', linewidth=2, label=f"-1σ: {mean_return-std_return:.4f}")
+      ax.axvline(mean_return + 2*std_return, color='green', linestyle='dashed', linewidth=2, label=f"+2σ: {mean_return+2*std_return:.4f}")
+      ax.axvline(mean_return - 2*std_return, color='green', linestyle='dashed', linewidth=2, label=f"-2σ: {mean_return-2*std_return:.4f}")
+      
+      # Estética
+      ax.set_title(f"Distribución de Retornos - {ticker}")
+      ax.set_xlabel("Retorno logarítmico")
+      ax.set_ylabel("Densidad")
+      ax.legend()
+      fig.tight_layout()
+      
+      # 👇 Mostrar en Streamlit
+      st.pyplot(fig)
     
     # ==========================
     # 6. Asimetría y curtosis
