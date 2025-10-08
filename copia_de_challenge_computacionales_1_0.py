@@ -77,7 +77,7 @@ if st.button("Calcular"):
     plt.figure(figsize=(8,5))
    
    # Histograma en densidad
-   count, bins, _ = plt.hist(returns, bins=50, density=True, edgecolor='black', alpha=0.7, label="Histograma")
+    count, bins, _ = plt.hist(returns, bins=50, density=True, edgecolor='black', alpha=0.7, label="Histograma")
    
    # Rango para la curva normal
    x = np.linspace(min(returns), max(returns), 1000)
