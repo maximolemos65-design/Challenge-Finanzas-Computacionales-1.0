@@ -43,7 +43,7 @@ interval = st.selectbox(
 )
 r = float(st.number_input("📌 Ingrese la tasa libre de riesgo (ej: 0.05 para 5%): "))
 K = (st.number_input("📌 Ingrese el precio strike: "))
-meses = float(st.number_input("📌 Ingrese el tiempo al vencimiento en meses (ej: para 6 meses ingresar 6): "))
+meses = int(st.number_input("📌 Ingrese el tiempo al vencimiento en meses (ej: para 6 meses ingresar 6): "))
 T = meses / 12
     
 
