@@ -8,6 +8,13 @@ import streamlit as st
 
 #Original file is located at
    # https://colab.research.google.com/drive/1PNUdvTqWbnEgkl4HFlbbBm-6bb4tTs4c
+st.title("Calculadora Financiera — Derivados 1")
+st.caption("UADE • Challenge Computacionales 1.0")
+
+st.markdown(
+    "Esta app calcula estadísticas de retornos, volatilidad anualizada y precios de opciones con **Black-Scholes**. "
+    "Cargá los parámetros y apretá **Calcular**."
+)
 
 #Estadísticas básicas
 
