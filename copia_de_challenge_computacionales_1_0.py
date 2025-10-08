@@ -11,12 +11,6 @@ import streamlit as st
 
 #Estadísticas básicas
 
-st.set_page_config(
-    page_title="Calculadora Financiera",
-    page_icon="💹",
-    layout="wide"
-)
-
 import yfinance as yf
 import numpy as np
 import matplotlib.pyplot as plt
