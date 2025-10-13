@@ -263,38 +263,52 @@ if st.session_state.calculado:
     # 2.5 Medias móviles
     # ==========================
     
-    st.write("\n— Volatilidad móvil —")
+    # ==========================
+    #  Volatilidad móvil
+    # ==========================
     
-    # --- Desvíos móviles (ventanas) calculados sobre data['Return'] para preservar índice ---
-    std_20 = data['Return'].rolling(window=20).std()    # desvío móvil 20 períodos
-    std_250 = data['Return'].rolling(window=250).std()  # desvío móvil 250 períodos
+    st.markdown("### 📉 Volatilidad Móvil de los Retornos")
     
-    # Opcional: anualizar (descomentar si querés)
-    std_20_ann  = std_20 * np.sqrt(factor)
-    std_250_ann = std_250 * np.sqrt(factor)
+    # Verificar que existan los retornos en el DataFrame
+    if "Return" in data.columns and not data["Return"].dropna().empty:
     
-    # --- Gráfico ---
-    plt.figure(figsize=(12,6))
-    plt.plot(std_20.index, std_20_ann, '--', label='Std20 (anualizada)', color='orange')
-    plt.plot(std_250.index, std_250_ann, '--', label='Std250 (anualizada)', color='red')
-    plt.axhline(y=vol_annual, color='green', linestyle='--', linewidth=1.5, label=f'Std constante')
+        # --- Desvíos móviles (ventanas) calculados sobre data['Return'] ---
+        std_20 = data['Return'].rolling(window=20).std()
+        std_250 = data['Return'].rolling(window=250).std()
     
-    plt.title(f"Evolución del desvío estándar móvil de retornos - {ticker}")
-    plt.xlabel("Fecha")
-    plt.ylabel("Desvío estándar (por periodo)")
-    plt.legend()
-    plt.grid(alpha=0.3)
-    plt.tight_layout()
-    plt.show()
+        # --- Anualizar ---
+        std_20_ann = std_20 * np.sqrt(factor)
+        std_250_ann = std_250 * np.sqrt(factor)
     
-    # --- Valores recientes (por si querés ver números) ---
-    last_std20 = std_20.dropna().iloc[-1] if std_20.dropna().size>0 else np.nan
-    last_std250 = std_250.dropna().iloc[-1] if std_250.dropna().size>0 else np.nan
-    # Si annualizás, mostrar:
-    st.write("\n📊 Estadísticas - Volatilidades anualizadas")
-    st.write(f"Último Std 20 (anualizado): {(last_std20*np.sqrt(factor)*100):.6f}%")
-    st.write(f"Último Std 250 (anualizado): {(last_std250*np.sqrt(factor)*100):.6f}%")
-    st.write(f"Volatilidad constante del período (anualizada): {(vol_annual*100):.6f}%")
+        # --- Gráfico ---
+        fig, ax = plt.subplots(figsize=(12, 6))
+        ax.plot(std_20.index, std_20_ann, '--', label='Std20 (anualizada)', color='orange')
+        ax.plot(std_250.index, std_250_ann, '--', label='Std250 (anualizada)', color='red')
+        ax.axhline(y=vol_annual, color='green', linestyle='--', linewidth=1.5, label='Std constante')
+    
+        ax.set_title(f"Evolución del Desvío Estándar Móvil de Retornos - {ticker}")
+        ax.set_xlabel("Fecha")
+        ax.set_ylabel("Desvío estándar (anualizado)")
+        ax.legend()
+        ax.grid(alpha=0.3)
+        plt.tight_layout()
+    
+        # Mostrar gráfico en la app
+        st.pyplot(fig)
+    
+        # --- Cálculo de valores recientes ---
+        last_std20 = std_20.dropna().iloc[-1] if std_20.dropna().size > 0 else np.nan
+        last_std250 = std_250.dropna().iloc[-1] if std_250.dropna().size > 0 else np.nan
+    
+        # --- Mostrar estadísticas ---
+        st.markdown("#### 📊 Estadísticas de Volatilidades Anualizadas Recientes")
+        st.write(f"**Último Std 20:** {(last_std20 * np.sqrt(factor) * 100):.4f}%")
+        st.write(f"**Último Std 250:** {(last_std250 * np.sqrt(factor) * 100):.4f}%")
+        st.write(f"**Volatilidad constante (anualizada):** {(vol_annual * 100):.4f}%")
+    
+    else:
+        st.warning("⚠️ No se encontraron datos de retornos para calcular la volatilidad móvil.")
+
     
     """Value at Risk"""
     
