@@ -45,6 +45,7 @@ r = float(st.number_input("📌 Ingrese la tasa libre de riesgo (ej: 0.05 para 5
 K = (st.number_input("📌 Ingrese el precio strike: "))
 meses = int(st.number_input("📌 Ingrese el tiempo al vencimiento en meses (ej: para 6 meses ingresar 6): "))
 T = meses / 12
+S = float(data['Close'].iloc[-1])  # Último precio spot
     
 
 # --- botón ---
@@ -135,7 +136,6 @@ if st.button("Calcular"):
     # ==========================
     # 8. Black-Scholes
     # ==========================
-    S = float(data['Close'].iloc[-1])  # Último precio spot
     sigma = float(vol_annual)
     
     d1 = (math.log(S/K) + (r + 0.5*sigma**2)*T) / (sigma * math.sqrt(T))
@@ -266,9 +266,6 @@ if st.button("Calcular"):
     # ==========================
     # 14. Value at Risk (VaR empírico) + Conditional VaR con sombreado
     # ==========================
-    
-    import numpy as np
-    import matplotlib.pyplot as plt
     
     # 1. Preguntar nivel de confianza
     conf = st.number_input(st.text_input("📌 Ingrese el nivel de confianza (ej: 0.95 para 95%): "))
