@@ -187,7 +187,7 @@ if st.session_state.calculado:
     st.write(f"   - Intrínseco: {put_intrinsic:.2f}")
     st.write(f"   - Extrínseco: {put_extrinsic:.2f}")
     
-    """Volatilidad"""
+    st.markdown("#### 📈 Volatilidad")
     
     st.write("— Cantidad de desvíos —")
     
@@ -207,27 +207,47 @@ if st.session_state.calculado:
     # ==========================
     # 2.3 Histograma de Z-Scores
     # ==========================
-    plt.figure(figsize=(8,5))
-    plt.hist(z_scores, bins=40, edgecolor='black', alpha=0.7, density=True, label="Z-Scores observados")
     
-    # Curva normal estándar
-    x = np.linspace(-4, 4, 200)
-    plt.plot(x, norm.pdf(x, 0, 1), 'r-', lw=2, label="N(0,1) teórica")
+    st.markdown("### 🧮 Distribución de Z-Scores")
     
-    # Líneas de referencia
-    plt.axvline(0, color='blue', linestyle='dashed', linewidth=2, label=f"Media=0: {mean_z:.4f}")
-    plt.axvline(1, color='green', linestyle='dashed', linewidth=1, label=f"+1σ: {mean_z+std_z:.4f}")
-    plt.axvline(-1, color='green', linestyle='dashed', linewidth=1, label=f"-1σ: {mean_z-std_z:.4f}")
+    # Verificar que existan los z-scores
+    if "z_scores" in locals() and not isinstance(z_scores, type(None)) and len(z_scores) > 0:
     
-    # Texto con valores
-    plt.text(2.5, 0.35, f"μ_ret = {mean_return:.5f}\nσ_ret = {std_return:.5f}\nμ_z = {mean_z:.5f}\nσ_z = {std_z:.5f}",
-             bbox=dict(facecolor='white', alpha=0.7))
+        # Crear figura y ejes
+        fig, ax = plt.subplots(figsize=(8, 5))
     
-    plt.title(f"Distribución de Z-Scores - {ticker}")
-    plt.xlabel("Z-Score (zt)")
-    plt.ylabel("Densidad")
-    plt.legend()
-    plt.show()
+        # Histograma de los z-scores
+        ax.hist(z_scores, bins=40, edgecolor='black', alpha=0.7, density=True, label="Z-Scores observados")
+    
+        # Curva normal estándar teórica
+        x = np.linspace(-4, 4, 200)
+        ax.plot(x, norm.pdf(x, 0, 1), 'r-', lw=2, label="N(0,1) teórica")
+    
+        # Líneas de referencia
+        ax.axvline(0, color='blue', linestyle='dashed', linewidth=2, label=f"Media=0: {mean_z:.4f}")
+        ax.axvline(1, color='green', linestyle='dashed', linewidth=1, label=f"+1σ: {mean_z+std_z:.4f}")
+        ax.axvline(-1, color='green', linestyle='dashed', linewidth=1, label=f"-1σ: {mean_z-std_z:.4f}")
+    
+        # Texto con resumen de parámetros
+        ax.text(
+            2.5, 0.35,
+            f"μ_ret = {mean_return:.5f}\nσ_ret = {std_return:.5f}\nμ_z = {mean_z:.5f}\nσ_z = {std_z:.5f}",
+            bbox=dict(facecolor='white', alpha=0.7)
+        )
+    
+        # Estética
+        ax.set_title(f"Distribución de Z-Scores - {ticker}")
+        ax.set_xlabel("Z-Score (zt)")
+        ax.set_ylabel("Densidad")
+        ax.legend()
+        ax.grid(alpha=0.3)
+    
+        # Mostrar gráfico en Streamlit
+        st.pyplot(fig)
+    
+    else:
+        st.warning("⚠️ No hay datos de Z-Scores disponibles. Calculá los retornos primero.")
+
     
     # ==========================
     # 2.4 Asimetría y curtosis de Z-Scores
