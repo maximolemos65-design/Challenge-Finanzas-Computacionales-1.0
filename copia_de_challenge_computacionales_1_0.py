@@ -770,6 +770,7 @@ vol = st.selectbox("🌪️ Volatilidad:", df_estrategias["Volatilidad"].unique(
 # ==========================
 # 3. Botón y resultado
 # ==========================
+# --- Botón y resultado ---
 if st.button("Buscar Estrategia"):
     resultado = df_estrategias[
         (df_estrategias["Objetivo"].str.lower() == obj.lower()) &
@@ -781,92 +782,92 @@ if st.button("Buscar Estrategia"):
         recommended_strategy = resultado["Estrategia"].values[0]
         st.success(f"✅ Estrategia recomendada: **{recommended_strategy}**")
 
-         # Suponiendo que ya tenés definidas estas variables:
-         # S, T, r, sigma, ticker, recommended_strategy
-         
-         if recommended_strategy == "Compra CALL":
-             st.subheader("📘 Estrategia: Compra de CALL")
-         
-             st.write(
-                 "Comprar un **call (opción de compra)** te da el **derecho, pero no la obligación**, "
-                 "de comprar el activo subyacente a un precio determinado (strike) hasta la fecha de vencimiento."
-             )
-         
-             # ==========================
-             # Black-Scholes Call
-             # ==========================
-             K = S * 1.02  # Strike del call (ligeramente OTM)
-         
-             def black_scholes_call(S, K, T, r, sigma):
-                 """Calcula el precio de un call europeo con Black-Scholes"""
-                 d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
-                 d2 = d1 - sigma * math.sqrt(T)
-                 call_price = S * norm.cdf(d1) - K * math.exp(-r * T) * norm.cdf(d2)
-                 return call_price
-         
-             # ==========================
-             # Cálculo prima
-             # ==========================
-             prima = black_scholes_call(S, K, T, r, sigma)
-         
-             # ==========================
-             # Payoff al vencimiento
-             # ==========================
-             S_range = np.linspace(S * 0.7, S * 1.3, 100)
-             payoff_call = np.maximum(S_range - K, 0) - prima  # beneficio neto
-         
-             # Punto de equilibrio
-             breakeven = K + prima
-         
-             # ==========================
-             # Ejemplo y descripción
-             # ==========================
-             st.markdown(
-                 f"""
-                 **Ejemplo práctico**
-         
-                 Compra de un call sobre **{ticker}** con base **{K:.2f}**, vencimiento en **{T*12:.0f} meses**,  
-                 y una prima de **${prima:.2f}** tendría el siguiente resultado al vencimiento:
-                 """
-             )
-         
-             # ==========================
-             # Gráfico de payoff
-             # ==========================
-             plt.figure(figsize=(10, 6))
-             plt.plot(S_range, payoff_call, label="Payoff Call", color="blue", linewidth=2)
-         
-             # Líneas de referencia
-             plt.axhline(0, color="black", linestyle="--", linewidth=1)
-             plt.axvline(K, color="red", linestyle="--", linewidth=1, label=f"Strike = {K:.2f}")
-             plt.axvline(S, color="green", linestyle="--", linewidth=1, label=f"S actual = {S:.2f}")
-             plt.axvline(breakeven, color="orange", linestyle="--", linewidth=1.5, label=f"Breakeven = {breakeven:.2f}")
-         
-             # Estética
-             plt.title("Payoff de un Call Europeo al Vencimiento")
-             plt.xlabel("Precio del subyacente al vencimiento")
-             plt.ylabel("Beneficio / Pérdida")
-             plt.legend()
-             plt.grid(alpha=0.3)
-         
-             st.pyplot(plt)
-             plt.close()
-         
-             # ==========================
-             # Información resumen
-             # ==========================
-             st.markdown("### 📊 Resumen de la Estrategia")
-         
-             st.write(f"**Prima del call:** ${prima:.2f}")
-             st.write(f"**Costo total:** ${prima:.2f}")
-             st.write(f"**Pérdida máxima:** ${prima:.2f} (si S < {K:.2f})")
-             st.write("**Ganancia máxima:** Ilimitada 🚀")
-             st.write(f"**Breakeven:** {breakeven:.2f}  →  variación necesaria: {(breakeven/S - 1)*100:.2f}%")
-         
-             st.success("💡 Una compra de CALL es ideal para escenarios con expectativa **alcista** y volatilidad **moderada o creciente**.")
+        # Suponiendo que ya tenés definidas estas variables:
+        # S, T, r, sigma, ticker
 
-          else:
-              st.warning("⚠️ No se encontró una estrategia que cumpla esas condiciones.")
+        if recommended_strategy == "Compra CALL":
+            st.subheader("📘 Estrategia: Compra de CALL")
+
+            st.write(
+                "Comprar un **call (opción de compra)** te da el **derecho, pero no la obligación**, "
+                "de comprar el activo subyacente a un precio determinado (strike) hasta la fecha de vencimiento."
+            )
+
+            # ==========================
+            # Black-Scholes Call
+            # ==========================
+            K = S * 1.02  # Strike del call (ligeramente OTM)
+
+            def black_scholes_call(S, K, T, r, sigma):
+                """Calcula el precio de un call europeo con Black-Scholes"""
+                d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
+                d2 = d1 - sigma * math.sqrt(T)
+                call_price = S * norm.cdf(d1) - K * math.exp(-r * T) * norm.cdf(d2)
+                return call_price
+
+            # ==========================
+            # Cálculo prima
+            # ==========================
+            prima = black_scholes_call(S, K, T, r, sigma)
+
+            # ==========================
+            # Payoff al vencimiento
+            # ==========================
+            S_range = np.linspace(S * 0.7, S * 1.3, 100)
+            payoff_call = np.maximum(S_range - K, 0) - prima  # beneficio neto
+
+            # Punto de equilibrio
+            breakeven = K + prima
+
+            # ==========================
+            # Ejemplo y descripción
+            # ==========================
+            st.markdown(
+                f"""
+                **Ejemplo práctico**
+
+                Compra de un call sobre **{ticker}** con base **{K:.2f}**, vencimiento en **{T*12:.0f} meses**,  
+                y una prima de **${prima:.2f}** tendría el siguiente resultado al vencimiento:
+                """
+            )
+
+            # ==========================
+            # Gráfico de payoff
+            # ==========================
+            plt.figure(figsize=(10, 6))
+            plt.plot(S_range, payoff_call, label="Payoff Call", color="blue", linewidth=2)
+
+            # Líneas de referencia
+            plt.axhline(0, color="black", linestyle="--", linewidth=1)
+            plt.axvline(K, color="red", linestyle="--", linewidth=1, label=f"Strike = {K:.2f}")
+            plt.axvline(S, color="green", linestyle="--", linewidth=1, label=f"S actual = {S:.2f}")
+            plt.axvline(breakeven, color="orange", linestyle="--", linewidth=1.5, label=f"Breakeven = {breakeven:.2f}")
+
+            # Estética
+            plt.title("Payoff de un Call Europeo al Vencimiento")
+            plt.xlabel("Precio del subyacente al vencimiento")
+            plt.ylabel("Beneficio / Pérdida")
+            plt.legend()
+            plt.grid(alpha=0.3)
+
+            st.pyplot(plt)
+            plt.close()
+
+            # ==========================
+            # Información resumen
+            # ==========================
+            st.markdown("### 📊 Resumen de la Estrategia")
+
+            st.write(f"**Prima del call:** ${prima:.2f}")
+            st.write(f"**Costo total:** ${prima:.2f}")
+            st.write(f"**Pérdida máxima:** ${prima:.2f} (si S < {K:.2f})")
+            st.write("**Ganancia máxima:** Ilimitada 🚀")
+            st.write(f"**Breakeven:** {breakeven:.2f}  →  variación necesaria: {(breakeven/S - 1)*100:.2f}%")
+
+            st.success("💡 Una compra de CALL es ideal para escenarios con expectativa **alcista** y volatilidad **moderada o creciente**.")
+    else:
+        st.warning("⚠️ No se encontró una estrategia que cumpla esas condiciones.")
+
 
 
 
