@@ -319,8 +319,12 @@ if st.session_state.calculado:
     st.markdown("### 💥 Value at Risk (VaR) Empírico")
     
     # 1️⃣ Input: nivel de confianza
-    conf_input = st.text_input("📌 Ingrese el nivel de confianza (ej: 0.95 para 95%):", value="0.95")
-    
+    conf_input = st.text_input(
+        "📌 Ingrese el nivel de confianza (ej: 0.95 para 95%):",
+        value="0.95",
+        key="confianza_input"
+    )
+
     # Validar y convertir
     try:
         conf = float(conf_input)
