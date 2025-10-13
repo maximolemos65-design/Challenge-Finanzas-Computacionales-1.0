@@ -705,13 +705,3 @@ if st.button("Calcular"):
     
     momentum_data
     
-    # ideas posibles
-    # montecarlo OK
-    # VaR OK
-    # volatilidad implicita poniendo una base y su precio YA FUE PQ NO TENEMOS EN CUENTA DIVIDENDOS DIFIERE CON TRADINGVIEW
-    # grafico de serie de precio OK
-    # hacerlo mas interactivo (consultarle al usuario si le gustaria ver tal información, consultarle si quisiera más explicación sobre un concepto)
-    # curtosis y asimetria OK
-    # analisis de volumen? AGREGAR GRAFICO DE BARRAS
-    # planillas?No creo, a lo sumo letras griegas
-    # flourish ver por graficos dinamicos
