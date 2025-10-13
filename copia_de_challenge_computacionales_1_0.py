@@ -71,34 +71,49 @@ if st.session_state.calculado:
     st.write(f"Desvío retorno:   {std_return*100:.2f}%")
     st.write()
     
-    # ==========================
+    
+   # ==========================
     # 5. Histograma con campana normal
     # ==========================
-    plt.figure(figsize=(8,5))
-   
-   # Histograma en densidad
-    count, bins, _ = plt.hist(returns, bins=50, density=True, edgecolor='black', alpha=0.7, label="Histograma")
-   
-   # Rango para la curva normal
-    x = np.linspace(min(returns), max(returns), 1000)
-    pdf = norm.pdf(x, mean_return, std_return)
-   
-   # Graficar campana normal
-    plt.plot(x, pdf, 'r-', linewidth=2, label="Normal teórica")
-   
-   # Líneas de media y desviaciones estándar
-    plt.axvline(mean_return, color='blue', linestyle='dashed', linewidth=2, label=f"Media: {mean_return:.4f}")
-    plt.axvline(mean_return + std_return, color='green', linestyle='dashed', linewidth=2, label=f"+1σ: {mean_return+std_return:.4f}")
-    plt.axvline(mean_return - std_return, color='green', linestyle='dashed', linewidth=2, label=f"-1σ: {mean_return-std_return:.4f}")
-    plt.axvline(mean_return + 2*std_return, color='green', linestyle='dashed', linewidth=2, label=f"+2σ: {mean_return+2*std_return:.4f}")
-    plt.axvline(mean_return - 2*std_return, color='green', linestyle='dashed', linewidth=2, label=f"-2σ: {mean_return-2*std_return:.4f}")
-   
-   # Estética del gráfico
-    plt.title(f"Distribución de Retornos - {ticker}")
-    plt.xlabel("Retorno logarítmico")
-    plt.ylabel("Densidad")
-    plt.legend()
-    plt.show()
+    
+    st.markdown("### 📈 Distribución de Retornos con Campana Normal")
+    
+    # Verificar que existan datos de retornos
+    if "returns" in locals() and not returns.empty:
+    
+        # Crear la figura y los ejes
+        fig, ax = plt.subplots(figsize=(8, 5))
+    
+        # Histograma de retornos (densidad)
+        count, bins, _ = ax.hist(returns, bins=50, density=True, edgecolor='black', alpha=0.7, label="Histograma")
+    
+        # Rango para la curva normal
+        x = np.linspace(min(returns), max(returns), 1000)
+        pdf = norm.pdf(x, mean_return, std_return)
+    
+        # Graficar campana normal teórica
+        ax.plot(x, pdf, 'r-', linewidth=2, label="Normal teórica")
+    
+        # Líneas de media y desviaciones estándar
+        ax.axvline(mean_return, color='blue', linestyle='dashed', linewidth=2, label=f"Media: {mean_return:.4f}")
+        ax.axvline(mean_return + std_return, color='green', linestyle='dashed', linewidth=2, label=f"+1σ: {mean_return+std_return:.4f}")
+        ax.axvline(mean_return - std_return, color='green', linestyle='dashed', linewidth=2, label=f"-1σ: {mean_return-std_return:.4f}")
+        ax.axvline(mean_return + 2*std_return, color='green', linestyle='dashed', linewidth=2, label=f"+2σ: {mean_return+2*std_return:.4f}")
+        ax.axvline(mean_return - 2*std_return, color='green', linestyle='dashed', linewidth=2, label=f"-2σ: {mean_return-2*std_return:.4f}")
+    
+        # Estética del gráfico
+        ax.set_title(f"Distribución de Retornos - {ticker}")
+        ax.set_xlabel("Retorno logarítmico")
+        ax.set_ylabel("Densidad")
+        ax.legend()
+        ax.grid(alpha=0.3)
+    
+        # Mostrar en Streamlit
+        st.pyplot(fig)
+    
+    else:
+        st.warning("⚠️ No hay datos de retornos disponibles. Calculá los retornos primero.")
+
 
     # ==========================
     # 6. Asimetría y curtosis
