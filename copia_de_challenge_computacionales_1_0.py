@@ -339,9 +339,9 @@ if st.session_state.calculado:
     
             # 4️⃣ Mostrar resultados
             st.success(f"🔹 Nivel de confianza: **{conf*100:.1f}%**")
-            st.write(f"📉 **VaR empírico ({alpha*100:.1f}%):** {VaR_empirico:.5f}")
-            st.write(f"📊 **CVaR (Expected Shortfall):** {CVaR_empirico:.5f}")
-            st.write(f"Σ Retornos cola: {suma_cola:.5f}")
+            st.write(f"📉 **VaR empírico ({alpha*100:.1f}%):** {VaR_empirico*100:.2f}%")
+            st.write(f"📊 **CVaR (Expected Shortfall):** {CVaR_empirico*100:.2f}%")
+            st.write(f"Σ Retornos cola: {suma_cola:.2f}")
             st.write(f"Conteo de observaciones en cola: {conteo_cola}")
     
         else:
