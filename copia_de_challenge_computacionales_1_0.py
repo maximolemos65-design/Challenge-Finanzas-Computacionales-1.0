@@ -428,59 +428,62 @@ if st.session_state.calculado:
     # ==========================
     # returns ya lo tenés calculado antes
     # Calcular cambio porcentual en volumen
-    volumen = data['Volume'].squeeze()   # para que sea Serie
-    vol_change = volumen.pct_change()
     
-    # Combinar en un DataFrame
-    df_aux = pd.DataFrame({
-        "Return": returns,
-        "Vol_Change": vol_change
-    }).dropna()
+    st.markdown("### 📊 Relación entre Retornos y Volumen")
     
-    # ==========================
-    # 2. Gráfico de dispersión
-    # ==========================
-    plt.figure(figsize=(8,5))
-    plt.scatter(df_aux['Return'], df_aux['Vol_Change'], alpha=0.5, color="purple")
-    plt.title(f"Relación entre Retornos y Cambio en Volumen - {ticker}")
-    plt.xlabel("Retornos")
-    plt.ylabel("Cambio en Volumen (%)")
-    plt.grid(alpha=0.3)
-    plt.show()
+    # Verificar que existan los datos
+    if "data" in locals() and not data.empty:
     
-    # ==========================
-    # 3. Correlación explícita
-    # ==========================
-    correlacion = df_aux['Return'].corr(df_aux['Vol_Change'])
-    st.write(f"\n📊 Correlación Retornos vs Cambio en Volumen: {correlacion:.4f}")
+        # --- 1. Preparar datos ---
+        volumen = data["Volume"].squeeze()
+        vol_media = volumen.mean()
+        vol_ratio = volumen / vol_media if vol_media != 0 else pd.Series(np.nan, index=volumen.index)
     
+        df_aux = pd.DataFrame({
+            "Return": returns,
+            "Vol_Ratio": vol_ratio
+        }).dropna()
     
-    # ==========================
-    # 4. Estadísticas
-    # ==========================
-    vol_media  = volumen.mean()
-    vol_desvio = volumen.std()
-    vol_max    = volumen.max()
-    vol_min    = volumen.min()
+        # --- 2. Estadísticas ---
+        vol_desvio = volumen.std()
+        vol_max = volumen.max()
+        vol_min = volumen.min()
     
-    st.write(f"\n📊 Métricas de volumen para {ticker}")
-    st.write(f"Promedio : {vol_media:,.0f}")
-    st.write(f"Desvío   : {vol_desvio:,.0f}")
-    st.write(f"Máximo   : {vol_max:,.0f}")
-    st.write(f"Mínimo   : {vol_min:,.0f}")
+        # Mostrar métricas en columnas
+        col1, col2, col3, col4 = st.columns(4)
+        col1.metric("📈 Promedio Volumen", f"{vol_media:,.0f}")
+        col2.metric("📉 Desvío", f"{vol_desvio:,.0f}")
+        col3.metric("🔝 Máximo", f"{vol_max:,.0f}")
+        col4.metric("🔻 Mínimo", f"{vol_min:,.0f}")
     
-    # ==========================
-    # 5. Gráfico de barras de Volumen
-    # ==========================
-    plt.figure(figsize=(12, 6))
-    plt.bar(volumen.index, volumen.values, width=1, color='purple', alpha=0.7)
-    plt.title(f"Volumen de negociación a lo largo del tiempo - {ticker}")
-    plt.xlabel("Fecha")
-    plt.ylabel("Volumen")
-    plt.grid(axis='y', alpha=0.5)
-    plt.xticks(volumen.index[::len(volumen)//10], rotation=45) # Set x-axis ticks to a subset of dates
-    plt.tight_layout() # Adjust layout to prevent labels overlapping
-    plt.show()
+        # --- 3. Gráfico de dispersión ---
+        st.markdown("#### 🔹 Dispersión: Retornos vs Proporción del Volumen Promedio")
+        fig1, ax1 = plt.subplots(figsize=(8, 5))
+        ax1.scatter(df_aux["Return"], df_aux["Vol_Ratio"], alpha=0.5, color="purple")
+        ax1.set_title(f"Relación entre Retornos y Volumen Promedio - {ticker}")
+        ax1.set_xlabel("Retornos")
+        ax1.set_ylabel("Volumen observado / Promedio")
+        ax1.grid(alpha=0.3)
+        st.pyplot(fig1)
+    
+        # --- 4. Gráfico de barras del volumen ---
+        st.markdown("#### 🔹 Volumen de negociación a lo largo del tiempo")
+        fig2, ax2 = plt.subplots(figsize=(12, 6))
+        ax2.bar(volumen.index, volumen.values, width=1, color="purple", alpha=0.7)
+        ax2.set_title(f"Volumen de negociación - {ticker}")
+        ax2.set_xlabel("Fecha")
+        ax2.set_ylabel("Volumen")
+        ax2.grid(axis="y", alpha=0.5)
+        # Ajustar etiquetas de fechas (si hay muchas)
+        if len(volumen) > 10:
+            ax2.set_xticks(volumen.index[::len(volumen)//10])
+            ax2.set_xticklabels(volumen.index[::len(volumen)//10].strftime("%Y-%m-%d"), rotation=45)
+        plt.tight_layout()
+        st.pyplot(fig2)
+    
+    else:
+        st.warning("⚠️ Aún no se cargaron datos. Presioná *Calcular* primero.")
+
     
     """Momentum - Variaciones"""
     
