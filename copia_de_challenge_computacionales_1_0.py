@@ -65,9 +65,8 @@ if st.button("Calcular"):
     mean_return = returns.mean()
     std_return  = returns.std()
     
-    st.write(f"\n📊 Estadísticas de {ticker}")
-    st.write(f"\n— Parámetros —")
-    st.write(f"Promedio retorno: {mean_return*100:.2f}%")
+    st.caption(f"\n📊 Retornos y distribución de {ticker}")
+    st.write(f"\nPromedio retorno: {mean_return*100:.2f}%")
     st.write(f"Desvío retorno:   {std_return*100:.2f}%")
     st.write()
     
