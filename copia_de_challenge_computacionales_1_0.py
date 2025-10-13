@@ -357,7 +357,6 @@ if st.session_state.calculado:
     simulaciones = np.zeros((N+1, n_simulaciones))   # incluye S0
     S0 = float(data['Close'].iloc[-1])   # ✅ escalar
     mu = mean_return
-    sigma = std_return
     dt = Dt   # ya lo definiste según intervalo
     
     for j in range(n_simulaciones):
