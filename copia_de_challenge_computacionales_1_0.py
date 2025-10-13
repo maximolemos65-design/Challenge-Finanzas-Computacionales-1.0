@@ -401,9 +401,9 @@ if st.session_state.calculado:
                     patch.set_alpha(0.4)
     
             # Líneas de referencia
-            ax.axvline(VaR_empirico, color="red", linestyle="--", linewidth=2, label=f"VaR {conf*100:.1f}% = {VaR_empirico:.4f}")
-            ax.axvline(CVaR_empirico, color="darkred", linestyle=":", linewidth=2, label=f"CVaR = {CVaR_empirico:.4f}")
-            ax.axvline(mean_emp, color="blue", linestyle="--", linewidth=2, label=f"Media = {mean_emp:.4f}")
+            ax.axvline(VaR_empirico, color="red", linestyle="--", linewidth=2, label=f"VaR {conf*100:.1f}% = {VaR_empirico*100:.2f}%")
+            ax.axvline(CVaR_empirico, color="darkred", linestyle=":", linewidth=2, label=f"CVaR = {CVaR_empirico*100:.2f}%")
+            ax.axvline(mean_emp, color="blue", linestyle="--", linewidth=2, label=f"Media = {mean_emp*100:.2f}%")
     
             # Títulos y leyenda
             ax.set_title(f"Distribución de Retornos y Value at Risk ({conf*100:.1f}%) - {ticker}")
