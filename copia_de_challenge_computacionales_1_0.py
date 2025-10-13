@@ -420,16 +420,14 @@ if st.session_state.calculado:
     st.write(f"Precio inicial: {S0:.2f}")
     st.write(f"Precio medio simulado a 1 año: {mean_final:.2f}")
     st.write(f"Desvío de precios finales: {std_final:.2f}")
-    
-    """Volumen"""
-    
+   
     # ==========================
     # 1. Preparar datos
     # ==========================
     # returns ya lo tenés calculado antes
     # Calcular cambio porcentual en volumen
     
-    st.markdown("###### 📊 Relación entre Retornos y Volumen")
+    st.caption("📊Volumen")
     
     # Verificar que existan los datos
     if "data" in locals() and not data.empty:
@@ -457,7 +455,7 @@ if st.session_state.calculado:
         col4.metric("🔻 Mínimo", f"{vol_min:,.0f}")
     
         # --- 3. Gráfico de dispersión ---
-        st.markdown("####### 🔹 Dispersión: Retornos vs Proporción del Volumen Promedio")
+        st.caption("🔹 Dispersión: Retornos vs Proporción del Volumen Promedio")
         fig1, ax1 = plt.subplots(figsize=(8, 5))
         ax1.scatter(df_aux["Return"], df_aux["Vol_Ratio"], alpha=0.5, color="purple")
         ax1.set_title(f"Relación entre Retornos y Volumen Promedio - {ticker}")
@@ -467,7 +465,7 @@ if st.session_state.calculado:
         st.pyplot(fig1)
     
         # --- 4. Gráfico de barras del volumen ---
-        st.markdown("####### 🔹 Volumen de negociación a lo largo del tiempo")
+        st.caption("🔹 Volumen de negociación a lo largo del tiempo")
         fig2, ax2 = plt.subplots(figsize=(12, 6))
         ax2.bar(volumen.index, volumen.values, width=1, color="purple", alpha=0.7)
         ax2.set_title(f"Volumen de negociación - {ticker}")
