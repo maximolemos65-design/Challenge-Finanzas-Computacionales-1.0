@@ -376,9 +376,9 @@ if st.session_state.calculado:
     
             # 3️⃣ Mostrar resultados numéricos
             st.success(f"🔹 Nivel de confianza: **{conf*100:.1f}%**")
-            st.write(f"📉 **VaR empírico ({alpha*100:.1f}%):** {VaR_empirico:.5f}")
-            st.write(f"📊 **CVaR (Expected Shortfall):** {CVaR_empirico:.5f}")
-            st.write(f"Media general: {mean_emp:.5f}")
+            st.write(f"📉 **VaR empírico ({alpha*100:.1f}%):** {VaR_empirico*100:.2f}%")
+            st.write(f"📊 **CVaR (Expected Shortfall):** {CVaR_empirico*100:.2f}%")
+            st.write(f"Media general: {mean_emp*100:.2f}%")
             st.write(f"Observaciones en la cola: {len(cola)}")
     
             # 4️⃣ Gráfico con sombreado
