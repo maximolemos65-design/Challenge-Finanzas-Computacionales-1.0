@@ -450,9 +450,9 @@ if st.session_state.calculado:
         # Mostrar métricas en columnas
         col1, col2, col3, col4 = st.columns(4)
         col1.metric("📈 Promedio Volumen", f"{vol_media/1000000:,.3f}M")
-        col2.metric("📉 Desvío", f"{vol_desvio:,.0f}")
-        col3.metric("🔝 Máximo", f"{vol_max:,.0f}")
-        col4.metric("🔻 Mínimo", f"{vol_min:,.0f}")
+        col2.metric("📉 Desvío", f"{vol_desvio/1000000:,.3f}M")
+        col3.metric("🔝 Máximo", f"{vol_max/1000000:,.3f}M")
+        col4.metric("🔻 Mínimo", f"{vol_min/1000000:,.3f}M")
     
         # --- 3. Gráfico de dispersión ---
         st.caption("🔹 Dispersión: Retornos vs Proporción del Volumen Promedio")
