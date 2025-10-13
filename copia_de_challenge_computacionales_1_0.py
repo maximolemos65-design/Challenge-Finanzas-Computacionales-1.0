@@ -76,7 +76,7 @@ if st.session_state.calculado:
     # 5. Histograma con campana normal
     # ==========================
     
-    st.markdown("# 📈 Distribución de Retornos con Campana Normal")
+    st.markdown("#### 📈 Distribución de Retornos con Campana Normal")
     
     # Verificar que existan datos de retornos
     if "returns" in locals() and not returns.empty:
