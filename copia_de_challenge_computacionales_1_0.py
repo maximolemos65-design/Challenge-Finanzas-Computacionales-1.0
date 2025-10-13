@@ -315,46 +315,6 @@ if st.session_state.calculado:
     # ==========================
     # 14. Value at Risk (VaR empírico) + Conditional VaR con sombreado
     # ==========================
-    
-    st.markdown("### 💥 Value at Risk (VaR) Empírico")
-    
-    # 1️⃣ Input: nivel de confianza
-    conf_input = st.text_input(
-        "📌 Ingrese el nivel de confianza (ej: 0.95 para 95%):",
-        value="0.95",
-        key="confianza_input"
-    )
-
-    # Validar y convertir
-    try:
-        conf = float(conf_input)
-        if 0 < conf < 1:
-            alpha = 1 - conf
-    
-            # 2️⃣ Calcular percentil empírico (VaR)
-            VaR_empirico = np.percentile(returns, alpha * 100)
-            mean_emp = returns.mean()
-    
-            # 3️⃣ Filtrar retornos en la cola (<= VaR)
-            cola = returns[returns <= VaR_empirico]
-            suma_cola = cola.sum()
-            conteo_cola = cola.count()
-            CVaR_empirico = cola.mean()
-    
-            # 4️⃣ Mostrar resultados
-            st.success(f"🔹 Nivel de confianza: **{conf*100:.1f}%**")
-            st.write(f"📉 **VaR empírico ({alpha*100:.1f}%):** {VaR_empirico*100:.2f}%")
-            st.write(f"📊 **CVaR (Expected Shortfall):** {CVaR_empirico*100:.2f}%")
-    
-        else:
-            st.warning("⚠️ Ingrese un valor entre 0 y 1 (por ejemplo, 0.95).")
-    
-    except ValueError:
-        st.warning("⚠️ Ingrese un número válido (por ejemplo, 0.95).")
-
-    
-    # 4. Graficar histograma con VaR y sombreado de la cola
-    """Value at Risk - Visualización"""
 
     st.markdown("### 💥 Value at Risk (VaR) Empírico")
     
