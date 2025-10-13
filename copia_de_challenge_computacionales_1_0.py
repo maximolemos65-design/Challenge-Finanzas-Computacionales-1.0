@@ -311,32 +311,45 @@ if st.session_state.calculado:
 
     
     """Value at Risk"""
-    
+
     # ==========================
     # 14. Value at Risk (VaR empírico) + Conditional VaR con sombreado
     # ==========================
     
-    # 1. Preguntar nivel de confianza
-    conf = st.number_input(st.text_input("📌 Ingrese el nivel de confianza (ej: 0.95 para 95%): "))
-    alpha = 1 - conf
+    st.markdown("### 💥 Value at Risk (VaR) Empírico")
     
-    # 2. Calcular percentil empírico (VaR)
-    VaR_empirico = np.percentile(returns, alpha*100)  # percentil en base a la muestra
-    mean_emp = returns.mean()
+    # 1️⃣ Input: nivel de confianza
+    conf_input = st.text_input("📌 Ingrese el nivel de confianza (ej: 0.95 para 95%):", value="0.95")
     
-    # 3. Filtrar retornos en la cola (<= VaR)
-    cola = returns[returns <= VaR_empirico]
+    # Validar y convertir
+    try:
+        conf = float(conf_input)
+        if 0 < conf < 1:
+            alpha = 1 - conf
     
-    # Suma, conteo y CVaR
-    suma_cola = cola.sum()
-    conteo_cola = cola.count()
-    CVaR_empirico = cola.mean()
+            # 2️⃣ Calcular percentil empírico (VaR)
+            VaR_empirico = np.percentile(returns, alpha * 100)
+            mean_emp = returns.mean()
     
-    st.write(f"\n🔹 Nivel de confianza (una cola, izquierda): {conf*100:.1f}%")
-    st.write(f"   ➤ VaR empírico ({alpha*100:.1f}%) = {VaR_empirico:.5f}")
-    st.write(f"   ➤ CVaR empírico (Expected Shortfall) = {CVaR_empirico:.5f}")
-    st.write(f"   ➤ Suma retornos cola = {suma_cola:.5f}")
-    st.write(f"   ➤ Conteo retornos cola = {conteo_cola}")
+            # 3️⃣ Filtrar retornos en la cola (<= VaR)
+            cola = returns[returns <= VaR_empirico]
+            suma_cola = cola.sum()
+            conteo_cola = cola.count()
+            CVaR_empirico = cola.mean()
+    
+            # 4️⃣ Mostrar resultados
+            st.success(f"🔹 Nivel de confianza: **{conf*100:.1f}%**")
+            st.write(f"📉 **VaR empírico ({alpha*100:.1f}%):** {VaR_empirico:.5f}")
+            st.write(f"📊 **CVaR (Expected Shortfall):** {CVaR_empirico:.5f}")
+            st.write(f"Σ Retornos cola: {suma_cola:.5f}")
+            st.write(f"Conteo de observaciones en cola: {conteo_cola}")
+    
+        else:
+            st.warning("⚠️ Ingrese un valor entre 0 y 1 (por ejemplo, 0.95).")
+    
+    except ValueError:
+        st.warning("⚠️ Ingrese un número válido (por ejemplo, 0.95).")
+
     
     # 4. Graficar histograma con VaR y sombreado de la cola
     plt.figure(figsize=(10,6))
