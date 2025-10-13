@@ -98,6 +98,8 @@ if st.button("Calcular"):
     plt.ylabel("Densidad")
     plt.legend()
     plt.show()
+
+    # ==========================
     # 6. Asimetría y curtosis
     # ==========================
     asimetria = skew(returns)
@@ -141,7 +143,7 @@ if st.button("Calcular"):
     Nd1 = norm.cdf(d1)
     Nd2 = norm.cdf(d2)
     
-    st.write(f"\n— Black-Scholes —")
+    st.caption(f"\n📊 Black-Scholes")
     st.write(f"d1 = {d1:.4f}")
     st.write(f"d2 = {d2:.4f}")
     st.write(f"Nd1 = {Nd1:.4f}")
