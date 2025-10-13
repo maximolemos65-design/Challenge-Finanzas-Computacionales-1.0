@@ -705,4 +705,82 @@ if st.button("Calcular"):
     st.write(f"Probabilidad negativo-negativo-negativo-negativo-negativo: {prob_nnnnn*100:.2f}%")
     
     momentum_data
+
+st.subheader("🔎 Selector de Estrategias con Opciones")
+
+# ==========================
+# 1. Crear DataFrame
+# ==========================
+df_estrategias = pd.DataFrame({
+    "Objetivo": [
+        "Cobertura","Acompañar tendencia","Volatilidad",
+        "Cobertura","Acompañar tendencia","Volatilidad",
+        "Cobertura","Acompañar tendencia","Volatilidad",
+        "Cobertura","Acompañar tendencia","Volatilidad",
+        "Cobertura","Acompañar tendencia","Volatilidad",
+        "Cobertura","Acompañar tendencia","Volatilidad"
+    ],
+    "Tendencia": [
+        "Alcista","Alcista","Alcista",
+        "Bajista","Bajista","Bajista",
+        "Lateral","Lateral","Lateral",
+        "Alcista","Alcista","Alcista",
+        "Bajista","Bajista","Bajista",
+        "Lateral","Lateral","Lateral"
+    ],
+    "Volatilidad": [
+        "Alta","Alta","Alta",
+        "Alta","Alta","Alta",
+        "Alta","Alta","Alta",
+        "Baja","Baja","Baja",
+        "Baja","Baja","Baja",
+        "Baja","Baja","Baja"
+    ],
+    "Estrategia": [
+        "Compra CALL",
+        "Bull spread con calls",
+        "Cono comprado",
+        "Compra PUT",
+        "Bear spread con puts",
+        "Cuna comprada",
+        "Collar",
+        "Iron condor vendido",
+        "Iron condor vendido",
+        "Venta PUT",
+        "Ratio call spread",
+        "Mariposa vendida",
+        "Venta CALL",
+        "Venta sintético",
+        "Cuna vendida",
+        "Venta CALL, compra tasa",
+        "Ratio put spread",
+        "Mariposa comprada"
+    ]
+})
+
+# ==========================
+# 2. Entradas del usuario
+# ==========================
+st.write("Seleccione las condiciones de mercado y su objetivo:")
+
+obj = st.selectbox("🎯 Objetivo:", df_estrategias["Objetivo"].unique())
+tend = st.selectbox("📈 Tendencia:", df_estrategias["Tendencia"].unique())
+vol = st.selectbox("🌪️ Volatilidad:", df_estrategias["Volatilidad"].unique())
+
+# ==========================
+# 3. Botón y resultado
+# ==========================
+if st.button("Buscar Estrategia"):
+    resultado = df_estrategias[
+        (df_estrategias["Objetivo"].str.lower() == obj.lower()) &
+        (df_estrategias["Tendencia"].str.lower() == tend.lower()) &
+        (df_estrategias["Volatilidad"].str.lower() == vol.lower())
+    ]
+
+    if not resultado.empty:
+        recommended_strategy = resultado["Estrategia"].values[0]
+        st.success(f"✅ Estrategia recomendada: **{recommended_strategy}**")
+    else:
+        st.warning("⚠️ No se encontró una estrategia que cumpla esas condiciones.")
+
     
