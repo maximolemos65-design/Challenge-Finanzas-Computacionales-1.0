@@ -104,7 +104,7 @@ if st.button("Calcular"):
     curtosis_val = kurtosis(returns, fisher=False)  # fisher=True → curtosis "exceso" (0 = normal)
     curtosis_total = kurtosis(returns, fisher=True)
     
-    st.write("\n📊 Asimetría y Curtosis de la serie de retornos")
+    st.caption("\n📊 Asimetría y Curtosis de la serie de retornos")
     st.write(f"Asimetría: {asimetria:.4f}")
     st.write(f"Curtosis (total): {curtosis_val:.4f}")
     st.write(f"Curtosis (exceso): {curtosis_total:.4f}")
@@ -128,7 +128,7 @@ if st.button("Calcular"):
     vol_daily = std_return
     vol_annual = vol_daily * np.sqrt(factor)
     
-    st.write(f"\nVolatilidad anualizada: {vol_annual:.5f}")
+    st.write(f"\nVolatilidad anualizada: {vol_annual*100:.3f}%")
     
     # ==========================
     # 8. Black-Scholes
