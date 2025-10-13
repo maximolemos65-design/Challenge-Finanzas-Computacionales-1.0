@@ -352,43 +352,69 @@ if st.session_state.calculado:
 
     
     # 4. Graficar histograma con VaR y sombreado de la cola
-    plt.figure(figsize=(10,6))
+    """Value at Risk - Visualización"""
+
+    st.markdown("### 💥 Value at Risk (VaR) Empírico")
     
-    # Histograma completo
-    counts, bins, patches = plt.hist(
-        returns,
-        bins=50,
-        density=True,
-        edgecolor='black',
-        alpha=0.6,
-        label="Distribución empírica"
-    )
+    # 1️⃣ Input de confianza
+    conf_input = st.text_input("📌 Ingrese el nivel de confianza (ej: 0.95 para 95%):", value="0.95")
     
-    # Sombrear las barras que están a la izquierda del VaR
-    for patch, bin_left in zip(patches, bins[:-1]):
-        if bin_left <= VaR_empirico:
-            patch.set_facecolor('red')
-            patch.set_alpha(0.4)
+    try:
+        conf = float(conf_input)
+        if 0 < conf < 1:
+            alpha = 1 - conf
     
-    # Línea en el VaR
-    plt.axvline(VaR_empirico, color="red", linestyle="--", linewidth=2, label=f"VaR {conf*100:.1f}%: {VaR_empirico:.4f}")
+            # 2️⃣ Calcular VaR y CVaR
+            VaR_empirico = np.percentile(returns, alpha * 100)
+            mean_emp = returns.mean()
+            cola = returns[returns <= VaR_empirico]
+            CVaR_empirico = cola.mean()
     
-    # Línea en la media
-    plt.axvline(mean_emp, color="blue", linestyle="--", linewidth=2, label=f"Media: {mean_emp:.4f}")
+            # 3️⃣ Mostrar resultados numéricos
+            st.success(f"🔹 Nivel de confianza: **{conf*100:.1f}%**")
+            st.write(f"📉 **VaR empírico ({alpha*100:.1f}%):** {VaR_empirico:.5f}")
+            st.write(f"📊 **CVaR (Expected Shortfall):** {CVaR_empirico:.5f}")
+            st.write(f"Media general: {mean_emp:.5f}")
+            st.write(f"Observaciones en la cola: {len(cola)}")
     
-    plt.title(f"VaR y CVaR empírico de {ticker} al {conf*100:.1f}% de confianza")
-    plt.xlabel("Retornos")
-    plt.ylabel("Densidad")
-    plt.legend()
-    plt.grid(alpha=0.3)
-    plt.show()
+            # 4️⃣ Gráfico con sombreado
+            fig, ax = plt.subplots(figsize=(10, 6))
     
-    # 5. Mostrar resultados finales
-    st.write(f"\n📊 Resultados VaR y CVaR empírico")
-    st.write(f"Nivel de confianza: {conf*100:.1f}%")
-    st.write(f"En el {alpha*100:.2f}% de los casos, suponiendo una distribución normal de los retornos y bajo condiciones normales de mercado, {ticker} tendrá un rendimiento menor o igual a {VaR_empirico*100:.5f}%.")
-    st.write(f"¿Qué podemos esperar si se rompe el VaR? Para saberlo es útil hacer uso del VaR Condicional (CVaR), que es el promedio de los retornos más allá de esa barrera. Para este caso el CVaR es {CVaR_empirico*100:.5f}%.")
+            # Histograma
+            counts, bins, patches = ax.hist(
+                returns,
+                bins=50,
+                density=True,
+                edgecolor='black',
+                alpha=0.6,
+                label="Distribución empírica"
+            )
     
+            # Sombrear cola (roja)
+            for patch, bin_left in zip(patches, bins[:-1]):
+                if bin_left <= VaR_empirico:
+                    patch.set_facecolor('red')
+                    patch.set_alpha(0.4)
+    
+            # Líneas de referencia
+            ax.axvline(VaR_empirico, color="red", linestyle="--", linewidth=2, label=f"VaR {conf*100:.1f}% = {VaR_empirico:.4f}")
+            ax.axvline(CVaR_empirico, color="darkred", linestyle=":", linewidth=2, label=f"CVaR = {CVaR_empirico:.4f}")
+            ax.axvline(mean_emp, color="blue", linestyle="--", linewidth=2, label=f"Media = {mean_emp:.4f}")
+    
+            # Títulos y leyenda
+            ax.set_title(f"Distribución de Retornos y Value at Risk ({conf*100:.1f}%) - {ticker}")
+            ax.set_xlabel("Retornos")
+            ax.set_ylabel("Densidad")
+            ax.legend()
+            ax.grid(alpha=0.3)
+            st.pyplot(fig)
+    
+        else:
+            st.warning("⚠️ Ingrese un valor entre 0 y 1 (por ejemplo, 0.95).")
+    
+    except ValueError:
+        st.warning("⚠️ Ingrese un número válido (por ejemplo, 0.95).")
+
     """Simulación de Montecarlo"""
     
     # ==========================
