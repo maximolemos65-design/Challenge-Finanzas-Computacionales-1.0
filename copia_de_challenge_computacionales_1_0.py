@@ -981,8 +981,8 @@ if st.session_state.calculado:
                 st.markdown(f"""
                 **Ejemplo práctico**  
                 
-                Compra de un **call** de `{ticker}` a **${call_price:.2f}** y un **put** a **${put_price:.2f}**,  
-                ambos con base **${K:.2f}** y vencimiento en **{T*12:.0f} meses**,  
+                Compra de un **call** de `{ticker}` a **`${call_price:.2f}`** y un **put** a **`${put_price:.2f}`**,  
+                ambos con base **`${K:.2f}`** y vencimiento en **`{T*12:.0f}` meses**,  
                 tendría el siguiente resultado:
                 """)
 
