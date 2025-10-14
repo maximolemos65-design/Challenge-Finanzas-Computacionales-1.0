@@ -836,6 +836,99 @@ if st.session_state.calculado:
                 st.write(f"**Breakeven:** {breakeven:.2f}  →  variación necesaria: {(breakeven/S - 1)*100:.2f}%")
 
                 st.success("💡 Una compra de CALL es ideal para escenarios con expectativa **alcista** y volatilidad **moderada o creciente**.")
+
+            # --- Estrategia específica: Bull spread con calls ---
+            elif recommended_strategy == "Bull spread con calls":
+                st.subheader("📘 Estrategia: Bull Spread con Calls")
+            
+                st.write("""
+                Esta estrategia se basa en **comprar un call** con una determinada base (strike) y **vender un call**
+                con una base mayor a la comprada.  
+                👉 La venta financia parcialmente la compra, generando una **posición alcista con pérdidas y ganancias limitadas.**
+                """)
+            
+                # ==========================
+                # Strikes
+                # ==========================
+                K_compra = S * 0.95   # Strike del call comprado (más bajo)
+                K_venta = S * 1.05    # Strike del call vendido (más alto)
+            
+                # ==========================
+                # Función Black-Scholes
+                # ==========================
+                def black_scholes_call(S, K, T, r, sigma):
+                    d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
+                    d2 = d1 - sigma * math.sqrt(T)
+                    call_price = S * norm.cdf(d1) - K * math.exp(-r * T) * norm.cdf(d2)
+                    return call_price
+            
+                # ==========================
+                # Primas y costo total
+                # ==========================
+                prima_call_compra = black_scholes_call(S, K_compra, T, r, sigma) * 1.01
+                prima_call_venta = black_scholes_call(S, K_venta, T, r, sigma) * 0.99
+                costo_total = prima_call_compra - prima_call_venta  # débito neto
+            
+                # ==========================
+                # Payoff al vencimiento
+                # ==========================
+                S_range = np.linspace(S * 0.7, S * 1.3, 200)
+                payoff_call_compra = np.maximum(S_range - K_compra, 0) - prima_call_compra
+                payoff_call_venta = -np.maximum(S_range - K_venta, 0) + prima_call_venta
+                payoff_bull_spread = payoff_call_compra + payoff_call_venta
+            
+                # ==========================
+                # Breakeven y métricas
+                # ==========================
+                BE = K_compra + costo_total
+                ganancia_max = (K_venta - K_compra) - costo_total
+                perdida_max = costo_total
+            
+                # ==========================
+                # Ejemplo
+                # ==========================
+                st.markdown(f"""
+                **Ejemplo práctico**
+            
+                Venta de un call de **{ticker}** base **{K_venta:.2f}**, vencimiento en **{T*12:.0f} meses**, prima **${prima_call_venta:.2f}**,  
+                y compra de un call base **{K_compra:.2f}** con prima **${prima_call_compra:.2f}** tendría el siguiente resultado:
+                """)
+            
+                # ==========================
+                # Gráfico del payoff
+                # ==========================
+                fig, ax = plt.subplots(figsize=(10, 6))
+                ax.plot(S_range, payoff_bull_spread, label="Bull Spread (Calls)", color="green", linewidth=2)
+                ax.axhline(0, color="black", linestyle="--", linewidth=1)
+                ax.axvline(K_compra, color="blue", linestyle="--", linewidth=1, label=f"Strike Call comprado = {K_compra:.2f}")
+                ax.axvline(K_venta, color="red", linestyle="--", linewidth=1, label=f"Strike Call vendido = {K_venta:.2f}")
+                ax.axvline(BE, color="orange", linestyle="--", linewidth=1.5, label=f"Breakeven = {BE:.2f}")
+            
+                ax.set_title("Estrategia Bull Spread con Calls")
+                ax.set_xlabel("Precio del subyacente al vencimiento")
+                ax.set_ylabel("Beneficio / Pérdida")
+                ax.legend()
+                ax.grid(alpha=0.3)
+                st.pyplot(fig)
+                plt.close()
+            
+                # ==========================
+                # Resumen numérico
+                # ==========================
+                st.markdown("### 📊 Resumen de la Estrategia")
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.metric("Strike Call Comprado", f"{K_compra:.2f}")
+                    st.metric("Strike Call Vendido", f"{K_venta:.2f}")
+                    st.metric("Costo Neto (prima total)", f"{costo_total:.2f}")
+                with col2:
+                    st.metric("Breakeven", f"{BE:.2f}")
+                    st.metric("Ganancia Máxima", f"{ganancia_max:.2f}")
+                    st.metric("Pérdida Máxima", f"{perdida_max:.2f}")
+            
+                st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
+
+            
         else:
             st.warning("⚠️ No se encontró una estrategia que cumpla esas condiciones.")
 
