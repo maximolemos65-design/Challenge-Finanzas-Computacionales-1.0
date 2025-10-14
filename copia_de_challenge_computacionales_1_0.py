@@ -1261,6 +1261,97 @@ if st.session_state.calculado:
                 st.write(f"**Breakeven inferior:** ${BE_lower:.2f} → Variación necesaria del subyacente: {(BE_lower/S - 1)*100:.2f}%")
                 st.write(f"**Breakeven superior:** ${BE_upper:.2f} → Variación necesaria del subyacente: {(BE_upper/S - 1)*100:.2f}%")
 
+            elif recommended_strategy == "Collar":    
+                st.write("""
+                Esta estrategia se basa en la **compra de acciones del subyacente**, la **compra de puts OTM (o ATM)** y la **venta de calls OTM**.  
+                De esta manera, la prima cobrada por los calls financia la compra del activo y de los puts.  
+                Si la volatilidad juega en contra del precio, el **put** nos protege;  
+                si el precio sube significativamente, el ejercicio del **call** estará cubierto con las acciones compradas.
+                """)
+            
+                # ==========================
+                # Strikes
+                # ==========================
+                K_put = S * 0.95   # Protección
+                K_call = S * 1.05  # Techo
+            
+                # ==========================
+                # Funciones Black-Scholes
+                # ==========================
+                def black_scholes_call(S, K, T, r, sigma):
+                    """Calcula el precio de un call europeo con Black-Scholes"""
+                    d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
+                    d2 = d1 - sigma * math.sqrt(T)
+                    return S * norm.cdf(d1) - K * math.exp(-r * T) * norm.cdf(d2)
+            
+                def black_scholes_put(S, K, T, r, sigma):
+                    """Calcula el precio de un put europeo con Black-Scholes"""
+                    d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
+                    d2 = d1 - sigma * math.sqrt(T)
+                    return K * math.exp(-r * T) * norm.cdf(-d2) - S * norm.cdf(-d1)
+            
+                # ==========================
+                # Primas y costo total
+                # ==========================
+                prima_put = black_scholes_put(S, K_put, T, r, sigma)
+                prima_call = black_scholes_call(S, K_call, T, r, sigma)
+                costo_total = S + prima_put - prima_call
+            
+                # ==========================
+                # Payoff al vencimiento
+                # ==========================
+                S_range = np.linspace(S * 0.6, S * 1.4, 200)
+            
+                payoff_accion = S_range - S
+                payoff_put = np.maximum(K_put - S_range, 0) - prima_put
+                payoff_call = -np.maximum(S_range - K_call, 0) + prima_call
+                payoff_total = payoff_accion + payoff_put + payoff_call
+            
+                # ==========================
+                # Breakevens
+                # ==========================
+                BE_lower = S - (prima_call - prima_put) - (S - K_put)
+                BE_upper = K_call + (prima_put - prima_call)
+            
+                # ==========================
+                # Ejemplo práctico
+                # ==========================
+                st.markdown(f"""
+                **Ejemplo práctico**  
+            
+                Compra de `{ticker}` a **`${S:.2f}`**,  
+                venta de un **call** de `{ticker}` con base **`${K_call:.2f}`** a **`{T*12:.0f}` meses** por **`${prima_call:.2f}`**,  
+                y compra de un **put** de `{ticker}` con base **`${K_put:.2f}`** a **`{T*12:.0f}` meses** por **`${prima_put:.2f}`**,  
+                tendría el siguiente resultado:
+                """)
+            
+                # ==========================
+                # Gráfico
+                # ==========================
+                fig, ax = plt.subplots(figsize=(10, 6))
+                ax.plot(S_range, payoff_total, label="Payoff Collar", color="blue", linewidth=2)
+                ax.axhline(0, color="black", linestyle="--", linewidth=1)
+                ax.axvline(K_put, color="red", linestyle="--", linewidth=1, label=f"Strike Put = {K_put:.2f}")
+                ax.axvline(K_call, color="green", linestyle="--", linewidth=1, label=f"Strike Call = {K_call:.2f}")
+                ax.set_title("Estrategia Collar (Acción + Put comprado + Call vendido)")
+                ax.set_xlabel("Precio del subyacente al vencimiento")
+                ax.set_ylabel("Beneficio / Pérdida")
+                ax.legend()
+                ax.grid(alpha=0.3)
+                st.pyplot(fig)
+            
+                # ==========================
+                # Resultados informativos
+                # ==========================
+                st.write(f"**Precio del subyacente:** ${S:.2f}")
+                st.write(f"**Strike Put (protección):** ${K_put:.2f}")
+                st.write(f"**Strike Call (tope):** ${K_call:.2f}")
+                st.write(f"**Prima put:** ${prima_put:.2f}")
+                st.write(f"**Prima call:** ${prima_call:.2f}")
+                st.write(f"**Costo total neto:** ${costo_total:.2f}")
+                st.write(f"**Breakeven inferior:** ${K_put:.2f} → Variación necesaria del subyacente: {(K_put/S - 1)*100:.2f}% (pérdida limitada más allá de este punto)")
+                st.write(f"**Breakeven superior:** ${K_call:.2f} → Variación necesaria del subyacente: {(K_call/S - 1)*100:.2f}% (ganancia limitada más allá de este punto)")
+
         else:
             st.warning("⚠️ No se encontró una estrategia que cumpla esas condiciones.")
 
