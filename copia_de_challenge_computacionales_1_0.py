@@ -1256,7 +1256,7 @@ if st.session_state.calculado:
                 # ==========================
                 st.write(f"**Prima put comprada:** ${prima_put:.2f}")
                 st.write(f"**Prima call comprada:** ${prima_call:.2f}")
-                st.write(f"**Pérdida máxima:** ${prima_total:.2f} (si `{K_put:.2f} < S < {K_call:.2f}`)")
+                st.write(f"**Pérdida máxima:** ${prima_total:.2f} (si {K_put:.2f} < S < {K_call:.2f})")
                 st.write("**Ganancia máxima:** Ilimitada 🚀")
                 st.write(f"**Breakeven inferior:** ${BE_lower:.2f} → Variación necesaria del subyacente: {(BE_lower/S - 1)*100:.2f}%")
                 st.write(f"**Breakeven superior:** ${BE_upper:.2f} → Variación necesaria del subyacente: {(BE_upper/S - 1)*100:.2f}%")
