@@ -1018,6 +1018,76 @@ if st.session_state.calculado:
                 st.write(f"**Ganancia máxima:** Ilimitada 🚀")
                 st.write(f"**Breakeven inferior:** ${BE_lower:.2f}  → Variación necesaria del subyacente: {(BE_lower/S - 1)*100:.2f}%")
                 st.write(f"**Breakeven superior:** ${BE_upper:.2f}  → Variación necesaria del subyacente: {(BE_upper/S - 1)*100:.2f}%")
+
+            elif recommended_strategy == "Compra PUT":
+                st.write("""
+                Comprar un **put** (opción de venta) te da el derecho pero no la obligación de vender el activo subyacente del contrato a un precio determinado hasta la fecha de vencimiento.
+                """)
+            
+                # ==========================
+                # Black-Scholes Put
+                # ==========================
+                K = S * 0.98
+            
+                def black_scholes_put(S, K, T, r, sigma):
+                    """Calcula el precio de un put europeo con Black-Scholes"""
+                    d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
+                    d2 = d1 - sigma * math.sqrt(T)
+                    put_price = K * math.exp(-r * T) * norm.cdf(-d2) - S * norm.cdf(-d1)
+                    return put_price
+            
+                # ==========================
+                # Cálculo prima
+                # ==========================
+                prima = black_scholes_put(S, K, T, r, sigma)
+            
+                # ==========================
+                # Payoff al vencimiento
+                # ==========================
+                S_range = np.linspace(S * 0.7, S * 1.3, 200)
+                payoff_put = np.maximum(K - S_range, 0) - prima
+            
+                # Punto de equilibrio
+                breakeven = K - prima
+            
+                # ==========================
+                # Ejemplo práctico
+                # ==========================
+                st.markdown(f"""
+                **Ejemplo práctico**  
+            
+                Compra de un **put** de `{ticker}` con base **`${K:.2f}`**, vencimiento en **`{T*12:.0f}` meses**,  
+                y una prima de **`${prima:.2f}`**, tendría el siguiente resultado:
+                """)
+            
+                # ==========================
+                # Gráfico
+                # ==========================
+                fig, ax = plt.subplots(figsize=(10,6))
+                ax.plot(S_range, payoff_put, label="Compra de Put", color="blue", linewidth=2)
+            
+                # Líneas de referencia
+                ax.axhline(0, color="black", linestyle="--", linewidth=1)
+                ax.axvline(K, color="red", linestyle="--", linewidth=1, label=f"Strike = {K:.2f}")
+                ax.axvline(S, color="green", linestyle="--", linewidth=1, label=f"S = {S:.2f}")
+                ax.axvline(breakeven, color="orange", linestyle="--", linewidth=1.5, label=f"Breakeven = {breakeven:.2f}")
+            
+                # Estética
+                ax.set_title("Payoff de un Put Europeo al Vencimiento")
+                ax.set_xlabel("Precio del subyacente al vencimiento")
+                ax.set_ylabel("Beneficio / Pérdida")
+                ax.legend()
+                ax.grid(alpha=0.3)
+                st.pyplot(fig)
+            
+                # ==========================
+                # Información resumen
+                # ==========================
+                st.write(f"**Prima put:** ${prima:.2f}")
+                st.write(f"**Costo total de la estrategia:** ${prima:.2f}")
+                st.write(f"**Pérdida máxima:** ${prima:.2f} (si S > {K:.2f})")
+                st.write("**Ganancia máxima:** Ilimitada")
+                st.write(f"**Breakeven:** ${breakeven:.2f} (Variación necesaria: {(breakeven/S - 1)*100:.2f}%)")
             
         else:
             st.warning("⚠️ No se encontró una estrategia que cumpla esas condiciones.")
