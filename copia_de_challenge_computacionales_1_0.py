@@ -1015,7 +1015,7 @@ if st.session_state.calculado:
                 st.write(f"**Prima put:** ${put_price:.2f}")
                 st.write(f"**Costo total (prima total):** ${prima_total:.2f}")
                 st.write(f"**Pérdida máxima:** ${prima_total:.2f} (si S ≈ {K:.2f})")
-                st.write(f"**Ganancia máxima:** Ilimitada")
+                st.write(f"**Ganancia máxima:** Ilimitada 🚀")
                 st.write(f"**Breakeven inferior:** ${BE_lower:.2f}  → Variación: {(BE_lower/S - 1)*100:.2f}%")
                 st.write(f"**Breakeven superior:** ${BE_upper:.2f}  → Variación: {(BE_upper/S - 1)*100:.2f}%")
             
