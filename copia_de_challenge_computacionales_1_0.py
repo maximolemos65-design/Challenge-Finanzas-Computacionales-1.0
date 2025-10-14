@@ -833,7 +833,7 @@ if st.session_state.calculado:
                 st.write(f"**Costo total:** ${prima:.2f}")
                 st.write(f"**Pérdida máxima:** ${prima:.2f} (si S < {K:.2f})")
                 st.write("**Ganancia máxima:** Ilimitada 🚀")
-                st.write(f"**Breakeven:** {breakeven:.2f}  →  variación necesaria: {(breakeven/S - 1)*100:.2f}%")
+                st.write(f"**Breakeven:** {breakeven:.2f}  →  Variación necesaria del subyacente: {(breakeven/S - 1)*100:.2f}%")
 
                 st.success("💡 Una compra de CALL es ideal para escenarios con expectativa **alcista** y volatilidad **moderada o creciente**.")
 
@@ -921,7 +921,7 @@ if st.session_state.calculado:
                 st.write("Strike Call Comprado", f"{K_compra:.2f}")
                 st.write("Strike Call Vendido", f"{K_venta:.2f}")
                 st.write("Costo Neto (prima total)", f"{costo_total:.2f}")
-                st.write("Breakeven", f"{BE:.2f}")
+                st.write("Breakeven", f"{BE:.2f}  → Variación necesaria del subyacente: {(BE/S - 1)*100:.2f}%")")
                 st.write("Ganancia Máxima", f"{ganancia_max:.2f}")
                 st.write("Pérdida Máxima", f"{perdida_max:.2f}")
             
@@ -1016,8 +1016,8 @@ if st.session_state.calculado:
                 st.write(f"**Costo total (prima total):** ${prima_total:.2f}")
                 st.write(f"**Pérdida máxima:** ${prima_total:.2f} (si S ≈ {K:.2f})")
                 st.write(f"**Ganancia máxima:** Ilimitada 🚀")
-                st.write(f"**Breakeven inferior:** ${BE_lower:.2f}  → Variación: {(BE_lower/S - 1)*100:.2f}%")
-                st.write(f"**Breakeven superior:** ${BE_upper:.2f}  → Variación: {(BE_upper/S - 1)*100:.2f}%")
+                st.write(f"**Breakeven inferior:** ${BE_lower:.2f}  → Variación necesaria del subyacente: {(BE_lower/S - 1)*100:.2f}%")
+                st.write(f"**Breakeven superior:** ${BE_upper:.2f}  → Variación necesaria del subyacente: {(BE_upper/S - 1)*100:.2f}%")
             
         else:
             st.warning("⚠️ No se encontró una estrategia que cumpla esas condiciones.")
