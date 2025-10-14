@@ -1092,7 +1092,8 @@ if st.session_state.calculado:
             elif recommended_strategy == "Bear spread con puts":
                 st.write("""
                 Esta estrategia se basa en **comprar un put** con una determinada base y **vender un put** de una base menor.  
-                La venta financia parcialmente la compra, generando una posición **bajista** con **riesgo y ganancia limitados**.  
+                Así, la venta va a financiar una parte de la compra y el inversor va a tener una **estrategia bajista** cuya pérdida va a estar limitada por la parte de la compra que la venta no logra financiar 
+                y la ganancia estará limitada a que el subyacente alcance la base comprada**.  
                 """)
             
                 # ==========================
