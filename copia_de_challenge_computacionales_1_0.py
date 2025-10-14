@@ -1087,7 +1087,7 @@ if st.session_state.calculado:
                 st.write(f"**Costo total de la estrategia:** ${prima:.2f}")
                 st.write(f"**Pérdida máxima:** ${prima:.2f} (si S > {K:.2f})")
                 st.write("**Ganancia máxima:** Ilimitada 🚀")
-                st.write(f"**Breakeven:** ${breakeven:.2f} → Variación necesaria: {(breakeven/S - 1)*100:.2f}%")
+                st.write(f"**Breakeven:** ${breakeven:.2f} → Variación necesaria del subyacente: {(breakeven/S - 1)*100:.2f}%")
 
             elif recommended_strategy == "Bear spread con puts":
                 st.write("""
@@ -1169,7 +1169,7 @@ if st.session_state.calculado:
                 st.write(f"**Put comprado (strike alto):** ${K_compra:.2f}")
                 st.write(f"**Put vendido (strike bajo):** ${K_venta:.2f}")
                 st.write(f"**Costo neto (prima total):** ${costo_total:.2f}")
-                st.write(f"**Breakeven:** ${BE:.2f} (Variación necesaria: {(BE/S - 1)*100:.2f}%)")
+                st.write(f"**Breakeven:** ${BE:.2f} → Variación necesaria del subyacente: {(BE/S - 1)*100:.2f}%")
                 st.write(f"**Ganancia máxima:** ${ganancia_max:.2f}")
                 st.write(f"**Pérdida máxima:** ${perdida_max:.2f}")
         
