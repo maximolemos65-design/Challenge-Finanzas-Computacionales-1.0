@@ -889,10 +889,12 @@ if st.session_state.calculado:
                 # ==========================
                 st.markdown(f"""
                 **Ejemplo práctico**
-            
-                Venta de un call de **{ticker}** base **{K_venta:.2f}**, vencimiento en **{T*12:.0f} meses**,con una prima de ${prima_call_venta:.2f},  
-                y compra de un call base {K_compra:.2f} con prima ${prima_call_compra:.2f} tendría el siguiente resultado:
+                
+                Venta de un call de **{ticker}** base **`{K_venta:.2f}`**, vencimiento en **`{T*12:.0f}` meses**,  
+                con una prima de **`${prima_call_venta:.2f}`**, y compra de un call base **`{K_compra:.2f}`**  
+                con prima **`${prima_call_compra:.2f}`** tendría el siguiente resultado:
                 """)
+
             
                 # ==========================
                 # Gráfico del payoff
