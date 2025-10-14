@@ -927,6 +927,94 @@ if st.session_state.calculado:
             
                 st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
 
+            elif recommended_strategy == "Cono comprado":
+            st.subheader("🎯 Estrategia: Cono Comprado (Long Straddle)")
+            st.write("""
+            Esta estrategia consiste en **comprar un call y un put sobre el mismo subyacente**, 
+            con **la misma base y mismo vencimiento**.  
+            Permite beneficiarse ante **movimientos fuertes del precio**, ya sea al alza o a la baja, 
+            dado que se tienen derechos en ambas direcciones.
+            """)
+        
+            # ==========================
+            # Parámetros
+            # ==========================
+            K = S * 1.02  # Strike común para call y put
+        
+            # ==========================
+            # Funciones Black-Scholes
+            # ==========================
+            def black_scholes_call(S, K, T, r, sigma):
+                """Calcula el precio de un call europeo con Black-Scholes"""
+                d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
+                d2 = d1 - sigma * math.sqrt(T)
+                return S * norm.cdf(d1) - K * math.exp(-r * T) * norm.cdf(d2)
+        
+            def black_scholes_put(S, K, T, r, sigma):
+                """Calcula el precio de un put europeo con Black-Scholes"""
+                d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
+                d2 = d1 - sigma * math.sqrt(T)
+                return K * math.exp(-r * T) * norm.cdf(-d2) - S * norm.cdf(-d1)
+        
+            # ==========================
+            # Cálculo de primas
+            # ==========================
+            call_price = black_scholes_call(S, K, T, r, sigma)
+            put_price = black_scholes_put(S, K, T, r, sigma)
+            prima_total = call_price + put_price
+        
+            # ==========================
+            # Payoff al vencimiento
+            # ==========================
+            S_range = np.linspace(S * 0.5, S * 1.5, 200)
+            payoff_straddle = np.maximum(S_range - K, 0) + np.maximum(K - S_range, 0) - prima_total
+        
+            # ==========================
+            # Breakeven points
+            # ==========================
+            BE_lower = K - prima_total
+            BE_upper = K + prima_total
+        
+            # ==========================
+            # Ejemplo descriptivo
+            # ==========================
+            st.markdown(f"""
+            **Ejemplo práctico:**  
+            Compra de un **call** a ${call_price:.2f} y un **put** a ${put_price:.2f} de **{ticker}**,  
+            ambos con base **{K:.2f}** y vencimiento en **{T*12:.0f} meses**.
+            """)
+        
+            # ==========================
+            # Gráfico del payoff
+            # ==========================
+            fig, ax = plt.subplots(figsize=(10,6))
+            ax.plot(S_range, payoff_straddle, label="Cono Comprado (Long Straddle)", color="blue", linewidth=2)
+        
+            # Líneas de referencia
+            ax.axhline(0, color="black", linestyle="--", linewidth=1)
+            ax.axvline(K, color="red", linestyle="--", linewidth=1, label=f"Strike = {K:.2f}")
+            ax.axvline(BE_lower, color="orange", linestyle="--", linewidth=1.5, label=f"BE inferior = {BE_lower:.2f}")
+            ax.axvline(BE_upper, color="orange", linestyle="--", linewidth=1.5, label=f"BE superior = {BE_upper:.2f}")
+        
+            # Estética
+            ax.set_title("📈 Estrategia de Cono Comprado (Long Straddle)")
+            ax.set_xlabel("Precio del subyacente al vencimiento")
+            ax.set_ylabel("Beneficio / Pérdida")
+            ax.legend()
+            ax.grid(alpha=0.3)
+            st.pyplot(fig)
+        
+            # ==========================
+            # Información resumen
+            # ==========================
+            st.subheader("📊 Resumen numérico de la estrategia")
+            st.write(f"**Prima call:** ${call_price:.2f}")
+            st.write(f"**Prima put:** ${put_price:.2f}")
+            st.write(f"**Costo total (prima total):** ${prima_total:.2f}")
+            st.write(f"**Pérdida máxima:** ${prima_total:.2f} (si S ≈ {K:.2f})")
+            st.write(f"**Ganancia máxima:** Ilimitada")
+            st.write(f"**Breakeven inferior:** ${BE_lower:.2f}  → Variación: {(BE_lower/S - 1)*100:.2f}%")
+            st.write(f"**Breakeven superior:** ${BE_upper:.2f}  → Variación: {(BE_upper/S - 1)*100:.2f}%")
             
         else:
             st.warning("⚠️ No se encontró una estrategia que cumpla esas condiciones.")
