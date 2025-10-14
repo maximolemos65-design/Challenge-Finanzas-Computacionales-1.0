@@ -921,7 +921,7 @@ if st.session_state.calculado:
                 st.write("Strike Call Comprado", f"{K_compra:.2f}")
                 st.write("Strike Call Vendido", f"{K_venta:.2f}")
                 st.write("Costo Neto (prima total)", f"{costo_total:.2f}")
-                st.write("Breakeven", f"{BE:.2f}  → Variación necesaria del subyacente: {(BE/S - 1)*100:.2f}%")")
+                st.write("Breakeven", f"{BE:.2f}  → Variación necesaria del subyacente: {(BE/S - 1)*100:.2f}%")
                 st.write("Ganancia Máxima", f"{ganancia_max:.2f}")
                 st.write("Pérdida Máxima", f"{perdida_max:.2f}")
             
