@@ -798,8 +798,8 @@ if st.session_state.calculado:
                     f"""
                     **Ejemplo práctico**
                     
-                    Compra de un call sobre **{ticker}** con base **{K:.2f}**, vencimiento en **{T*12:.0f} meses**,  
-                    y una prima de **${prima:.2f}** tendría el siguiente resultado al vencimiento:
+                    Compra de un call sobre **{ticker}** con base **`{K:.2f}`**, vencimiento en **`{T*12:.0f}` meses**,  
+                    y una prima de **$`{prima:.2f}`** tendría el siguiente resultado al vencimiento:
                     """
                 )
 
