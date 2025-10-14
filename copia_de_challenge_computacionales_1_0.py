@@ -1088,7 +1088,92 @@ if st.session_state.calculado:
                 st.write(f"**Pérdida máxima:** ${prima:.2f} (si S > {K:.2f})")
                 st.write("**Ganancia máxima:** Ilimitada 🚀")
                 st.write(f"**Breakeven:** ${breakeven:.2f} → Variación necesaria: {(breakeven/S - 1)*100:.2f}%")
+
+            elif recommended_strategy == "Bear spread con puts":
+                st.write("""
+                Esta estrategia se basa en **comprar un put** con una determinada base y **vender un put** de una base menor.  
+                La venta financia parcialmente la compra, generando una posición **bajista** con **riesgo y ganancia limitados**.  
+                """)
             
+                # ==========================
+                # Parámetros
+                # ==========================
+                K_compra = S * 1.05   # Strike del put comprado (más alto)
+                K_venta = S * 0.95    # Strike del put vendido (más bajo)
+            
+                # ==========================
+                # Función Black-Scholes
+                # ==========================
+                def black_scholes_put(S, K, T, r, sigma):
+                    d1 = (math.log(S / K) + (r + 0.5 * sigma**2) * T) / (sigma * math.sqrt(T))
+                    d2 = d1 - sigma * math.sqrt(T)
+                    put_price = K * math.exp(-r * T) * norm.cdf(-d2) - S * norm.cdf(-d1)
+                    return put_price
+            
+                # ==========================
+                # Primas
+                # ==========================
+                prima_put_compra = black_scholes_put(S, K_compra, T, r, sigma) * 1.02
+                prima_put_venta = black_scholes_put(S, K_venta, T, r, sigma) * 0.98
+                costo_total = prima_put_compra - prima_put_venta  # costo neto (débito)
+            
+                # ==========================
+                # Payoff
+                # ==========================
+                S_range = np.linspace(S * 0.7, S * 1.3, 200)
+                payoff_put_compra = np.maximum(K_compra - S_range, 0) - prima_put_compra
+                payoff_put_venta = -np.maximum(K_venta - S_range, 0) + prima_put_venta
+                payoff_bear_spread = payoff_put_compra + payoff_put_venta
+            
+                # ==========================
+                # Breakeven y resultados
+                # ==========================
+                BE = K_compra - costo_total
+                ganancia_max = (K_compra - K_venta) - costo_total
+                perdida_max = costo_total
+            
+                # ==========================
+                # Ejemplo práctico
+                # ==========================
+                st.markdown(f"""
+                **Ejemplo práctico**  
+            
+                Venta de un **put** de `{ticker}` con base **`${K_venta:.2f}`** (prima **`${prima_put_venta:.2f}`**)  
+                y compra de un **put** con base **`${K_compra:.2f}`** (prima **`${prima_put_compra:.2f}`**)  
+                con vencimiento en **`{T*12:.0f}` meses**, tendría el siguiente resultado:
+                """)
+            
+                # ==========================
+                # Gráfico
+                # ==========================
+                fig, ax = plt.subplots(figsize=(10,6))
+                ax.plot(S_range, payoff_bear_spread, label="Bear Spread (Puts)", color="darkred", linewidth=2)
+            
+                # Líneas de referencia
+                ax.axhline(0, color="black", linestyle="--", linewidth=1)
+                ax.axvline(K_compra, color="blue", linestyle="--", linewidth=1, label=f"Strike Put comprado = {K_compra:.2f}")
+                ax.axvline(K_venta, color="red", linestyle="--", linewidth=1, label=f"Strike Put vendido = {K_venta:.2f}")
+                ax.axvline(BE, color="orange", linestyle="--", linewidth=1.5, label=f"Breakeven = {BE:.2f}")
+            
+                ax.set_title("Estrategia Bear Spread con Puts")
+                ax.set_xlabel("Precio del subyacente al vencimiento")
+                ax.set_ylabel("Beneficio / Pérdida")
+                ax.legend()
+                ax.grid(alpha=0.3)
+                st.pyplot(fig)
+            
+                # ==========================
+                # Resumen numérico
+                # ==========================
+                st.write(f"**Put comprado (strike alto):** ${K_compra:.2f}")
+                st.write(f"**Put vendido (strike bajo):** ${K_venta:.2f}")
+                st.write(f"**Costo neto (prima total):** ${costo_total:.2f}")
+                st.write(f"**Breakeven:** ${BE:.2f} (Variación necesaria: {(BE/S - 1)*100:.2f}%)")
+                st.write(f"**Ganancia máxima:** ${ganancia_max:.2f}")
+                st.write(f"**Pérdida máxima:** ${perdida_max:.2f}")
+        
+                st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
+
         else:
             st.warning("⚠️ No se encontró una estrategia que cumpla esas condiciones.")
 
