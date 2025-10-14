@@ -890,8 +890,8 @@ if st.session_state.calculado:
                 st.markdown(f"""
                 **Ejemplo práctico**
             
-                Venta de un call de **{ticker}** base **{K_venta:.2f}**, vencimiento en **{T*12:.0f} meses**, prima **${prima_call_venta:.2f}**,  
-                y compra de un call base **{K_compra:.2f}** con prima **${prima_call_compra:.2f}** tendría el siguiente resultado:
+                Venta de un call de **{ticker}** base **{K_venta:.2f}**, vencimiento en **{T*12:.0f} meses**,con una prima de ${prima_call_venta:.2f},  
+                y compra de un call base **{K_compra:.2f}** con prima ${prima_call_compra:.2f} tendría el siguiente resultado:
                 """)
             
                 # ==========================
@@ -916,15 +916,12 @@ if st.session_state.calculado:
                 # Resumen numérico
                 # ==========================
                 st.markdown("### 📊 Resumen de la Estrategia")
-                col1, col2 = st.columns(2)
-                with col1:
-                    st.metric("Strike Call Comprado", f"{K_compra:.2f}")
-                    st.metric("Strike Call Vendido", f"{K_venta:.2f}")
-                    st.metric("Costo Neto (prima total)", f"{costo_total:.2f}")
-                with col2:
-                    st.metric("Breakeven", f"{BE:.2f}")
-                    st.metric("Ganancia Máxima", f"{ganancia_max:.2f}")
-                    st.metric("Pérdida Máxima", f"{perdida_max:.2f}")
+                st.write("Strike Call Comprado", f"{K_compra:.2f}")
+                st.write("Strike Call Vendido", f"{K_venta:.2f}")
+                st.write("Costo Neto (prima total)", f"{costo_total:.2f}")
+                st.write("Breakeven", f"{BE:.2f}")
+                st.write("Ganancia Máxima", f"{ganancia_max:.2f}")
+                st.write("Pérdida Máxima", f"{perdida_max:.2f}")
             
                 st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
 
