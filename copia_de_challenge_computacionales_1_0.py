@@ -1087,7 +1087,7 @@ if st.session_state.calculado:
                 st.write(f"**Costo total de la estrategia:** ${prima:.2f}")
                 st.write(f"**Pérdida máxima:** ${prima:.2f} (si S > {K:.2f})")
                 st.write("**Ganancia máxima:** Ilimitada 🚀")
-                st.write(f"**Breakeven:** ${breakeven:.2f} (Variación necesaria: {(breakeven/S - 1)*100:.2f}%)")
+                st.write(f"**Breakeven:** ${breakeven:.2f} → Variación necesaria: {(breakeven/S - 1)*100:.2f}%")
             
         else:
             st.warning("⚠️ No se encontró una estrategia que cumpla esas condiciones.")
