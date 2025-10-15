@@ -29,6 +29,11 @@ if "calculado" not in st.session_state:
 # ==========================
 st.write("💡 Para acciones argentinas agregar '.BA' al final del ticker. Ejemplo: 'GGAL.BA'")
 
+# 1) Vaciar solo en el primer ingreso de la sesión
+if "first_load" not in st.session_state:
+    st.session_state.clear()          # borra todos los widgets/valores anteriores
+    st.session_state["first_load"] = True
+
 ticker = st.text_input("📌 Ingrese el ticker (ej: AAPL o GGAL.BA):", value="AAPL").strip().upper()
 start_date = st.date_input("🗓️ Fecha inicio", value=date.today() - timedelta(days=180))
 end_date = st.date_input("🗓️ Fecha fin", value=date.today())
