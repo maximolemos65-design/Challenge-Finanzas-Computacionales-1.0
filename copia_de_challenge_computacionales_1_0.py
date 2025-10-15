@@ -327,8 +327,8 @@ if st.session_state.calculado:
     
             # 3️⃣ Mostrar resultados numéricos
             st.success(f"🔹 Nivel de confianza: **{conf*100:.1f}%**")
-            st.write(f"📉 **VaR empírico ({alpha*100:.1f}%):** {VaR_empirico*100:.2f}%")
-            st.write(f"📊 **CVaR (Expected Shortfall):** {CVaR_empirico*100:.2f}%")
+            st.write(f"📉 **VaR empírico ({alpha*100:.1f}%):** {VaR_empirico*100:.2f}% → En el {alpha*100:.2f}% de los casos, suponiendo una volatilidad constante y bajo condiciones normales de mercado, {ticker} tendrá un rendimiento menor o igual a {VaR_empirico*100:.5f}%.")
+            st.write(f"📊 **CVaR (Expected Shortfall):** {CVaR_empirico*100:.2f}% → ¿Qué podemos esperar si se rompe el VaR? Para saberlo es útil hacer uso del VaR Condicional (CVaR), que es el promedio de los retornos más allá de esa barrera. Para este caso el CVaR es {CVaR_empirico*100:.5f}%.")
             st.write(f"Observaciones en la cola: {len(cola)}")
     
             # 4️⃣ Gráfico con sombreado
