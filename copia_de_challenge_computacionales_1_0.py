@@ -1971,7 +1971,7 @@ if st.session_state.calculado:
                 • Prima **put** vendida: **`${prima_put:.2f}`**  
                 • Prima **call** vendida: **`${prima_call:.2f}`**  
                 • **Ganancia máxima:** **`${prima_total:.2f}`** (si el precio se mantiene entre `${K_put:.2f}` y `${K_call:.2f}`)  
-                • **Pérdida máxima:** Ilimitada  
+                • **Pérdida máxima:** Ilimitada ⚠️
                 • **Breakeven inferior:** **`${BE_lower:.2f}`**  → Variación necesaria: **{(BE_lower/S - 1)*100:.2f}%**  
                 • **Breakeven superior:** **`${BE_upper:.2f}`**  → Variación necesaria: **{(BE_upper/S - 1)*100:.2f}%**
                 """)
