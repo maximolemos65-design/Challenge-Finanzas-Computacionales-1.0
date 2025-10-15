@@ -1532,6 +1532,93 @@ if st.session_state.calculado:
 
                 st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
 
+            elif recommended_strategy == "Ratio call spread":
+                st.markdown("""
+                **💡 Estrategia: Ratio Call Spread**
+                
+                Esta estrategia se basa en la **compra de un call** de una determinada base y la **venta de dos calls** de una base superior.  
+                El objetivo es **financiar la compra** del call largo con las primas recibidas por los calls vendidos.  
+                Es ideal cuando se espera una **suba moderada** del subyacente pero se desea estar **cubierto a la baja**.
+                """)
+            
+                # ==========================
+                # Parámetros
+                # ==========================
+                K1 = S * 0.98  # Strike del call comprado
+                K2 = S * 1.02  # Strike de los calls vendidos
+            
+                # ==========================
+                # Función Black-Scholes
+                # ==========================
+                def black_scholes_call(S, K, T, r, sigma):
+                    """Calcula el precio de un call europeo con Black-Scholes"""
+                    d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
+                    d2 = d1 - sigma * math.sqrt(T)
+                    call_price = S * norm.cdf(d1) - K * math.exp(-r * T) * norm.cdf(d2)
+                    return call_price
+            
+                # ==========================
+                # Primas
+                # ==========================
+                prima_call_long = black_scholes_call(S, K1, T, r, sigma)
+                prima_call_short = black_scholes_call(S, K2, T, r, sigma)
+                prima_neta = prima_call_long - 2 * prima_call_short  # costo neto (puede ser negativo o pequeño)
+            
+                # ==========================
+                # Payoff al vencimiento
+                # ==========================
+                S_range = np.linspace(S*0.6, S*1.6, 200)
+                payoff_long_call = np.maximum(S_range - K1, 0) - prima_call_long
+                payoff_short_calls = -2 * (np.maximum(S_range - K2, 0) - prima_call_short)
+                payoff_ratio_call = payoff_long_call + payoff_short_calls
+            
+                # ==========================
+                # Ejemplo práctico
+                # ==========================
+                st.markdown(f"""
+                **Ejemplo práctico**  
+            
+                Compra de **1 call** de `{ticker}` con strike **`${K1:.2f}`** a **`{T*12:.0f}` meses** por **`${prima_call_long:.2f}`**,  
+                y venta de **2 calls** de `{ticker}` con strike **`${K2:.2f}`** a **`{T*12:.0f}` meses** por **`${prima_call_short:.2f}`** cada uno,  
+                tendría el siguiente resultado:
+                """)
+            
+                # ==========================
+                # Gráfico
+                # ==========================
+                fig, ax = plt.subplots(figsize=(10,6))
+                ax.plot(S_range, payoff_ratio_call, label="Ratio Call Spread (1:-2)", color="purple", linewidth=2)
+            
+                # Líneas de referencia
+                ax.axhline(0, color="black", linestyle="--", linewidth=1)
+                ax.axvline(K1, color="blue", linestyle="--", linewidth=1, label=f"Strike largo = {K1:.2f}")
+                ax.axvline(K2, color="red", linestyle="--", linewidth=1, label=f"Strike corto = {K2:.2f}")
+                ax.axvline(K2 + prima_call_long, color="darkblue", linestyle="--", linewidth=1, label=f"Breakeven = {K2 + prima_call_long:.2f}")
+            
+                # Estética
+                ax.set_title("Estrategia Ratio Call Spread (Compra 1 Call, Venta 2 Calls)")
+                ax.set_xlabel("Precio del subyacente al vencimiento")
+                ax.set_ylabel("Beneficio / Pérdida")
+                ax.legend()
+                ax.grid(alpha=0.3)
+                st.pyplot(fig)
+            
+                # ==========================
+                # Información final
+                # ==========================
+                st.markdown(f"""
+                **Detalles de la estrategia**  
+            
+                - Prima del call comprado (strike `{K1:.2f}`): **`${prima_call_long:.2f}`**  
+                - Prima de cada call vendido (strike `{K2:.2f}`): **`${prima_call_short:.2f}`**  
+                - Prima neta total: **`${prima_neta:.2f}`**  
+                - Ganancia máxima: **Limitada entre los strikes `{K1:.2f}` y `{K2:.2f}`**  
+                - Pérdida potencial: **Ilimitada** si el subyacente supera **`${K2 + prima_call_long:.2f}`**  
+                  (Variación necesaria: **`{((K2 + prima_call_long)/S - 1)*100:.2f}%`**)  
+                """)
+
+                st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
+
         else:
             st.warning("⚠️ No se encontró una estrategia que cumpla esas condiciones.")
 
