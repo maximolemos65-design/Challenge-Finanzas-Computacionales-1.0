@@ -1530,6 +1530,8 @@ if st.session_state.calculado:
                 - Punto de equilibrio (Breakeven): **`${breakeven:.2f}`** → Variación necesaria del subyacente: **`{(breakeven/S-1)*100:.2f}%`**  
                 """)
 
+                st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
+
         else:
             st.warning("⚠️ No se encontró una estrategia que cumpla esas condiciones.")
 
