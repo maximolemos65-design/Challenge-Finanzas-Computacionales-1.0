@@ -258,11 +258,7 @@ if st.session_state.calculado:
     st.write("\n📊 Asimetría y Curtosis de la serie de Z-Scores")
     st.write(f"Asimetría: {asimetria:.4f}")
     st.write(f"Curtosis: {curtosis_val:.4f}")
-    
-    # ==========================
-    # 2.5 Medias móviles
-    # ==========================
-    
+
     # ==========================
     #  Volatilidad móvil
     # ==========================
@@ -308,9 +304,6 @@ if st.session_state.calculado:
     
     else:
         st.warning("⚠️ No se encontraron datos de retornos para calcular la volatilidad móvil.")
-
-    
-    """Value at Risk"""
 
     # ==========================
     # 14. Value at Risk (VaR empírico) + Conditional VaR con sombreado
