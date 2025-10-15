@@ -1618,6 +1618,106 @@ if st.session_state.calculado:
 
                 st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
 
+            elif recommended_strategy == "Mariposa vendida":
+                st.subheader("🦋 Estrategia: Mariposa Vendida (Short Butterfly)")
+            
+                st.markdown("""
+                Esta estrategia consiste en **comprar 2 calls ATM** (de base central)  
+                y **vender un call con base inferior** junto con **otro con base superior**.  
+                Limita las ganancias, pero reduce el costo del armado.
+                """)
+            
+                # ==========================
+                # Strikes
+                # ==========================
+                K1 = S * 0.95   # strike inferior
+                K2 = S * 1.00   # strike central (ATM)
+                K3 = S * 1.05   # strike superior
+            
+                # ==========================
+                # Funciones Black-Scholes
+                # ==========================
+                def black_scholes_call(S, K, T, r, sigma):
+                    d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
+                    d2 = d1 - sigma * math.sqrt(T)
+                    call_price = S * norm.cdf(d1) - K * math.exp(-r * T) * norm.cdf(d2)
+                    return call_price
+            
+                # ==========================
+                # Primas (costos de la estrategia)
+                # ==========================
+                prima_K1 = black_scholes_call(S, K1, T, r, sigma)*0.95
+                prima_K2 = black_scholes_call(S, K2, T, r, sigma)
+                prima_K3 = black_scholes_call(S, K3, T, r, sigma)*0.95
+            
+                # Comprar 1 call K1, vender 2 calls K2, comprar 1 call K3
+                prima_total = prima_K1 - 2*prima_K2 + prima_K3
+            
+                # ==========================
+                # Payoff al vencimiento
+                # ==========================
+                S_range = np.linspace(S*0.7, S*1.3, 200)
+            
+                payoff = (
+                    -np.maximum(S_range - K1, 0)   # short call K1
+                    + 2*np.maximum(S_range - K2, 0)  # long 2 calls K2
+                    - np.maximum(S_range - K3, 0)    # short call K3
+                    - prima_total                   # prima neta
+                )
+            
+                # ==========================
+                # Breakeven points
+                # ==========================
+                BE_lower = K1 - prima_total
+                BE_upper = K3 + prima_total
+            
+                # ==========================
+                # Ejemplo práctico
+                # ==========================
+                st.markdown(f"""
+                **Ejemplo práctico**  
+            
+                Venta de un **call** de `{ticker}` base **`${K1:.2f}`** con prima **`${prima_K1:.2f}`**,  
+                compra de **dos calls** base **`${K2:.2f}`** con prima **`${prima_K2:.2f}`**,  
+                y venta de un **call** base **`${K3:.2f}`** con prima **`${prima_K3:.2f}`**,  
+                todos con vencimiento en **`{T*12:.0f}` meses**,  
+                tendría el siguiente resultado:
+                """)
+            
+                # ==========================
+                # Gráfico
+                # ==========================
+                fig, ax = plt.subplots(figsize=(10,6))
+                ax.plot(S_range, payoff, label="Mariposa Vendida (Short Butterfly)", color="red", linewidth=2)
+                ax.axhline(0, color="black", linestyle="--", linewidth=1)
+                ax.axvline(K1, color="blue", linestyle="--", linewidth=1, label=f"K1 = {K1:.2f}")
+                ax.axvline(K2, color="green", linestyle="--", linewidth=1, label=f"K2 = {K2:.2f}")
+                ax.axvline(K3, color="purple", linestyle="--", linewidth=1, label=f"K3 = {K3:.2f}")
+                ax.axvline(BE_lower, color="orange", linestyle="--", linewidth=1.5, label=f"BE inferior = {BE_lower:.2f}")
+                ax.axvline(BE_upper, color="orange", linestyle="--", linewidth=1.5, label=f"BE superior = {BE_upper:.2f}")
+                ax.set_title("Estrategia Mariposa Vendida (Short Butterfly)")
+                ax.set_xlabel("Precio del subyacente al vencimiento")
+                ax.set_ylabel("Beneficio / Pérdida")
+                ax.legend()
+                ax.grid(alpha=0.3)
+                st.pyplot(fig)
+            
+                # ==========================
+                # Info
+                # ==========================
+                st.markdown(f"""
+                - **Prima neta pagada/recibida:** `${-prima_total:.2f}`  
+                - **Ganancia máxima:** `${np.max(payoff):.2f}`  
+                - **Pérdida máxima:** `${np.min(payoff):.2f}`  
+                - **Breakeven inferior:** `${BE_lower:.2f}` → Variación necesaria del subyacente: {(BE_lower/S-1)*100:.2f}%  
+                - **Breakeven superior:** `${BE_upper:.2f}` → Variación necesaria del subyacente: {(BE_upper/S-1)*100:.2f}%
+                """)
+            
+                # ==========================
+                # Recomendación
+                # ==========================
+                st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
+
         else:
             st.warning("⚠️ No se encontró una estrategia que cumpla esas condiciones.")
 
