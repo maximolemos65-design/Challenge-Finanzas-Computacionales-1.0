@@ -1796,6 +1796,96 @@ if st.session_state.calculado:
                 # ==========================
                 st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
 
+            elif recommended_strategy == "Venta sintético":
+                st.markdown("""
+                Esta estrategia consiste en comprar un **put** y vender un **call** de misma base.  
+                El objetivo es replicar el resultado de la **venta de una acción en corto**, pero con una inversión significativamente menor (apalancamiento).  
+                
+                La importancia de la **venta sintética** radica en que en algunos mercados —como el argentino— está prohibida la venta en descubierto de acciones.  
+                """)
+            
+                K = S * 1.02
+            
+                # ==========================
+                # Funciones Black-Scholes
+                # ==========================
+                def black_scholes_call(S, K, T, r, sigma):
+                    """Calcula el precio de un call europeo con Black-Scholes"""
+                    d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
+                    d2 = d1 - sigma * math.sqrt(T)
+                    call_price = S * norm.cdf(d1) - K * math.exp(-r * T) * norm.cdf(d2)
+                    return call_price
+            
+                def black_scholes_put(S, K, T, r, sigma):
+                    """Calcula el precio de un put europeo con Black-Scholes"""
+                    d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
+                    d2 = d1 - sigma * math.sqrt(T)
+                    put_price = K * math.exp(-r * T) * norm.cdf(-d2) - S * norm.cdf(-d1)
+                    return put_price
+            
+                # ==========================
+                # Primas
+                # ==========================
+                prima_call = black_scholes_call(S, K, T, r, sigma)
+                prima_put = black_scholes_put(S, K, T, r, sigma)
+                prima_neta = prima_call - prima_put  # ingreso neto de la posición
+            
+                # ==========================
+                # Payoff al vencimiento
+                # ==========================
+                S_range = np.linspace(S * 0.6, S * 1.4, 200)
+            
+                payoff_put = np.maximum(K - S_range, 0) - prima_put     # long put
+                payoff_call = -np.maximum(S_range - K, 0) + prima_call  # short call
+                payoff_sintetico = payoff_put + payoff_call
+            
+                # ==========================
+                # Payoff de venta directa
+                # ==========================
+                payoff_short_stock = S - S_range  # vender el subyacente directamente
+            
+                # ==========================
+                # Ejemplo práctico
+                # ==========================
+                st.markdown(f"""
+                **Ejemplo práctico**  
+            
+                Venta sintética de `{ticker}`:  
+                Compra de un **put** a **`${prima_put:.2f}`** y venta de un **call** a **`${prima_call:.2f}`**,  
+                ambos con base **`${K:.2f}`** y vencimiento en **`{T*12:.0f}` meses**,  
+                replicando la **venta del subyacente en corto** con menor capital.
+                """)
+            
+                # ==========================
+                # Gráfico
+                # ==========================
+                fig, ax = plt.subplots(figsize=(10, 6))
+                ax.plot(S_range, payoff_sintetico, label="Venta sintética (Put + Call)", color="red", linewidth=2)
+                ax.plot(S_range, payoff_short_stock, label="Venta directa del subyacente", color="gray", linestyle="--", linewidth=1.5)
+            
+                ax.axhline(0, color="black", linestyle="--", linewidth=1)
+                ax.axvline(K, color="blue", linestyle="--", linewidth=1, label=f"Strike = {K:.2f}")
+            
+                ax.set_title("Estrategia de Venta Sintética (Synthetic Short)")
+                ax.set_xlabel("Precio del subyacente al vencimiento")
+                ax.set_ylabel("Beneficio / Pérdida")
+                ax.legend()
+                ax.grid(alpha=0.3)
+                st.pyplot(fig)
+            
+                # ==========================
+                # Info
+                # ==========================
+                st.markdown(f"""
+                **Detalles de la posición:**  
+                Put comprado Strike **`${K:.2f}`** → Prima = **`${prima_put:.2f}`**  
+                Call vendido Strike **`${K:.2f}`** → Prima = **`${prima_call:.2f}`**  
+                Prima neta recibida: **`${prima_neta:.2f}`**  
+            
+                La posición replica el payoff de una **venta del subyacente**.
+                """)
+                st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
+
         else:
             st.warning("⚠️ No se encontró una estrategia que cumpla esas condiciones.")
 
