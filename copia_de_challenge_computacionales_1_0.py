@@ -1977,6 +1977,88 @@ if st.session_state.calculado:
                 """)
 
                 st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
+
+            elif recommended_strategy == "Venta CALL, compra tasa":
+                st.markdown("""
+                Si se espera que el activo se mantenga estable con **volatilidad baja**,  
+                se puede optar por **vender opciones CALL** para cobrar la prima  
+                y **reinvertir ese dinero** en la **tasa libre de riesgo** si ésta fuera atractiva.
+                """)
+            
+                # ==========================
+                # Parámetros
+                # ==========================
+                K = S * 1.02  # strike levemente superior
+            
+                # ==========================
+                # Black-Scholes Call
+                # ==========================
+                def black_scholes_call(S, K, T, r, sigma):
+                    d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
+                    d2 = d1 - sigma * math.sqrt(T)
+                    call_price = S * norm.cdf(d1) - K * math.exp(-r * T) * norm.cdf(d2)
+                    return call_price
+            
+                prima = black_scholes_call(S, K, T, r, sigma)
+            
+                # ==========================
+                # Payoff al vencimiento
+                # ==========================
+                S_range = np.linspace(S * 0.7, S * 1.5, 100)
+                payoff_call_seller = prima * (1 + r) ** T - np.maximum(S_range - K, 0)
+            
+                # ==========================
+                # Punto de equilibrio
+                # ==========================
+                breakeven = K + prima * (1 + r) ** T
+            
+                # ==========================
+                # Ejemplo práctico
+                # ==========================
+                st.markdown(f"""
+                **Ejemplo práctico**  
+            
+                Venta de un **call** de `{ticker}` a **`${prima:.2f}`**, con base **`${K:.2f}`**,  
+                vencimiento en **`{T*12:.0f}` meses** e inversión de la prima al **`{r*100:.2f}%` anual**,  
+                generaría el siguiente resultado al vencimiento:
+                """)
+            
+                # ==========================
+                # Gráfico
+                # ==========================
+                fig, ax = plt.subplots(figsize=(10, 6))
+                ax.plot(S_range, payoff_call_seller, label="Payoff Vendedor Call", color="purple", linewidth=2)
+            
+                # Líneas de referencia
+                ax.axhline(0, color="black", linestyle="--", linewidth=1)
+                ax.axvline(K, color="red", linestyle="--", linewidth=1, label=f"Strike = {K:.2f}")
+                ax.axvline(S, color="green", linestyle="--", linewidth=1, label=f"S = {S:.2f}")
+                ax.axvline(breakeven, color="orange", linestyle="--", linewidth=1.5, label=f"Breakeven = {breakeven:.2f}")
+            
+                # Estética
+                ax.set_title("Payoff de un Call Europeo (Vendedor) al Vencimiento")
+                ax.set_xlabel("Precio del subyacente al vencimiento")
+                ax.set_ylabel("Beneficio / Pérdida")
+                ax.legend()
+                ax.grid(alpha=0.3)
+                st.pyplot(fig)
+            
+                # ==========================
+                # Información adicional
+                # ==========================
+                st.markdown(f"""
+                **Detalles de la posición:**  
+                • **Prima call:** **`${prima:.2f}`**  
+                • **Costo total:** `0`  
+                • **Ganancia máxima:** **`${prima*(1+r)**T:.2f}`** (si `S < {K:.2f}`)  
+                • **Pérdida máxima:** Ilimitada ⚠️ 
+                • **Breakeven:** **`${breakeven:.2f}`** → Variación necesaria: **{(breakeven/S - 1)*100:.2f}%**
+                """)
+            
+                # ==========================
+                # Recomendación
+                # ==========================
+                st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
                 
         else:
             st.warning("⚠️ No se encontró una estrategia que cumpla esas condiciones.")
