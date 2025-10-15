@@ -1352,6 +1352,113 @@ if st.session_state.calculado:
                 st.write(f"**Breakeven inferior:** ${K_put:.2f} → Variación necesaria del subyacente: {(K_put/S - 1)*100:.2f}% (pérdida limitada más allá de este punto)")
                 st.write(f"**Breakeven superior:** ${K_call:.2f} → Variación necesaria del subyacente: {(K_call/S - 1)*100:.2f}% (ganancia limitada más allá de este punto)")
 
+            elif recommended_strategy == "Iron condor vendido":
+                st.write("""
+                Esta estrategia consiste en **vender un call** de determinada base OTM (o ATM) y **comprar otro call** de base superior.  
+                A su vez, implica **vender un put** de una base inferior (OTM o ATM) y **comprar otro put** con una base aún menor.  
+                En resumen, es la suma de un **bear spread con calls** y un **bull spread con puts**.  
+                """)
+            
+                st.warning("💡 RECOMENDACIÓN: Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
+            
+                # ==========================
+                # Strikes
+                # ==========================
+                K1 = S * 0.90  # Put comprado (protección inferior)
+                K2 = S * 0.95  # Put vendido
+                K3 = S * 1.05  # Call vendido
+                K4 = S * 1.10  # Call comprado (protección superior)
+            
+                # ==========================
+                # Funciones Black-Scholes
+                # ==========================
+                def black_scholes_call(S, K, T, r, sigma):
+                    d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
+                    d2 = d1 - sigma * math.sqrt(T)
+                    return S * norm.cdf(d1) - K * math.exp(-r * T) * norm.cdf(d2)
+            
+                def black_scholes_put(S, K, T, r, sigma):
+                    d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
+                    d2 = d1 - sigma * math.sqrt(T)
+                    return K * math.exp(-r * T) * norm.cdf(-d2) - S * norm.cdf(-d1)
+            
+                # ==========================
+                # Primas individuales
+                # ==========================
+                prima_put_long = black_scholes_put(S, K1, T, r, sigma)
+                prima_put_short = black_scholes_put(S, K2, T, r, sigma)
+                prima_call_short = black_scholes_call(S, K3, T, r, sigma)
+                prima_call_long = black_scholes_call(S, K4, T, r, sigma)
+            
+                # ==========================
+                # Crédito neto recibido
+                # ==========================
+                credito_neto = (prima_put_short - prima_put_long) + (prima_call_short - prima_call_long)
+            
+                # ==========================
+                # Payoff al vencimiento
+                # ==========================
+                S_range = np.linspace(S * 0.7, S * 1.3, 300)
+            
+                payoff_put_long = np.maximum(K1 - S_range, 0) - prima_put_long
+                payoff_put_short = -np.maximum(K2 - S_range, 0) + prima_put_short
+                payoff_call_short = -np.maximum(S_range - K3, 0) + prima_call_short
+                payoff_call_long = np.maximum(S_range - K4, 0) - prima_call_long
+            
+                payoff_condor = payoff_put_long + payoff_put_short + payoff_call_short + payoff_call_long
+            
+                # ==========================
+                # Breakevens
+                # ==========================
+                BE_lower = K2 - credito_neto
+                BE_upper = K3 + credito_neto
+            
+                # ==========================
+                # Ejemplo práctico
+                # ==========================
+                st.markdown(f"""
+                **Ejemplo práctico**  
+            
+                Venta de un **put** de `{ticker}` con base **`${K2:.2f}`** y compra de un **put** con base **`${K1:.2f}`**,  
+                junto con la venta de un **call** de `{ticker}` con base **`${K3:.2f}`** y compra de un **call** con base **`${K4:.2f}`**,  
+                todos con vencimiento a **`{T*12:.0f}` meses**,  
+                resultaría en el siguiente payoff:
+                """)
+            
+                # ==========================
+                # Gráfico
+                # ==========================
+                fig, ax = plt.subplots(figsize=(10, 6))
+                ax.plot(S_range, payoff_condor, label="Iron Condor Vendida", color="red", linewidth=2)
+                ax.axhline(0, color="black", linestyle="--", linewidth=1)
+                ax.axvline(K1, color="gray", linestyle="--", linewidth=1, label=f"K1 = {K1:.2f}")
+                ax.axvline(K2, color="blue", linestyle="--", linewidth=1, label=f"K2 = {K2:.2f}")
+                ax.axvline(K3, color="green", linestyle="--", linewidth=1, label=f"K3 = {K3:.2f}")
+                ax.axvline(K4, color="gray", linestyle="--", linewidth=1, label=f"K4 = {K4:.2f}")
+                ax.axvline(BE_lower, color="orange", linestyle="--", linewidth=1.5, label=f"BE inferior = {BE_lower:.2f}")
+                ax.axvline(BE_upper, color="orange", linestyle="--", linewidth=1.5, label=f"BE superior = {BE_upper:.2f}")
+                ax.set_title("Estrategia Iron Condor Vendida (Short Iron Condor)")
+                ax.set_xlabel("Precio del subyacente al vencimiento")
+                ax.set_ylabel("Beneficio / Pérdida")
+                ax.legend()
+                ax.grid(alpha=0.3)
+                st.pyplot(fig)
+            
+                # ==========================
+                # Información final
+                # ==========================
+                st.write(f"**Prima put comprada (`{K1:.2f}`):** `${prima_put_long:.2f}`")
+                st.write(f"**Prima put vendida (`{K2:.2f}`):** `${prima_put_short:.2f}`")
+                st.write(f"**Prima call vendida (`{K3:.2f}`):** `${prima_call_short:.2f}`")
+                st.write(f"**Prima call comprada (`{K4:.2f}`):** `${prima_call_long:.2f}`")
+            
+                st.markdown("---")
+                st.write(f"**Crédito neto recibido:** `${credito_neto:.2f}`")
+                st.write(f"**Ganancia máxima:** `${credito_neto:.2f}` (si `{K2:.2f}` < S < `{K3:.2f}`)")
+                st.write(f"**Pérdida máxima:** `${min(K2 - K1 - credito_neto, K4 - K3 - credito_neto):.2f}` (limitada por los spreads)")
+                st.write(f"**Breakeven inferior:** `${BE_lower:.2f}` (Variación: {(BE_lower/S-1)*100:.2f}%)")
+                st.write(f"**Breakeven superior:** `${BE_upper:.2f}` (Variación: {(BE_upper/S-1)*100:.2f}%)")
+
         else:
             st.warning("⚠️ No se encontró una estrategia que cumpla esas condiciones.")
 
