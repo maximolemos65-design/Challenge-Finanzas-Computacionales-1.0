@@ -1972,8 +1972,8 @@ if st.session_state.calculado:
                 • Prima **call** vendida: **`${prima_call:.2f}`**  
                 • **Ganancia máxima:** **`${prima_total:.2f}`** (si el precio se mantiene entre `${K_put:.2f}` y `${K_call:.2f}`)  
                 • **Pérdida máxima:** Ilimitada ⚠️    
-                • **Breakeven inferior:** **`${BE_lower:.2f}`**  → Variación necesaria: **{(BE_lower/S - 1)*100:.2f}%**  
-                • **Breakeven superior:** **`${BE_upper:.2f}`**  → Variación necesaria: **{(BE_upper/S - 1)*100:.2f}%**
+                • **Breakeven inferior:** **`${BE_lower:.2f}`**  → Variación necesaria del subyacente: **{(BE_lower/S - 1)*100:.2f}%**  
+                • **Breakeven superior:** **`${BE_upper:.2f}`**  → Variación necesaria del subyacente: **{(BE_upper/S - 1)*100:.2f}%**
                 """)
 
                 st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
@@ -2052,7 +2052,7 @@ if st.session_state.calculado:
                 • **Costo total:** `0`  
                 • **Ganancia máxima:** **`${prima*(1+r)**T:.2f}`** (si `S < {K:.2f}`)  
                 • **Pérdida máxima:** Ilimitada ⚠️    
-                • **Breakeven:** **`${breakeven:.2f}`** → Variación necesaria: **{(breakeven/S - 1)*100:.2f}%**
+                • **Breakeven:** **`${breakeven:.2f}`** → Variación necesaria del subyacente: **{(breakeven/S - 1)*100:.2f}%**
                 """)
             
                 # ==========================
