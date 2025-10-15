@@ -1336,14 +1336,18 @@ if st.session_state.calculado:
                 # ==========================
                 # Resultados informativos
                 # ==========================
-                st.write(f"• **Precio del subyacente:** ${S:.2f}")
-                st.write(f"• **Strike Put (protección):** ${K_put:.2f}")
-                st.write(f"• **Strike Call (tope):** ${K_call:.2f}")
-                st.write(f"• **Prima put:** ${prima_put:.2f}")
-                st.write(f"• **Prima call:** ${prima_call:.2f}")
-                st.write(f"• **Costo total neto:** ${costo_total:.2f}")
-                st.write(f"• **Breakeven inferior:** ${K_put:.2f} → Variación necesaria del subyacente: {(K_put/S - 1)*100:.2f}% (pérdida limitada más allá de este punto)")
-                st.write(f"• **Breakeven superior:** ${K_call:.2f} → Variación necesaria del subyacente: {(K_call/S - 1)*100:.2f}% (ganancia limitada más allá de este punto)")
+                st.markdown(f"""
+                **Detalles de la estrategia:**
+                
+                • **Precio del subyacente:** ${S:.2f}
+                • **Strike Put (protección):** ${K_put:.2f}
+                • **Strike Call (tope):** ${K_call:.2f}
+                • **Prima put:** ${prima_put:.2f}
+                • **Prima call:** ${prima_call:.2f}
+                • **Costo total neto:** ${costo_total:.2f}
+                • **Breakeven inferior:** ${K_put:.2f} → Variación necesaria del subyacente: {(K_put/S - 1)*100:.2f}% (pérdida limitada más allá de este punto)
+                • **Breakeven superior:** ${K_call:.2f} → Variación necesaria del subyacente: {(K_call/S - 1)*100:.2f}% (ganancia limitada más allá de este punto)
+                """)
 
             elif recommended_strategy == "Iron condor vendido":
                 st.write("""
@@ -1439,7 +1443,8 @@ if st.session_state.calculado:
                 # Información final
                 # ==========================
                 st.markdown(f"""
-                **Detalles de la estrategia**
+                **Detalles de la estrategia:**
+                
                 • **Prima put comprada (`{K1:.2f}`):** `${prima_put_long:.2f}`
                 • **Prima put vendida (`{K2:.2f}`):** `${prima_put_short:.2f}`
                 • **Prima call vendida (`{K3:.2f}`):** `${prima_call_short:.2f}`
@@ -1515,7 +1520,7 @@ if st.session_state.calculado:
                 # Información final
                 # ==========================
                 st.markdown(f"""
-                **Detalles de la estrategia**  
+                **Detalles de la estrategia:**  
             
                 • Prima del put: **`${prima:.2f}`**  
                 • Costo total: **`0`**  
@@ -1601,7 +1606,7 @@ if st.session_state.calculado:
                 # Información final
                 # ==========================
                 st.markdown(f"""
-                **Detalles de la estrategia**  
+                **Detalles de la estrategia:**  
             
                 • Prima del call comprado (strike `{K1:.2f}`): **`${prima_call_long:.2f}`**  
                 • Prima de cada call vendido (strike `{K2:.2f}`): **`${prima_call_short:.2f}`**  
@@ -1700,6 +1705,8 @@ if st.session_state.calculado:
                 # Info
                 # ==========================
                 st.markdown(f"""
+                **Detalles de la estrategia:** 
+                
                 • **Prima neta pagada/recibida:** `${-prima_total:.2f}`  
                 • **Ganancia máxima:** `${np.max(payoff):.2f}`  
                 • **Pérdida máxima:** `${np.min(payoff):.2f}`  
@@ -1778,6 +1785,8 @@ if st.session_state.calculado:
                 # Info
                 # ==========================
                 st.markdown(f"""
+                **Detalles de la estrategia:** 
+                
                 • **Prima call:** `${prima:.2f}`  
                 • **Costo total de la estrategia:** `0`  
                 • **Pérdida máxima:** Ilimitada ⚠️
@@ -1871,7 +1880,8 @@ if st.session_state.calculado:
                 # Info
                 # ==========================
                 st.markdown(f"""
-                **Detalles de la posición:**  
+                **Detalles de la estrategia:**
+                
                 • Put comprado Strike **`${K:.2f}`** → Prima = **`${prima_put:.2f}`**  
                 • Call vendido Strike **`${K:.2f}`** → Prima = **`${prima_call:.2f}`**  
                 • Prima neta recibida: **`${prima_neta:.2f}`**  
@@ -1961,7 +1971,8 @@ if st.session_state.calculado:
                 # Info
                 # ==========================
                 st.markdown(f"""
-                **Detalles de la posición:**  
+                **Detalles de la estrategia:**
+                
                 • Prima **put** vendida: **`${prima_put:.2f}`**  
                 • Prima **call** vendida: **`${prima_call:.2f}`**  
                 • **Ganancia máxima:** **`${prima_total:.2f}`** (si el precio se mantiene entre `${K_put:.2f}` y `${K_call:.2f}`)  
@@ -2041,7 +2052,8 @@ if st.session_state.calculado:
                 # Información adicional
                 # ==========================
                 st.markdown(f"""
-                **Detalles de la posición:**  
+                **Detalles de la estrategia:**
+                
                 • **Prima call:** **`${prima:.2f}`**  
                 • **Costo total:** `0`  
                 • **Ganancia máxima:** **`${prima*(1+r)**T:.2f}`** (si `S < {K:.2f}`)  
@@ -2140,6 +2152,8 @@ if st.session_state.calculado:
                 # Información final
                 # ==========================
                 st.markdown(f"""
+                **Detalles de la estrategia:** 
+                
                 • **Prima neta pagada/recibida:** `${-prima_total:.2f}`  
                 • **Ganancia máxima (en `{K2:.2f}`):** `${np.max(payoff):.2f}`  
                 • **Pérdida máxima (en extremos):** `${prima_total:.2f}`  
