@@ -1452,10 +1452,83 @@ if st.session_state.calculado:
                 st.write(f"**Crédito neto recibido:** `${credito_neto:.2f}`")
                 st.write(f"**Ganancia máxima:** `${credito_neto:.2f}` (si `{K2:.2f}` < S < `{K3:.2f}`)")
                 st.write(f"**Pérdida máxima:** `${min(K2 - K1 - credito_neto, K4 - K3 - credito_neto):.2f}` (limitada por los spreads)")
-                st.write(f"**Breakeven inferior:** `${BE_lower:.2f}` (Variación: {(BE_lower/S-1)*100:.2f}%)")
-                st.write(f"**Breakeven superior:** `${BE_upper:.2f}` (Variación: {(BE_upper/S-1)*100:.2f}%)")
+                st.write(f"**Breakeven inferior:** `${BE_lower:.2f}` → Variación necesaria del subyacente: {(BE_lower/S-1)*100:.2f}%")
+                st.write(f"**Breakeven superior:** `${BE_upper:.2f}` → Variación necesaria del subyacente: {(BE_upper/S-1)*100:.2f}%")
 
                 st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
+
+            elif recommended_strategy == "Venta PUT":
+                st.markdown("""
+                **💡 Estrategia: Venta de PUT**
+                
+                Al vender un **put (opción de venta)** se cobra la prima que abona el comprador.  
+                Si se espera **baja volatilidad** y una **tendencia alcista**, es probable que el put no se ejerza y el lanzador conserve la prima.  
+                En caso contrario, si el precio cae, el vendedor tiene la obligación de **comprar el activo subyacente** al precio pactado.
+            
+                ⚠️ **Recomendación:** Consultar los **requerimientos de garantía** con su agente de bolsa por el lanzamiento de las opciones.
+                """)
+            
+                # ==========================
+                # Parámetros y función BS
+                # ==========================
+                K = S * 0.98
+            
+                def black_scholes_put(S, K, T, r, sigma):
+                    """Calcula el precio de un put europeo con Black-Scholes"""
+                    d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
+                    d2 = d1 - sigma * math.sqrt(T)
+                    put_price = K * math.exp(-r * T) * norm.cdf(-d2) - S * norm.cdf(-d1)
+                    return put_price
+            
+                prima = black_scholes_put(S, K, T, r, sigma)
+            
+                # ==========================
+                # Payoff del vendedor
+                # ==========================
+                S_range = np.linspace(S*0.7, S*1.3, 200)
+                payoff_put_seller = prima - np.maximum(K - S_range, 0)
+                breakeven = K - prima
+            
+                # ==========================
+                # Ejemplo práctico
+                # ==========================
+                st.markdown(f"""
+                **Ejemplo práctico**  
+                
+                Venta de un **put** de `{ticker}` con strike **`${K:.2f}`**,  
+                vencimiento en **`{T*12:.0f}` meses** y prima **`${prima:.2f}`**,  
+                tendría el siguiente resultado:
+                """)
+            
+                # ==========================
+                # Gráfico
+                # ==========================
+                fig, ax = plt.subplots(figsize=(10,6))
+                ax.plot(S_range, payoff_put_seller, label="Payoff Vendedor Put", color="crimson", linewidth=2)
+                ax.axhline(0, color="black", linestyle="--", linewidth=1)
+                ax.axvline(K, color="red", linestyle="--", linewidth=1, label=f"Strike = {K:.2f}")
+                ax.axvline(S, color="green", linestyle="--", linewidth=1, label=f"S = {S:.2f}")
+                ax.axvline(breakeven, color="orange", linestyle="--", linewidth=1.5, label=f"Breakeven = {breakeven:.2f}")
+            
+                ax.set_title("Payoff de un Put Europeo (Vendedor) al Vencimiento")
+                ax.set_xlabel("Precio del subyacente al vencimiento")
+                ax.set_ylabel("Beneficio / Pérdida")
+                ax.legend()
+                ax.grid(alpha=0.3)
+                st.pyplot(fig)
+            
+                # ==========================
+                # Información final
+                # ==========================
+                st.markdown(f"""
+                **Detalles de la estrategia**  
+            
+                - Prima del put: **`${prima:.2f}`**  
+                - Costo total: **`0`**  
+                - Ganancia máxima: **`${prima:.2f}`** (si el precio `{S:.2f}` > strike `{K:.2f}`)  
+                - Pérdida máxima: **Ilimitada ⚠️**  
+                - Punto de equilibrio (Breakeven): **`${breakeven:.2f}`** → Variación necesaria del subyacente: **`{(breakeven/S-1)*100:.2f}%`**  
+                """)
 
         else:
             st.warning("⚠️ No se encontró una estrategia que cumpla esas condiciones.")
