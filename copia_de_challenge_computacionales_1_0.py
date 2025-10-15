@@ -1611,8 +1611,8 @@ if st.session_state.calculado:
             
                 - Prima del call comprado (strike `{K1:.2f}`): **`${prima_call_long:.2f}`**  
                 - Prima de cada call vendido (strike `{K2:.2f}`): **`${prima_call_short:.2f}`**  
-                - Prima neta total: **`${prima_neta:.2f}`**  
-                - Ganancia máxima: **`{max(payoff_ratio_call)}`** (cuando S = **`{K2:.2f}`**)  
+                - Prima neta total: **`${-prima_neta:.2f}`**  
+                - Ganancia máxima: **`{max(payoff_ratio_call):.2f}`** (cuando S = **`{K2:.2f}`**)  
                 - Pérdida potencial: **Ilimitada ⚠️** si el subyacente supera **`${K2 + prima_call_long:.2f}`** → Variación necesaria del subyacente: **`{((K2 + prima_call_long)/S - 1)*100:.2f}%`**)  
                 """)
 
