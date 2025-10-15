@@ -2051,7 +2051,7 @@ if st.session_state.calculado:
                 • **Prima call:** **`${prima:.2f}`**  
                 • **Costo total:** `0`  
                 • **Ganancia máxima:** **`${prima*(1+r)**T:.2f}`** (si `S < {K:.2f}`)  
-                • **Pérdida máxima:** Ilimitada ⚠️ 
+                • **Pérdida máxima:** Ilimitada ⚠️    
                 • **Breakeven:** **`${breakeven:.2f}`** → Variación necesaria: **{(breakeven/S - 1)*100:.2f}%**
                 """)
             
