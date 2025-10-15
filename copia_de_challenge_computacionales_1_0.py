@@ -1359,8 +1359,6 @@ if st.session_state.calculado:
                 En resumen, es la suma de un **bear spread con calls** y un **bull spread con puts**.  
                 """)
             
-                st.warning("💡 RECOMENDACIÓN: Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
-            
                 # ==========================
                 # Strikes
                 # ==========================
@@ -1451,13 +1449,13 @@ if st.session_state.calculado:
                 st.write(f"**Prima put vendida (`{K2:.2f}`):** `${prima_put_short:.2f}`")
                 st.write(f"**Prima call vendida (`{K3:.2f}`):** `${prima_call_short:.2f}`")
                 st.write(f"**Prima call comprada (`{K4:.2f}`):** `${prima_call_long:.2f}`")
-            
-                st.markdown("---")
                 st.write(f"**Crédito neto recibido:** `${credito_neto:.2f}`")
                 st.write(f"**Ganancia máxima:** `${credito_neto:.2f}` (si `{K2:.2f}` < S < `{K3:.2f}`)")
                 st.write(f"**Pérdida máxima:** `${min(K2 - K1 - credito_neto, K4 - K3 - credito_neto):.2f}` (limitada por los spreads)")
                 st.write(f"**Breakeven inferior:** `${BE_lower:.2f}` (Variación: {(BE_lower/S-1)*100:.2f}%)")
                 st.write(f"**Breakeven superior:** `${BE_upper:.2f}` (Variación: {(BE_upper/S-1)*100:.2f}%)")
+
+                st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
 
         else:
             st.warning("⚠️ No se encontró una estrategia que cumpla esas condiciones.")
