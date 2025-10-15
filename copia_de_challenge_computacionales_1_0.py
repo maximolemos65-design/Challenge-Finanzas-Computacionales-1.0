@@ -2148,9 +2148,9 @@ if st.session_state.calculado:
                 st.markdown(f"""
                 - **Prima neta pagada/recibida:** `${-prima_total:.2f}`  
                 - **Ganancia máxima (en `{K2:.2f}`):** `${np.max(payoff):.2f}`  
-                - **Pérdida máxima (en extremos):** `${-prima_total:.2f}`  
-                - **Breakeven inferior:** `{BE_lower:.2f}` (**{(BE_lower/S-1)*100:.2f}%**)  
-                - **Breakeven superior:** `{BE_upper:.2f}` (**{(BE_upper/S-1)*100:.2f}%**)  
+                - **Pérdida máxima (en extremos):** `${prima_total:.2f}`  
+                - **Breakeven inferior:** `{BE_lower:.2f}` → Variación necesaria del subyacente: **{(BE_lower/S-1)*100:.2f}%**  
+                - **Breakeven superior:** `{BE_upper:.2f}` → Variación necesaria del subyacente: **{(BE_upper/S-1)*100:.2f}%**  
                 - **Prima call comprado base `{K1:.2f}`:** `${prima_K1:.2f}`  
                 - **Prima call lanzado base `{K2:.2f}`:** `${prima_K2:.2f}`  
                 - **Prima call comprado base `{K3:.2f}`:** `${prima_K3:.2f}`
