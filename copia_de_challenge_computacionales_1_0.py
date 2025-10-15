@@ -2184,6 +2184,88 @@ if st.session_state.calculado:
                 • **Prima call lanzado base `{K2:.2f}`:** `${prima_K2:.2f}`  
                 • **Prima call comprado base `{K3:.2f}`:** `${prima_K3:.2f}`
                 """)
+
+            elif recommended_strategy == "Ratio put spread":
+                st.markdown("""
+                Esta estrategia se basa en **comprar 1 put** de una determinada base y **vender 2 puts** de una base inferior,  
+                lo que nos permite financiar la compra del put.  
+                Es importante destacar que la **ganancia máxima** proviene de las primas netas cobradas.  
+                **Recomendación:** consultar los requerimientos de garantía por el lanzamiento de las opciones.
+                """)
+            
+                # ==========================
+                # Strikes
+                # ==========================
+                K1 = S * 1.02  # Strike del put comprado
+                K2 = S * 0.98  # Strike de los puts vendidos
+            
+                # ==========================
+                # Función Black-Scholes
+                # ==========================
+                def black_scholes_put(S, K, T, r, sigma):
+                    d1 = (math.log(S / K) + (r + 0.5 * sigma**2) * T) / (sigma * math.sqrt(T))
+                    d2 = d1 - sigma * math.sqrt(T)
+                    put_price = K * math.exp(-r * T) * norm.cdf(-d2) - S * norm.cdf(-d1)
+                    return put_price
+            
+                # ==========================
+                # Cálculo de primas
+                # ==========================
+                prima_put_long = black_scholes_put(S, K1, T, r, sigma)
+                prima_put_short = black_scholes_put(S, K2, T, r, sigma)
+                prima_neta = prima_put_long - 2 * prima_put_short
+            
+                # ==========================
+                # Payoff al vencimiento
+                # ==========================
+                S_range = np.linspace(S * 0.5, S * 1.5, 200)
+                payoff_long_put = np.maximum(K1 - S_range, 0) - prima_put_long
+                payoff_short_puts = -2 * (np.maximum(K2 - S_range, 0) - prima_put_short)
+                payoff_ratio_put = payoff_long_put + payoff_short_puts
+            
+                # ==========================
+                # Breakeven estimado
+                # ==========================
+                breakeven = 2*K2 - K1 + prima_neta
+            
+                # ==========================
+                # Ejemplo práctico
+                # ==========================
+                st.markdown(f"""
+                **Ejemplo práctico**  
+            
+                Compra de un **put** de `{ticker}` base **`${K1:.2f}`** a **`${prima_put_long:.2f}`**,  
+                y venta de **dos puts** base **`${K2:.2f}`** a **`${prima_put_short:.2f}`**,  
+                ambos con vencimiento en **`{T*12:.0f}` meses**,  
+                tendría el siguiente resultado:
+                """)
+            
+                # ==========================
+                # Gráfico
+                # ==========================
+                fig, ax = plt.subplots(figsize=(10, 6))
+                ax.plot(S_range, payoff_ratio_put, label="Ratio Put Spread (1:-2)", color="purple", linewidth=2)
+                ax.axhline(0, color="black", linestyle="--", linewidth=1)
+                ax.axvline(K1, color="blue", linestyle="--", linewidth=1, label=f"Strike largo = {K1:.2f}")
+                ax.axvline(K2, color="red", linestyle="--", linewidth=1, label=f"Strike corto = {K2:.2f}")
+                ax.axvline(breakeven, color="orange", linestyle="--", linewidth=1.5, label=f"Breakeven = {breakeven:.2f}")
+                ax.set_title("Estrategia Ratio Put Spread (Compra 1 Put, Venta 2 Puts)")
+                ax.set_xlabel("Precio del subyacente al vencimiento")
+                ax.set_ylabel("Beneficio / Pérdida")
+                ax.legend()
+                ax.grid(alpha=0.3)
+                st.pyplot(fig)
+            
+                # ==========================
+                # Información resumen
+                # ==========================
+                st.markdown(f"""
+                • **Prima put comprado** base `{K1:.2f}`: `${prima_put_long:.2f}`  
+                • **Prima puts vendidos** base `{K2:.2f}`: `${prima_put_short:.2f}`  
+                • **Prima neta total:** `${-prima_neta:.2f}`  
+                • **Ganancia máxima:** {max(payoff_ratio_put):.2f} (cuando S = `{K2:.2f}`) 
+                • **Breakeven:** `{breakeven:.2f}` → **Variación necesaria:** {(breakeven/S-1)*100:.2f}%
+                """)
                 
         else:
             st.warning("⚠️ No se encontró una estrategia que cumpla esas condiciones.")
