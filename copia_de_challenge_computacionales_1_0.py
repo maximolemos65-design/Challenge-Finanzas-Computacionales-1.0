@@ -2260,11 +2260,11 @@ if st.session_state.calculado:
                 # Información resumen
                 # ==========================
                 st.markdown(f"""
-                • **Prima put comprado** base `{K1:.2f}`: `${prima_put_long:.2f}`  
-                • **Prima puts vendidos** base `{K2:.2f}`: `${prima_put_short:.2f}`  
-                • **Prima neta total:** `${-prima_neta:.2f}`  
-                • **Ganancia máxima:** {max(payoff_ratio_put):.2f} (cuando S = `{K2:.2f}`) 
-                • **Breakeven:** `{breakeven:.2f}` → **Variación necesaria:** {(breakeven/S-1)*100:.2f}%
+                - **Prima put comprado** base `{K1:.2f}`: `${prima_put_long:.2f}`
+                - **Prima puts vendidos** base `{K2:.2f}`: `${prima_put_short:.2f}`
+                - **Prima neta total:** `${-prima_neta:.2f}`
+                - **Ganancia máxima:** {max(payoff_ratio_put):.2f} (cuando S = `{K2:.2f}`)
+                - **Breakeven:** `{breakeven:.2f}` → **Variación necesaria:** {(breakeven/S-1)*100:.2f}%
                 """)
                 
         else:
