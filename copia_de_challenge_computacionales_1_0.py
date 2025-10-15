@@ -1886,6 +1886,96 @@ if st.session_state.calculado:
                 """)
                 st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
 
+            elif recommended_strategy == "Cuna vendida":
+                st.markdown("""
+                Esta estrategia consiste en **vender un call OTM** con una base superior al precio actual  
+                y **vender un put OTM** con una base inferior al precio actual del mismo subyacente.  
+                
+                Esto permite obtener un ingreso por la **venta de primas** que, según la expectativa del inversor, **no serán ejercidas**.  
+                Si el precio del activo se mueve demasiado hacia arriba o hacia abajo, el inversor estará obligado a vender o comprar el subyacente.  
+                """)
+            
+                K_call = S * 1.05
+                K_put = S * 0.95
+            
+                # ==========================
+                # Funciones Black-Scholes
+                # ==========================
+                def black_scholes_call(S, K, T, r, sigma):
+                    d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
+                    d2 = d1 - sigma * math.sqrt(T)
+                    return S * norm.cdf(d1) - K * math.exp(-r * T) * norm.cdf(d2)
+            
+                def black_scholes_put(S, K, T, r, sigma):
+                    d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
+                    d2 = d1 - sigma * math.sqrt(T)
+                    return K * math.exp(-r * T) * norm.cdf(-d2) - S * norm.cdf(-d1)
+            
+                # ==========================
+                # Primas cobradas
+                # ==========================
+                prima_put = black_scholes_put(S, K_put, T, r, sigma) * 1.05
+                prima_call = black_scholes_call(S, K_call, T, r, sigma) * 1.05
+                prima_total = prima_put + prima_call
+            
+                # ==========================
+                # Payoff al vencimiento
+                # ==========================
+                S_range = np.linspace(S * 0.6, S * 1.4, 200)
+                payoff_strangle = -np.maximum(K_put - S_range, 0) - np.maximum(S_range - K_call, 0) + prima_total
+            
+                # ==========================
+                # Breakeven points
+                # ==========================
+                BE_lower = K_put - prima_total
+                BE_upper = K_call + prima_total
+            
+                # ==========================
+                # Ejemplo práctico
+                # ==========================
+                st.markdown(f"""
+                **Ejemplo práctico**  
+            
+                Venta de un **put** de `{ticker}` a **`${prima_put:.2f}`** con base **`${K_put:.2f}`**  
+                y de un **call** a **`${prima_call:.2f}`** con base **`${K_call:.2f}`**,  
+                ambos con vencimiento en **`{T*12:.0f}` meses**.  
+                Esta operación generaría un ingreso total de **`${prima_total:.2f}`**,  
+                mientras el precio del activo permanezca entre las bases vendidas.
+                """)
+            
+                # ==========================
+                # Gráfico
+                # ==========================
+                fig, ax = plt.subplots(figsize=(10, 6))
+                ax.plot(S_range, payoff_strangle, label="Cuna Vendida (Short Strangle)", color="red", linewidth=2)
+            
+                # Líneas de referencia
+                ax.axhline(0, color="black", linestyle="--", linewidth=1)
+                ax.axvline(K_put, color="blue", linestyle="--", linewidth=1, label=f"Strike Put = {K_put:.2f}")
+                ax.axvline(K_call, color="green", linestyle="--", linewidth=1, label=f"Strike Call = {K_call:.2f}")
+                ax.axvline(BE_lower, color="orange", linestyle="--", linewidth=1.5, label=f"BE inferior = {BE_lower:.2f}")
+                ax.axvline(BE_upper, color="orange", linestyle="--", linewidth=1.5, label=f"BE superior = {BE_upper:.2f}")
+            
+                ax.set_title("Estrategia de Cuna Vendida (Short Strangle)")
+                ax.set_xlabel("Precio del subyacente al vencimiento")
+                ax.set_ylabel("Beneficio / Pérdida")
+                ax.legend()
+                ax.grid(alpha=0.3)
+                st.pyplot(fig)
+            
+                # ==========================
+                # Info
+                # ==========================
+                st.markdown(f"""
+                **Detalles de la posición:**  
+                • Prima **put** vendida: **`${prima_put:.2f}`**  
+                • Prima **call** vendida: **`${prima_call:.2f}`**  
+                • **Ganancia máxima:** **`${prima_total:.2f}`** (si el precio se mantiene entre `${K_put:.2f}` y `${K_call:.2f}`)  
+                • **Pérdida máxima:** Ilimitada  
+                • **Breakeven inferior:** **`${BE_lower:.2f}`**  → Variación necesaria: **{(BE_lower/S - 1)*100:.2f}%**  
+                • **Breakeven superior:** **`${BE_upper:.2f}`**  → Variación necesaria: **{(BE_upper/S - 1)*100:.2f}%**
+                """)
+
         else:
             st.warning("⚠️ No se encontró una estrategia que cumpla esas condiciones.")
 
