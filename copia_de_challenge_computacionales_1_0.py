@@ -189,7 +189,7 @@ if st.session_state.calculado:
     
     st.markdown("#### 📈 Volatilidad")
     
-    st.write("— Cantidad de desvíos —")
+    st.caption("Cantidad de desvíos")
     
     # ==========================
     # 2.1 Calcular Z-scores
