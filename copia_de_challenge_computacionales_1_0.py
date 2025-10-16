@@ -886,7 +886,7 @@ if st.session_state.calculado:
                 
                 Venta de un call de **{ticker}** base **`{K_venta:.2f}`**  
                 con una prima de **`${prima_call_venta:.2f}`**, y compra de un call base **`{K_compra:.2f}`**  
-                con prima **`${prima_call_compra:.2f}`**, vencimiento en **`{T*12:.0f}` meses**, tendría el siguiente resultado al vencimiento:
+                con prima **`${prima_call_compra:.2f}`**, ambos con vencimiento en **`{T*12:.0f}` meses**, tendría el siguiente resultado al vencimiento:
                 """)
 
             
@@ -914,9 +914,9 @@ if st.session_state.calculado:
                 st.markdown(f"""
                 **Detalles de la estrategia:**
                 
-                - **Prima call comprado: `{prima_call_compra:.2f}`**
-                - **Prima call vendido: `{prima_call_venta:.2f}`**
-                - **Costo neto inicial (prima total): `{costo_total:.2f}`**
+                - **Prima call comprado: `${prima_call_compra:.2f}`**
+                - **Prima call vendido: `${prima_call_venta:.2f}`**
+                - **Costo neto inicial (prima total): `${costo_total:.2f}`**
                 - **Breakeven: `{BE:.2f}`**  → Variación necesaria del subyacente: {(BE/S - 1)*100:.2f}%
                 - **Ganancia Máxima: `{ganancia_max:.2f}`**
                 - **Pérdida Máxima: `{perdida_max:.2f}`**
