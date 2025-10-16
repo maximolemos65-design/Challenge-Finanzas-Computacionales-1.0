@@ -488,7 +488,7 @@ if st.session_state.calculado:
     col3.metric("📊 Desvío Estándar", f"${desvio_precios:,.2f}")
     
     # Nueva métrica de escenarios (como texto)
-    st.markdown("### ⚖️ Escenarios Positivos / Negativos")
+    st.markdown("#### ⚖️ Escenarios Positivos / Negativos")
     
     st.markdown(f"""
     **📈 Escenarios Positivos:** `{pct_positivos:.1f}%`  
