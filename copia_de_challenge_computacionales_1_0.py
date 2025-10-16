@@ -263,7 +263,7 @@ if st.session_state.calculado:
     #  Volatilidad móvil
     # ==========================
     
-    st.markdown("### 📉 Volatilidad Móvil de los Retornos")
+    st.markdown("#### 📉 Volatilidad Móvil de los Retornos")
     
     # Verificar que existan los retornos en el DataFrame
     if "Return" in data.columns and not data["Return"].dropna().empty:
@@ -309,7 +309,7 @@ if st.session_state.calculado:
     # 14. Value at Risk (VaR empírico) + Conditional VaR con sombreado
     # ==========================
 
-    st.markdown("### 💥 Value at Risk (VaR) Empírico")
+    st.subheader("💥 Value at Risk (VaR) Empírico")
     
     # 1️⃣ Input de confianza
     conf_input = st.text_input("📌 Ingrese el nivel de confianza (ej: 0.95 para 95%):", value="0.95")
@@ -435,6 +435,8 @@ if st.session_state.calculado:
     # =====================================================
     # 📊 Histograma de precios finales
     # =====================================================
+    st.markdown("#### 🎲 Histograma de Simulación de Precios")
+    
     final_prices = simulaciones[-1, :]  # últimos precios de cada simulación
     
     fig2, ax2 = plt.subplots(figsize=(8,5))
@@ -461,7 +463,7 @@ if st.session_state.calculado:
     # 📊 Resultados Monte Carlo
     # ==========================
     
-    st.subheader("🎲 Resultados de la Simulación Montecarlo")
+    st.markdown("#### 🎲 Resultados de la Simulación Montecarlo")
     
     # 1️⃣ Cálculos básicos
     precio_inicial = S0
