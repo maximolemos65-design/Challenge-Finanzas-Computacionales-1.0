@@ -826,7 +826,7 @@ if st.session_state.calculado:
                 
                 - **Prima del call: `${prima:.2f}`** 
                 - **Costo inicial: `${prima:.2f}`** 
-                - **Pérdida máxima: `${prima:.2f}`** (si `S < {K:.2f}`) 
+                - **Pérdida máxima: `${prima:.2f}`** (si **`S < {K:.2f}`**) 
                 - **Ganancia máxima:** Ilimitada 🚀 
                 - **Breakeven: `{breakeven:.2f}`**  →  Variación necesaria del subyacente: {(breakeven/S - 1)*100:.2f}%
                 """)
@@ -884,9 +884,9 @@ if st.session_state.calculado:
                 st.markdown(f"""
                 **Ejemplo práctico**
                 
-                Venta de un call de **{ticker}** base **`{K_venta:.2f}`**, vencimiento en **`{T*12:.0f}` meses**,  
+                Venta de un call de **{ticker}** base **`{K_venta:.2f}`**  
                 con una prima de **`${prima_call_venta:.2f}`**, y compra de un call base **`{K_compra:.2f}`**  
-                con prima **`${prima_call_compra:.2f}`** tendría el siguiente resultado:
+                con prima **`${prima_call_compra:.2f}`**, vencimiento en **`{T*12:.0f}` meses**, tendría el siguiente resultado al vencimiento:
                 """)
 
             
@@ -914,12 +914,12 @@ if st.session_state.calculado:
                 st.markdown(f"""
                 **Detalles de la estrategia:**
                 
-                - "Strike Call Comprado:", {K_compra:.2f}
-                - "Strike Call Vendido:", {K_venta:.2f}
-                - "Costo Neto (prima total):" {costo_total:.2f}
-                - "Breakeven:", {BE:.2f}  → Variación necesaria del subyacente: {(BE/S - 1)*100:.2f}%
-                - "Ganancia Máxima:", {ganancia_max:.2f}
-                - "Pérdida Máxima:", {perdida_max:.2f}
+                - **Prima call comprado: `{prima_call_comprado:.2f}`**
+                - **Prima call vendido: `{prima_call_vendido:.2f}`**
+                - **Costo neto inicial (prima total): `{costo_total:.2f}`**
+                - **Breakeven: `{BE:.2f}`**  → Variación necesaria del subyacente: {(BE/S - 1)*100:.2f}%
+                - **Ganancia Máxima: `{ganancia_max:.2f}`**
+                - **Pérdida Máxima: `{perdida_max:.2f}`**
                 """)
             
                 st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
