@@ -187,9 +187,7 @@ if st.session_state.calculado:
     st.write(f"   - Intrínseco: {put_intrinsic:.2f}")
     st.write(f"   - Extrínseco: {put_extrinsic:.2f}")
     
-    st.markdown("#### 📈 Volatilidad")
-    
-    st.caption("Cantidad de desvíos")
+    st.subheader("📈 Volatilidad")
     
     # ==========================
     # 2.1 Calcular Z-scores
@@ -199,16 +197,15 @@ if st.session_state.calculado:
     # Media y desvío de los Z-scores
     mean_z = z_scores.mean()
     std_z  = z_scores.std()
-    
-    st.write()
-    st.write(f"Media z-scores: {mean_z:.6f}")
-    st.write(f"Desvío z-scores: {std_z:.6f}")
-    
+   
     # ==========================
     # 2.3 Histograma de Z-Scores
     # ==========================
     
-    st.markdown("### 🧮 Distribución de Z-Scores")
+    st.markdown("#### 🧮 Distribución de Z-Scores")
+    st.write()
+    st.write(f"Media z-scores: {mean_z:.6f}")
+    st.write(f"Desvío z-scores: {std_z:.6f}")
     
     # Verificar que existan los z-scores
     if "z_scores" in locals() and not isinstance(z_scores, type(None)) and len(z_scores) > 0:
