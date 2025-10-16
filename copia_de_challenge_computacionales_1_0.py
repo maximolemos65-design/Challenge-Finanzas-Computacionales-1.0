@@ -504,7 +504,7 @@ if st.session_state.calculado:
     # returns ya lo tenés calculado antes
     # Calcular cambio porcentual en volumen
     
-    st.caption("📊Volumen")
+    st.subheader("📊Volumen")
     
     # Verificar que existan los datos
     if "data" in locals() and not data.empty:
