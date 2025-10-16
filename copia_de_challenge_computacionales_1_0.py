@@ -1018,8 +1018,8 @@ if st.session_state.calculado:
                 - **Costo total (prima total): `${prima_total:.2f}`**
                 - **Pérdida máxima: `${prima_total:.2f}`** (si **`S ≈ {K:.2f}`**)
                 - **Ganancia máxima:** Ilimitada 🚀
-                - **Breakeven inferior: `${BE_lower:.2f}**  → Variación necesaria del subyacente: {(BE_lower/S - 1)*100:.2f}%
-                - **Breakeven superior: `${BE_upper:.2f}**  → Variación necesaria del subyacente: {(BE_upper/S - 1)*100:.2f}%
+                - **Breakeven inferior: `${BE_lower:.2f}`**  → Variación necesaria del subyacente: {(BE_lower/S - 1)*100:.2f}%
+                - **Breakeven superior: `${BE_upper:.2f}`**  → Variación necesaria del subyacente: {(BE_upper/S - 1)*100:.2f}%
                 """)
 
             elif recommended_strategy == "Compra PUT":
