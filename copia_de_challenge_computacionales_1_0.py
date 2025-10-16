@@ -457,16 +457,22 @@ if st.session_state.calculado:
     ax2.legend()
     st.pyplot(fig2)
     
-    # =====================================================
-    # 📋 Resultados Monte Carlo
-    # =====================================================
-    st.markdown(f"""
-    **📊 Resultados de la simulación Monte Carlo para `{ticker}`**
+    st.subheader("🎲 Resultados de la Simulación Montecarlo")
+
+    # Crear columnas
+    col1, col2, col3 = st.columns(3)
     
-    - Precio inicial: **`${S0:.2f}`**  
-    - Precio medio simulado a 1 año: **`${mean_final:.2f}`**  
-    - Desvío estándar de precios finales: **`${std_final:.2f}`**
-    """)
+    with col1:
+        st.markdown("💵 **Precio Inicial**")
+        st.markdown(f"<h2 style='margin-top:-10px'>${precio_inicial:,.2f}</h2>", unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("📈 **Precio Medio Simulado (1 año)**")
+        st.markdown(f"<h2 style='margin-top:-10px'>${precio_medio:,.2f}</h2>", unsafe_allow_html=True)
+    
+    with col3:
+        st.markdown("📊 **Desvío Estándar (Precios Finales)**")
+        st.markdown(f"<h2 style='margin-top:-10px'>${desvio_precios:,.2f}</h2>", unsafe_allow_html=True)
    
     # ==========================
     # 1. Preparar datos
