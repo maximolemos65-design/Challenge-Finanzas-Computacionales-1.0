@@ -531,7 +531,7 @@ if st.session_state.calculado:
         col4.metric("🔻 Mínimo", f"{vol_min/1000000:,.3f}M")
     
         # --- 3. Gráfico de dispersión ---
-        st.markdown("####🔹 Dispersión: Retornos vs Proporción del Volumen Promedio")
+        st.markdown("#### 🔹 Dispersión: Retornos vs Proporción del Volumen Promedio")
         fig1, ax1 = plt.subplots(figsize=(8, 5))
         ax1.scatter(df_aux["Return"], df_aux["Vol_Ratio"], alpha=0.5, color="purple")
         ax1.set_title(f"Relación entre Retornos y Volumen Promedio - {ticker}")
@@ -541,7 +541,7 @@ if st.session_state.calculado:
         st.pyplot(fig1)
     
         # --- 4. Gráfico de barras del volumen ---
-        st.markdown("####🔹 Volumen de negociación a lo largo del tiempo")
+        st.markdown("#### 🔹 Volumen de negociación a lo largo del tiempo")
         fig2, ax2 = plt.subplots(figsize=(12, 6))
         ax2.bar(volumen.index, volumen.values, width=1, color="purple", alpha=0.7)
         ax2.set_title(f"Volumen de negociación - {ticker}")
