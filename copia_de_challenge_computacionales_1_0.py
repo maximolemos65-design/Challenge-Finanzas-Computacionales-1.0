@@ -463,19 +463,37 @@ if st.session_state.calculado:
     
     st.subheader("🎲 Resultados de la Simulación Montecarlo")
     
-    # Valores a mostrar
+    # 1️⃣ Cálculos básicos
     precio_inicial = S0
     precio_medio = mean_final
     desvio_precios = std_final
     
-    # Crear 3 columnas
-    col1, col2, col3 = st.columns(3)
+    # 2️⃣ Escenarios positivos / negativos
+    positivos = np.sum(final_prices > precio_inicial)
+    negativos = np.sum(final_prices < precio_inicial)
+    total = len(final_prices)
     
-    # Mostrar métricas
+    pct_positivos = (positivos / total) * 100
+    pct_negativos = (negativos / total) * 100
+    
+    # 3️⃣ Mostrar métricas
+    col1, col2, col3, col4 = st.columns(4)
+    
     col1.metric("💵 Precio Inicial", f"${precio_inicial:,.2f}")
-    col2.metric("📈 Precio Medio Simulado (1 año)", f"${precio_medio:,.2f}", delta=f"{(precio_medio - precio_inicial)/precio_inicial*100:.2f}%")
-    col3.metric("📊 Desvío Estándar", f"${desvio_precios:,.2f}") 
-       
+    col2.metric(
+        "📈 Precio Medio Simulado (1 año)",
+        f"${precio_medio:,.2f}",
+        delta=f"{(precio_medio - precio_inicial)/precio_inicial*100:.2f}%",
+    )
+    col3.metric("📊 Desvío Estándar", f"${desvio_precios:,.2f}")
+    
+    # Nueva métrica de escenarios
+    col4.metric(
+        "⚖️ Escenarios Positivos/Negativos",
+        f"{pct_positivos:.1f}% / {pct_negativos:.1f}%",
+        help="Porcentaje de simulaciones donde el precio final supera o cae respecto al inicial."
+    ) 
+           
     # ==========================
     # 1. Preparar datos
     # ==========================
