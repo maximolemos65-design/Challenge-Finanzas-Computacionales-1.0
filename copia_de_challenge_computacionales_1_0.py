@@ -477,7 +477,7 @@ if st.session_state.calculado:
     pct_negativos = (negativos / total) * 100
     
     # 3️⃣ Mostrar métricas
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col3 = st.columns(3)
     
     col1.metric("💵 Precio Inicial", f"${precio_inicial:,.2f}")
     col2.metric(
@@ -488,9 +488,8 @@ if st.session_state.calculado:
     col3.metric("📊 Desvío Estándar", f"${desvio_precios:,.2f}")
     
     # Nueva métrica de escenarios
-    col4.metric(
-        "⚖️ Escenarios Positivos/Negativos",
-        f"{pct_positivos:.1f}% / {pct_negativos:.1f}%",
+    st.markdown("⚖️ Escenarios Positivos/Negativos"):
+    st.markdown(f"{pct_positivos:.1f}% / {pct_negativos:.1f}%",
         help="Porcentaje de simulaciones donde el precio final supera o cae respecto al inicial."
     ) 
            
