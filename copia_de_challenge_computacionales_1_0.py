@@ -369,16 +369,16 @@ if st.session_state.calculado:
     except ValueError:
         st.warning("⚠️ Ingrese un número válido (por ejemplo, 0.95).")
 
-    """Simulación de Montecarlo"""
+    # =====================================================
+    # 📈 Simulación de Montecarlo
+    # =====================================================
+    st.subheader("🎲 Simulación de Montecarlo")
     
-    # ==========================
-    # Gráfico combinado: histórico + Monte Carlo
-    # ==========================
-    
-    plt.figure(figsize=(12,6))
+    # --- Gráfico combinado: histórico + simulaciones ---
+    fig1, ax1 = plt.subplots(figsize=(12, 6))
     
     # 1. Gráfico histórico
-    plt.plot(data.index, data['Close'], label=f"Precio histórico {ticker}", color="blue", linewidth=2)
+    ax1.plot(data.index, data['Close'], label=f"Precio histórico {ticker}", color="blue", linewidth=2)
     
     # 2. Determinar frecuencia según intervalo elegido
     if interval == "1d":
@@ -397,70 +397,76 @@ if st.session_state.calculado:
     # 3. Simulaciones Monte Carlo
     n_simulaciones = 500
     simulaciones = np.zeros((N+1, n_simulaciones))   # incluye S0
-    S0 = float(data['Close'].iloc[-1])   # ✅ escalar
+    S0 = float(data['Close'].iloc[-1])               # ✅ escalar
     mu = mean_return
-    dt = Dt   # ya lo definiste según intervalo
+    dt = Dt                                          # ya definido según el intervalo
     
     for j in range(n_simulaciones):
         prices = [S0]
         for t in range(1, N+1):
             z = np.random.normal()
-            St = float(prices[-1] * np.exp((mu - 0.5 * sigma**2)*dt + sigma*np.sqrt(dt)*z))  # ✅ float
+            St = float(prices[-1] * np.exp((mu - 0.5 * sigma**2)*dt + sigma*np.sqrt(dt)*z))
             prices.append(St)
-        simulaciones[:, j] = np.array(prices).flatten()   # ✅ vector 1D
+        simulaciones[:, j] = np.array(prices).flatten()
     
         # Fechas futuras (arranca después del último dato real)
         future_dates = pd.date_range(start=data.index[-1], periods=N+1, freq=freq)[1:]
-        plt.plot(future_dates, prices[1:], linewidth=1, alpha=0.2, color="orange")
+        ax1.plot(future_dates, prices[1:], linewidth=1, alpha=0.2, color="orange")
     
     # 4. Línea promedio de todas las simulaciones
     mean_path = simulaciones.mean(axis=1)[1:]
-    plt.plot(future_dates, mean_path, color="black", linewidth=2, label="Media de simulaciones")
+    ax1.plot(future_dates, mean_path, color="black", linewidth=2, label="Media de simulaciones")
     
     # 5. Último precio como referencia
-    plt.scatter(data.index[-1], S0, color="black", zorder=5, label=f"Último precio: {S0:.2f}")
+    ax1.scatter(data.index[-1], S0, color="black", zorder=5, label=f"Último precio: {S0:.2f}")
     
     # 6. Strike
-    plt.axhline(y=K, color="red", linestyle="--", linewidth=1.5, label=f"Strike = {K}")
+    ax1.axhline(y=K, color="red", linestyle="--", linewidth=1.5, label=f"Strike = {K}")
     
-    # 7. Formato
-    plt.title(f"Trayectoria histórica y simulaciones Monte Carlo - {ticker}")
-    plt.xlabel("Fecha")
-    plt.ylabel("Precio")
-    plt.legend()
-    plt.grid(alpha=0.3)
-    plt.show()
+    # 7. Formato del gráfico
+    ax1.set_title(f"Trayectoria histórica y simulaciones Monte Carlo - {ticker}")
+    ax1.set_xlabel("Fecha")
+    ax1.set_ylabel("Precio")
+    ax1.legend()
+    ax1.grid(alpha=0.3)
+    st.pyplot(fig1)
     
-    # ==========================
-    # 8. Histograma de precios finales
-    # ==========================
+    
+    # =====================================================
+    # 📊 Histograma de precios finales
+    # =====================================================
     final_prices = simulaciones[-1, :]  # últimos precios de cada simulación
     
-    plt.figure(figsize=(8,5))
-    plt.hist(final_prices, bins=10, edgecolor='black', alpha=0.7)
+    fig2, ax2 = plt.subplots(figsize=(8,5))
+    ax2.hist(final_prices, bins=10, edgecolor='black', alpha=0.7)
     
     # Línea en el precio inicial
-    plt.axvline(S0, color="blue", linestyle="--", linewidth=2, label=f"Precio inicial: {S0:.2f}")
+    ax2.axvline(S0, color="blue", linestyle="--", linewidth=2, label=f"Precio inicial: {S0:.2f}")
     
     # Línea en el strike
-    plt.axvline(K, color="red", linestyle="--", linewidth=2, label=f"Strike = {K}")
+    ax2.axvline(K, color="red", linestyle="--", linewidth=2, label=f"Strike = {K}")
     
     # Estadísticas
     mean_final = np.mean(final_prices)
     std_final  = np.std(final_prices)
+    ax2.axvline(mean_final, color="green", linestyle="--", linewidth=2, label=f"Media final: {mean_final:.2f}")
     
-    st.write()
-    plt.axvline(mean_final, color="green", linestyle="--", linewidth=2, label=f"Media final: {mean_final:.2f}")
-    plt.title(f"Distribución de precios finales - Monte Carlo ({ticker})")
-    plt.xlabel("Precio al vencimiento (1 año)")
-    plt.ylabel("Frecuencia")
-    plt.legend()
-    plt.show()
+    ax2.set_title(f"Distribución de precios finales - Monte Carlo ({ticker})")
+    ax2.set_xlabel("Precio al vencimiento (1 año)")
+    ax2.set_ylabel("Frecuencia")
+    ax2.legend()
+    st.pyplot(fig2)
     
-    st.write("\n📊 Resultados Monte Carlo")
-    st.write(f"Precio inicial: {S0:.2f}")
-    st.write(f"Precio medio simulado a 1 año: {mean_final:.2f}")
-    st.write(f"Desvío de precios finales: {std_final:.2f}")
+    # =====================================================
+    # 📋 Resultados Monte Carlo
+    # =====================================================
+    st.markdown(f"""
+    **📊 Resultados de la simulación Monte Carlo para `{ticker}`**
+    
+    - Precio inicial: **`${S0:.2f}`**  
+    - Precio medio simulado a 1 año: **`${mean_final:.2f}`**  
+    - Desvío estándar de precios finales: **`${std_final:.2f}`**
+    """)
    
     # ==========================
     # 1. Preparar datos
