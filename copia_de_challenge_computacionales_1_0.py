@@ -824,14 +824,12 @@ if st.session_state.calculado:
                 st.markdown(f"""
                 **Detalles de la estrategia:**
                 
-                - **Prima del call:** `${prima:.2f}` 
-                - **Costo inicial:** `${prima:.2f}` 
-                - **Pérdida máxima:** `${prima:.2f}` (si `S < {K:.2f}`) 
-                - **Ganancia máxima:** Ilimitada 🚀") 
-                - **Breakeven:** `{breakeven:.2f}`  →  Variación necesaria del subyacente: {(breakeven/S - 1)*100:.2f}%
+                - **Prima del call: `${prima:.2f}`** 
+                - **Costo inicial: `${prima:.2f}`** 
+                - **Pérdida máxima: `${prima:.2f}`** (si `S < {K:.2f}`) 
+                - **Ganancia máxima:** Ilimitada 🚀 
+                - **Breakeven: `{breakeven:.2f}`**  →  Variación necesaria del subyacente: {(breakeven/S - 1)*100:.2f}%
                 """)
-
-                st.success("💡 Una compra de CALL es ideal para escenarios con expectativa **alcista** y volatilidad **moderada o creciente**.")
 
             # --- Estrategia específica: Bull spread con calls ---
             elif recommended_strategy == "Bull spread con calls":
