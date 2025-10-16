@@ -487,11 +487,16 @@ if st.session_state.calculado:
     )
     col3.metric("📊 Desvío Estándar", f"${desvio_precios:,.2f}")
     
-    # Nueva métrica de escenarios
-    st.markdown("⚖️ Escenarios Positivos/Negativos"):
-    st.markdown(f"{pct_positivos:.1f}% / {pct_negativos:.1f}%",
-        help="Porcentaje de simulaciones donde el precio final supera o cae respecto al inicial."
-    ) 
+    # Nueva métrica de escenarios (como texto)
+    st.markdown("### ⚖️ Escenarios Positivos / Negativos")
+    
+    st.markdown(f"""
+    **📈 Escenarios Positivos:** `{pct_positivos:.1f}%`  
+    **📉 Escenarios Negativos:** `{pct_negativos:.1f}%`  
+    
+    > 🔍 *Indica el porcentaje de simulaciones donde el precio final supera o cae respecto al inicial.*
+    """)
+
            
     # ==========================
     # 1. Preparar datos
