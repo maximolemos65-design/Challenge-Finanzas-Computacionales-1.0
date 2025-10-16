@@ -458,31 +458,23 @@ if st.session_state.calculado:
     st.pyplot(fig2)
     
     # ==========================
-    # 📊 Resultados Monte Carlo en columnas
+    # 📊 Resultados Monte Carlo
     # ==========================
     
     st.subheader("🎲 Resultados de la Simulación Montecarlo")
     
-    # Calcular valores a mostrar
+    # Valores a mostrar
     precio_inicial = S0
     precio_medio = mean_final
     desvio_precios = std_final
     
-    # Mostrar en 3 columnas
+    # Crear 3 columnas
     col1, col2, col3 = st.columns(3)
     
-    with col1:
-        st.markdown("💵 **Precio Inicial**")
-        st.markdown(f"<h2 style='margin-top:-10px'>${precio_inicial:,.2f}</h2>", unsafe_allow_html=True)
-    
-    with col2:
-        st.markdown("📈 **Precio Medio Simulado (1 año)**")
-        st.markdown(f"<h2 style='margin-top:-10px'>${precio_medio:,.2f}</h2>", unsafe_allow_html=True)
-    
-    with col3:
-        st.markdown("📊 **Desvío Estándar (Precios Finales)**")
-        st.markdown(f"<h2 style='margin-top:-10px'>${desvio_precios:,.2f}</h2>", unsafe_allow_html=True)
-    
+    # Mostrar métricas
+    col1.metric("💵 Precio Inicial", f"${precio_inicial:,.2f}")
+    col2.metric("📈 Precio Medio Simulado (1 año)", f"${precio_medio:,.2f}", delta=f"{(precio_medio - precio_inicial)/precio_inicial*100:.2f}%")
+    col3.metric("📊 Desvío Estándar", f"${desvio_precios:,.2f}") 
        
     # ==========================
     # 1. Preparar datos
