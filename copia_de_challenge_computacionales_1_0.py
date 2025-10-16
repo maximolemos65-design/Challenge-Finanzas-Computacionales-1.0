@@ -457,9 +457,18 @@ if st.session_state.calculado:
     ax2.legend()
     st.pyplot(fig2)
     
+    # ==========================
+    # 📊 Resultados Monte Carlo en columnas
+    # ==========================
+    
     st.subheader("🎲 Resultados de la Simulación Montecarlo")
-
-    # Crear columnas
+    
+    # Calcular valores a mostrar
+    precio_inicial = S0
+    precio_medio = mean_final
+    desvio_precios = std_final
+    
+    # Mostrar en 3 columnas
     col1, col2, col3 = st.columns(3)
     
     with col1:
@@ -473,7 +482,8 @@ if st.session_state.calculado:
     with col3:
         st.markdown("📊 **Desvío Estándar (Precios Finales)**")
         st.markdown(f"<h2 style='margin-top:-10px'>${desvio_precios:,.2f}</h2>", unsafe_allow_html=True)
-   
+    
+       
     # ==========================
     # 1. Preparar datos
     # ==========================
