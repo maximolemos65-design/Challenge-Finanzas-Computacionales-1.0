@@ -823,7 +823,8 @@ if st.session_state.calculado:
                 # ==========================
                 st.markdown(f"""
                 **Detalles de la estrategia:**
-                
+
+                - **Último precio observado del subyacente: `{S:.2f}`**
                 - **Prima del call: `${prima:.2f}`** 
                 - **Costo inicial: `${prima:.2f}`** 
                 - **Pérdida máxima: `${prima:.2f}`** (si **`S < {K:.2f}`**) 
@@ -913,7 +914,8 @@ if st.session_state.calculado:
                 # ==========================
                 st.markdown(f"""
                 **Detalles de la estrategia:**
-                
+
+                - **Último precio observado del subyacente: `{S:.2f}`**
                 - **Prima call comprado: `${prima_call_compra:.2f}`**
                 - **Prima call vendido: `${prima_call_venta:.2f}`**
                 - **Costo neto inicial (prima total): `${costo_total:.2f}`**
@@ -978,7 +980,7 @@ if st.session_state.calculado:
                 st.markdown(f"""
                 **Ejemplo práctico**  
                 
-                Compra de un **call** de `{ticker}` a **`${call_price:.2f}`** y un **put** a **`${put_price:.2f}`**,  
+                Compra de un **call** de **{ticker}** a **`${call_price:.2f}`** y un **put** a **`${put_price:.2f}`**,  
                 ambos con base **`${K:.2f}`** y vencimiento en **`{T*12:.0f}` meses**,  
                 tendría el siguiente resultado:
                 """)
@@ -1009,14 +1011,15 @@ if st.session_state.calculado:
                 # ==========================
                 st.markdown(f"""
                 **Detalles de la estrategia:**
-                
-                - **Prima call:** ${call_price:.2f}")
-                - **Prima put:** ${put_price:.2f}")
-                - **Costo total (prima total):** ${prima_total:.2f}")
-                - **Pérdida máxima:** ${prima_total:.2f} (si S ≈ {K:.2f})")
-                - **Ganancia máxima:** Ilimitada 🚀")
-                - **Breakeven inferior:** ${BE_lower:.2f}  → Variación necesaria del subyacente: {(BE_lower/S - 1)*100:.2f}%")
-                - **Breakeven superior:** ${BE_upper:.2f}  → Variación necesaria del subyacente: {(BE_upper/S - 1)*100:.2f}%")
+
+                - **Último precio observado del subyacente: `{S:.2f}`**
+                - **Prima call: `${call_price:.2f}`**
+                - **Prima put: `${put_price:.2f}`**
+                - **Costo total (prima total): `${prima_total:.2f}`**
+                - **Pérdida máxima: `${prima_total:.2f}`** (si **`S ≈ {K:.2f}`**)
+                - **Ganancia máxima:** Ilimitada 🚀
+                - **Breakeven inferior: `${BE_lower:.2f}**  → Variación necesaria del subyacente: {(BE_lower/S - 1)*100:.2f}%
+                - **Breakeven superior: `${BE_upper:.2f}**  → Variación necesaria del subyacente: {(BE_upper/S - 1)*100:.2f}%
                 """)
 
             elif recommended_strategy == "Compra PUT":
