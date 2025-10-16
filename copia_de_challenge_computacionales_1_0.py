@@ -95,11 +95,11 @@ if st.session_state.calculado:
         ax.plot(x, pdf, 'r-', linewidth=2, label="Normal teórica")
     
         # Líneas de media y desviaciones estándar
-        ax.axvline(mean_return, color='blue', linestyle='dashed', linewidth=2, label=f"Media: {mean_return:.4f}")
-        ax.axvline(mean_return + std_return, color='green', linestyle='dashed', linewidth=2, label=f"+1σ: {mean_return+std_return:.4f}")
-        ax.axvline(mean_return - std_return, color='green', linestyle='dashed', linewidth=2, label=f"-1σ: {mean_return-std_return:.4f}")
-        ax.axvline(mean_return + 2*std_return, color='green', linestyle='dashed', linewidth=2, label=f"+2σ: {mean_return+2*std_return:.4f}")
-        ax.axvline(mean_return - 2*std_return, color='green', linestyle='dashed', linewidth=2, label=f"-2σ: {mean_return-2*std_return:.4f}")
+        ax.axvline(mean_return, color='blue', linestyle='dashed', linewidth=2, label=f"Media: {mean_return*100:.2f}%")
+        ax.axvline(mean_return + std_return, color='green', linestyle='dashed', linewidth=2, label=f"+1σ: {(mean_return+std_return)*100:.2f}%")
+        ax.axvline(mean_return - std_return, color='green', linestyle='dashed', linewidth=2, label=f"-1σ: {(mean_return-std_return)*100:.2f}%")
+        ax.axvline(mean_return + 2*std_return, color='green', linestyle='dashed', linewidth=2, label=f"+2σ: {(mean_return+2*std_return)*100:.2f}%")
+        ax.axvline(mean_return - 2*std_return, color='green', linestyle='dashed', linewidth=2, label=f"-2σ: {(mean_return-2*std_return)*100:.2f}%")
     
         # Estética del gráfico
         ax.set_title(f"Distribución de Retornos - {ticker}")
