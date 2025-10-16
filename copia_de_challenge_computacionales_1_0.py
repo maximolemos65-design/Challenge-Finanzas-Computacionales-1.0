@@ -1018,8 +1018,8 @@ if st.session_state.calculado:
                 - **Costo total (prima total): `${prima_total:.2f}`**
                 - **Pérdida máxima: `${prima_total:.2f}`** (si **`S ≈ {K:.2f}`**)
                 - **Ganancia máxima:** Ilimitada 🚀
-                - **Breakeven inferior: `${BE_lower:.2f}`**  → Variación necesaria del subyacente: {(BE_lower/S - 1)*100:.2f}%
-                - **Breakeven superior: `${BE_upper:.2f}`**  → Variación necesaria del subyacente: {(BE_upper/S - 1)*100:.2f}%
+                - **Breakeven inferior: `{BE_lower:.2f}`**  → Variación necesaria del subyacente: {(BE_lower/S - 1)*100:.2f}%
+                - **Breakeven superior: `{BE_upper:.2f}`**  → Variación necesaria del subyacente: {(BE_upper/S - 1)*100:.2f}%
                 """)
 
             elif recommended_strategy == "Compra PUT":
@@ -1089,11 +1089,12 @@ if st.session_state.calculado:
                 st.markdown(f"""
                 **Detalles de la estrategia:**
                 
-                st.write(f"**Prima put:** ${prima:.2f}")
-                st.write(f"**Costo total de la estrategia:** ${prima:.2f}")
-                st.write(f"**Pérdida máxima:** ${prima:.2f} (si S > {K:.2f})")
-                st.write("**Ganancia máxima:** Ilimitada 🚀")
-                st.write(f"**Breakeven:** ${breakeven:.2f} → Variación necesaria del subyacente: {(breakeven/S - 1)*100:.2f}%")
+                - **Último precio observado del subyacente: `{S:.2f}`**
+                - **Prima put: `${prima:.2f}`**
+                - **Costo total de la estrategia: `${prima:.2f}`**
+                - **Pérdida máxima: `${prima:.2f}`** (si **`S > {K:.2f}`**)
+                - **Ganancia máxima:** Ilimitada 🚀
+                - **Breakeven: `{breakeven:.2f}`** → Variación necesaria del subyacente: {(breakeven/S - 1)*100:.2f}%
                 """)
 
             elif recommended_strategy == "Bear spread con puts":
