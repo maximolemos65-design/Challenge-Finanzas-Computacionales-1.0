@@ -914,8 +914,8 @@ if st.session_state.calculado:
                 st.markdown(f"""
                 **Detalles de la estrategia:**
                 
-                - **Prima call comprado: `{prima_call_comprado:.2f}`**
-                - **Prima call vendido: `{prima_call_vendido:.2f}`**
+                - **Prima call comprado: `{prima_call_compra:.2f}`**
+                - **Prima call vendido: `{prima_call_venta:.2f}`**
                 - **Costo neto inicial (prima total): `{costo_total:.2f}`**
                 - **Breakeven: `{BE:.2f}`**  → Variación necesaria del subyacente: {(BE/S - 1)*100:.2f}%
                 - **Ganancia Máxima: `{ganancia_max:.2f}`**
