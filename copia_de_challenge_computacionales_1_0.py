@@ -1752,7 +1752,7 @@ if st.session_state.calculado:
                 st.markdown(f"""
                 **Ejemplo práctico**  
             
-                Venta de un **call** de `{ticker}` con base **`${K:.2f}`**  
+                Venta de un **call** de `{ticker}` con base **`{K:.2f}`**  
                 y vencimiento en **`{T*12:.0f}` meses**,  
                 cobrando una prima de **`${prima:.2f}`**,  
                 tendría el siguiente resultado:
@@ -1796,7 +1796,7 @@ if st.session_state.calculado:
             elif recommended_strategy == "Venta sintético":
                 st.write("""
                 Esta estrategia consiste en comprar un **put** y vender un **call** de misma base.  
-                El objetivo es replicar el resultado de la **venta de una acción en corto**, pero con una inversión significativamente menor (apalancamiento).  
+                El objetivo es replicar el resultado de la **venta de una acción en corto**, pero con una inversión significativamente menor (es decir, con apalancamiento).  
                 
                 La importancia de la **venta sintética** radica en que en algunos mercados —como el argentino— está prohibida la venta en descubierto de acciones.  
                 """)
@@ -1849,7 +1849,7 @@ if st.session_state.calculado:
             
                 Venta sintética de `{ticker}`:  
                 Compra de un **put** a **`${prima_put:.2f}`** y venta de un **call** a **`${prima_call:.2f}`**,  
-                ambos con base **`${K:.2f}`** y vencimiento en **`{T*12:.0f}` meses**,  
+                ambos con base **`{K:.2f}`** y vencimiento en **`{T*12:.0f}` meses**,  
                 replicando la **venta del subyacente en corto** con menor capital.
                 """)
             
@@ -1935,11 +1935,10 @@ if st.session_state.calculado:
                 st.markdown(f"""
                 **Ejemplo práctico**  
             
-                Venta de un **put** de `{ticker}` a **`${prima_put:.2f}`** con base **`${K_put:.2f}`**  
-                y de un **call** a **`${prima_call:.2f}`** con base **`${K_call:.2f}`**,  
-                ambos con vencimiento en **`{T*12:.0f}` meses**.  
-                Esta operación generaría un ingreso total de **`${prima_total:.2f}`**,  
-                mientras el precio del activo permanezca entre las bases vendidas.
+                Venta de un **put** de `{ticker}` a **`${prima_put:.2f}`** con base **`{K_put:.2f}`**  
+                y de un **call** a **`${prima_call:.2f}`** con base **`{K_call:.2f}`**,  
+                ambos con vencimiento en **`{T*12:.0f}` meses**,
+                tendría el siguiente resultado:
                 """)
             
                 # ==========================
@@ -2019,7 +2018,7 @@ if st.session_state.calculado:
                 st.markdown(f"""
                 **Ejemplo práctico**  
             
-                Venta de un **call** de `{ticker}` a **`${prima:.2f}`**, con base **`${K:.2f}`**,  
+                Venta de un **call** de `{ticker}` a **`${prima:.2f}`**, con base **`{K:.2f}`**,  
                 vencimiento en **`{T*12:.0f}` meses** e inversión de la prima al **`{r*100:.2f}%` anual**,  
                 generaría el siguiente resultado al vencimiento:
                 """)
@@ -2067,7 +2066,6 @@ if st.session_state.calculado:
                 st.write("""
                 Para implementar esta estrategia debemos **vender 2 calls** con una determinada base y **comprar un call** de base inferior y **otro de base superior**.  
                 Estas compras van a cumplir la función de limitar nuestras pérdidas pero, por supuesto, a costa de obtener un ingreso neto menor.  
-                **Recomendación:** consultar los requerimientos de garantía por el lanzamiento de las opciones.
                 """)
             
                 # ==========================
@@ -2212,8 +2210,8 @@ if st.session_state.calculado:
                 st.markdown(f"""
                 **Ejemplo práctico**  
             
-                Compra de un **put** de `{ticker}` base **`${K1:.2f}`** a **`${prima_put_long:.2f}`**  
-                y venta de **dos puts** base **`${K2:.2f}`** a **`${prima_put_short:.2f}`**,  
+                Compra de un **put** de `{ticker}` base **`{K1:.2f}`** a **`${prima_put_long:.2f}`**  
+                y venta de **dos puts** base **`{K2:.2f}`** a **`${prima_put_short:.2f}`**,  
                 ambos con vencimiento en **`{T*12:.0f}` meses**,  
                 tendría el siguiente resultado:
                 """)
