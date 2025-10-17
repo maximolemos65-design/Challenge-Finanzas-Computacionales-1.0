@@ -864,7 +864,7 @@ if st.session_state.calculado:
                 - **Costo total: `${prima:.2f}`** 
                 - **Pérdida máxima: `${prima:.2f}`** (si **`S < {K:.2f}`**) 
                 - **Ganancia máxima:** Ilimitada 🚀 
-                - **Breakeven: `{breakeven:.2f}`**  →  Variación necesaria del subyacente: {(breakeven/S - 1)*100:.2f}%
+                - **Breakeven: `{breakeven:.2f}`**  →  Variación necesaria del subyacente: **{(breakeven/S - 1)*100:.2f}%**
                 """)
 
             # --- Estrategia específica: Bull spread con calls ---
@@ -954,7 +954,7 @@ if st.session_state.calculado:
                 - **Prima call comprado: `${prima_call_compra:.2f}`**
                 - **Prima call vendido: `${prima_call_venta:.2f}`**
                 - **Costo neto total (prima total): `${costo_total:.2f}`**
-                - **Breakeven: `{BE:.2f}`**  → Variación necesaria del subyacente: {(BE/S - 1)*100:.2f}%
+                - **Breakeven: `{BE:.2f}`**  → Variación necesaria del subyacente: **{(BE/S - 1)*100:.2f}%**
                 - **Ganancia Máxima: `{ganancia_max:.2f}`**
                 - **Pérdida Máxima: `{perdida_max:.2f}`**
                 """)
@@ -1053,8 +1053,8 @@ if st.session_state.calculado:
                 - **Costo total (prima total): `${prima_total:.2f}`**
                 - **Pérdida máxima: `${prima_total:.2f}`** (si **`S ≈ {K:.2f}`**)
                 - **Ganancia máxima:** Ilimitada 🚀
-                - **Breakeven inferior: `{BE_lower:.2f}`**  → Variación necesaria del subyacente: {(BE_lower/S - 1)*100:.2f}%
-                - **Breakeven superior: `{BE_upper:.2f}`**  → Variación necesaria del subyacente: {(BE_upper/S - 1)*100:.2f}%
+                - **Breakeven inferior: `{BE_lower:.2f}`**  → Variación necesaria del subyacente: **{(BE_lower/S - 1)*100:.2f}%**
+                - **Breakeven superior: `{BE_upper:.2f}`**  → Variación necesaria del subyacente: **{(BE_upper/S - 1)*100:.2f}%**
                 """)
 
             elif recommended_strategy == "Compra PUT":
@@ -1129,7 +1129,7 @@ if st.session_state.calculado:
                 - **Costo total de la estrategia: `${prima:.2f}`**
                 - **Pérdida máxima: `${prima:.2f}`** (si **`S > {K:.2f}`**)
                 - **Ganancia máxima:** Ilimitada 🚀
-                - **Breakeven: `{breakeven:.2f}`** → Variación necesaria del subyacente: {(breakeven/S - 1)*100:.2f}%
+                - **Breakeven: `{breakeven:.2f}`** → Variación necesaria del subyacente: **{(breakeven/S - 1)*100:.2f}%**
                 """)
 
             elif recommended_strategy == "Bear spread con puts":
@@ -1216,7 +1216,7 @@ if st.session_state.calculado:
                 - **Prima put comprado: `${prima_put_compra:.2f}`**
                 - **Prima put vendido: `${prima_put_venta:.2f}`**
                 - **Costo neto (prima total): `${costo_total:.2f}`**
-                - **Breakeven: `{BE:.2f}`** → Variación necesaria del subyacente: {(BE/S - 1)*100:.2f}%
+                - **Breakeven: `{BE:.2f}`** → Variación necesaria del subyacente: **{(BE/S - 1)*100:.2f}%**
                 - **Ganancia máxima: `${ganancia_max:.2f}`**
                 - **Pérdida máxima: `${perdida_max:.2f}`**
                 """)
@@ -1310,8 +1310,8 @@ if st.session_state.calculado:
                 - **Prima call comprada: `${prima_call:.2f}`**
                 - **Pérdida máxima: `${prima_total:.2f}`** (si **`{K_put:.2f} < S < {K_call:.2f}`**)
                 - **Ganancia máxima:** Ilimitada 🚀
-                - **Breakeven inferior: `{BE_lower:.2f}`** → Variación necesaria del subyacente: {(BE_lower/S - 1)*100:.2f}%
-                - **Breakeven superior: `{BE_upper:.2f}`** → Variación necesaria del subyacente: {(BE_upper/S - 1)*100:.2f}%
+                - **Breakeven inferior: `{BE_lower:.2f}`** → Variación necesaria del subyacente: **{(BE_lower/S - 1)*100:.2f}%**
+                - **Breakeven superior: `{BE_upper:.2f}`** → Variación necesaria del subyacente: **{(BE_upper/S - 1)*100:.2f}%**
                 """)
 
             elif recommended_strategy == "Collar":    
@@ -1403,8 +1403,8 @@ if st.session_state.calculado:
                 - **Prima put: `${prima_put:.2f}`**
                 - **Prima call: `${prima_call:.2f}`**
                 - **Costo total neto: `${costo_total:.2f}`**
-                - **Breakeven inferior: `{K_put:.2f}`** → Variación necesaria del subyacente: {(K_put/S - 1)*100:.2f}% (pérdida limitada más allá de este punto)
-                - **Breakeven superior: `{K_call:.2f}`** → Variación necesaria del subyacente: {(K_call/S - 1)*100:.2f}% (ganancia limitada más allá de este punto)
+                - **Breakeven inferior: `{K_put:.2f}`** → Variación necesaria del subyacente: **{(K_put/S - 1)*100:.2f}%** (pérdida limitada más allá de este punto)
+                - **Breakeven superior: `{K_call:.2f}`** → Variación necesaria del subyacente: **{(K_call/S - 1)*100:.2f}%** (ganancia limitada más allá de este punto)
                 """)
 
             elif recommended_strategy == "Iron condor vendido":
@@ -1511,8 +1511,8 @@ if st.session_state.calculado:
                 - **Crédito neto recibido: `${credito_neto:.2f}`**
                 - **Ganancia máxima: `${credito_neto:.2f}`** (si **`{K2:.2f} < S < {K3:.2f}`**)
                 - **Pérdida máxima: `${min(K2 - K1 - credito_neto, K4 - K3 - credito_neto):.2f}`** (limitada por los spreads)
-                - **Breakeven inferior: `{BE_lower:.2f}`** → Variación necesaria del subyacente: {(BE_lower/S-1)*100:.2f}%
-                - **Breakeven superior: `{BE_upper:.2f}`** → Variación necesaria del subyacente: {(BE_upper/S-1)*100:.2f}%
+                - **Breakeven inferior: `{BE_lower:.2f}`** → Variación necesaria del subyacente: **{(BE_lower/S-1)*100:.2f}%**
+                - **Breakeven superior: `{BE_upper:.2f}`** → Variación necesaria del subyacente: **{(BE_upper/S-1)*100:.2f}%**
                 """)
 
                 st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
@@ -1579,13 +1579,14 @@ if st.session_state.calculado:
                 # Información final
                 # ==========================
                 st.markdown(f"""
-                **Detalles de la estrategia:**  
-            
-                - Prima del put: **`${prima:.2f}`**  
-                - Costo total: **`0`**  
-                - Ganancia máxima: **`${prima:.2f}`** (si el precio `{S:.2f}` > strike `{K:.2f}`)  
-                - Pérdida máxima: **Ilimitada ⚠️**  
-                - Punto de equilibrio (Breakeven): **`${breakeven:.2f}`** → Variación necesaria del subyacente: **`{(breakeven/S-1)*100:.2f}%`**  
+                **Detalles de la estrategia:** 
+                
+                - **Último precio observado del subyacente: `{S:.2f}`**
+                - **Prima del put: `${prima:.2f}`**  
+                - **Costo total: `0`**  
+                - **Ganancia máxima: ${prima:.2f}`** (si **`S > `{K:.2f}`**)  
+                - **Pérdida máxima: Ilimitada ⚠️**  
+                - **Punto de equilibrio (Breakeven): `{breakeven:.2f}`** → Variación necesaria del subyacente: **`{(breakeven/S-1)*100:.2f}%`**  
                 """)
 
                 st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
@@ -1666,12 +1667,14 @@ if st.session_state.calculado:
                 # ==========================
                 st.markdown(f"""
                 **Detalles de la estrategia:**  
-            
-                - Prima del call comprado (strike `{K1:.2f}`): **`${prima_call_long:.2f}`**  
-                - Prima de cada call vendido (strike `{K2:.2f}`): **`${prima_call_short:.2f}`**  
-                - Prima neta total: **`${-prima_neta:.2f}`**  
-                - Ganancia máxima: **`{max(payoff_ratio_call):.2f}`** (cuando **S = `{K2:.2f}`**)  
-                - Pérdida potencial: **Ilimitada ⚠️** si el subyacente supera **`${K2 + prima_call_long:.2f}`** → Variación necesaria del subyacente: **`{((K2 + prima_call_long)/S - 1)*100:.2f}%`**)  
+
+                - **Último precio observado del subyacente: `{S:.2f}`**
+                - **Prima del call comprado: `${prima_call_long:.2f}`**  
+                - **Prima de cada call vendido: `${prima_call_short:.2f}`**  
+                - **Prima neta total: `${-prima_neta:.2f}`**  
+                - **Ganancia máxima: `{max(payoff_ratio_call):.2f}`** (si **`S = {K2:.2f}`**)  
+                - **Pérdida potencial: Ilimitada ⚠️** (si **`S > {K2 + prima_call_long:.2f}`**)  
+                - **Breakeven: `{K2 + prima_call_long:.2f}`** → Variación necesaria del subyacente: **{((K2 + prima_call_long)/S - 1)*100:.2f}%** 
                 """)
 
                 st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
@@ -1765,12 +1768,13 @@ if st.session_state.calculado:
                 # ==========================
                 st.markdown(f"""
                 **Detalles de la estrategia:** 
-                
-                - **Prima neta pagada/recibida:** `${-prima_total:.2f}`  
-                - **Ganancia máxima:** `${np.max(payoff):.2f}`  
-                - **Pérdida máxima:** `${np.min(payoff):.2f}`  
-                - **Breakeven inferior:** `${BE_lower:.2f}` → Variación necesaria del subyacente: {(BE_lower/S-1)*100:.2f}%  
-                - **Breakeven superior:** `${BE_upper:.2f}` → Variación necesaria del subyacente: {(BE_upper/S-1)*100:.2f}%
+
+                - **Último precio observado del subyacente: `{S:.2f}`**
+                - **Prima neta pagada/recibida: `${-prima_total:.2f}`**  
+                - **Ganancia máxima: `${np.max(payoff):.2f}`**  
+                - **Pérdida máxima: `${np.min(payoff):.2f}`**  
+                - **Breakeven inferior: `${BE_lower:.2f}`** → Variación necesaria del subyacente: **{(BE_lower/S-1)*100:.2f}%**  
+                - **Breakeven superior: `${BE_upper:.2f}`** → Variación necesaria del subyacente: **{(BE_upper/S-1)*100:.2f}%**
                 """)
             
                 # ==========================
@@ -1845,12 +1849,13 @@ if st.session_state.calculado:
                 # ==========================
                 st.markdown(f"""
                 **Detalles de la estrategia:** 
-                
-                - **Prima call:** `${prima:.2f}`  
-                - **Costo total de la estrategia:** `0`  
-                - **Pérdida máxima:** Ilimitada ⚠️
-                - **Ganancia máxima:** `${prima:.2f}` (si **S < {K:.2f}**)  
-                - **Breakeven:** `${breakeven:.2f}` → Variación necesaria del subyacente: {(breakeven/S-1)*100:.2f}%
+
+                - **Último precio observado del subyacente: `{S:.2f}`**
+                - **Prima call: `${prima:.2f}`**  
+                - **Costo total de la estrategia: `0`**  
+                - **Pérdida máxima: Ilimitada ⚠️**
+                - **Ganancia máxima: `${prima:.2f}`** (si **`S < {K:.2f}`**)  
+                - **Breakeven: `{breakeven:.2f}`** → Variación necesaria del subyacente: **{(breakeven/S-1)*100:.2f}%**
                 """)
             
                 # ==========================
