@@ -6,7 +6,6 @@ from scipy.stats import norm, skew, kurtosis
 import math
 import pandas as pd
 from datetime import date, timedelta
-import plotly.express as px
 
 # ==========================
 # Encabezado
