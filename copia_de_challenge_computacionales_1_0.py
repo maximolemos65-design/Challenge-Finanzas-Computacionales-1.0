@@ -786,8 +786,6 @@ if st.session_state.calculado:
 
             # --- Estrategia específica: Compra CALL ---
             if recommended_strategy == "Compra CALL":
-                st.subheader("📘 Estrategia: Compra de CALL")
-
                 st.write(
                     "Comprar un **call (opción de compra)** te da el **derecho, pero no la obligación**, "
                     "de comprar el activo subyacente a un precio determinado (strike) hasta la fecha de vencimiento."
@@ -868,9 +866,7 @@ if st.session_state.calculado:
                 """)
 
             # --- Estrategia específica: Bull spread con calls ---
-            elif recommended_strategy == "Bull spread con calls":
-                st.subheader("📘 Estrategia: Bull Spread con Calls")
-            
+            elif recommended_strategy == "Bull spread con calls":         
                 st.write("""
                 Esta estrategia se basa en **comprar un call** con una determinada base (strike) y **vender un call**
                 con una base mayor a la comprada.  
@@ -962,7 +958,6 @@ if st.session_state.calculado:
                 st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
 
             elif recommended_strategy == "Cono comprado":
-                st.subheader("🎯 Estrategia: Cono Comprado (Long Straddle)")
                 st.write("""
                 Esta estrategia consiste en **comprar un call y un put sobre el mismo subyacente**, 
                 con **la misma base y mismo vencimiento**.  
@@ -1520,9 +1515,7 @@ if st.session_state.calculado:
                 st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
 
             elif recommended_strategy == "Venta PUT":
-                st.markdown("""
-                **💡 Estrategia: Venta de PUT**
-                
+                st.write(""" 
                 Al vender un **put (opción de venta)** se cobra la prima que abona el comprador.  
                 Si se espera **baja volatilidad** y una **tendencia alcista**, es probable que el put no se ejerza y el lanzador conserve la prima.  
                 En caso contrario, si el precio cae, el vendedor tiene la obligación de **comprar el activo subyacente** al precio pactado.
@@ -1594,9 +1587,7 @@ if st.session_state.calculado:
                 st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
 
             elif recommended_strategy == "Ratio call spread":
-                st.markdown("""
-                **💡 Estrategia: Ratio Call Spread**
-                
+                st.write("""     
                 Esta estrategia se basa en la **compra de un call** de una determinada base y la **venta de dos calls** de una base superior.  
                 El objetivo es **financiar la compra** del call largo con las primas recibidas por los calls vendidos.  
                 Es ideal cuando se espera una **suba moderada** del subyacente pero se desea estar **cubierto a la baja**.
@@ -1682,9 +1673,7 @@ if st.session_state.calculado:
                 st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
 
             elif recommended_strategy == "Mariposa vendida":
-                st.subheader("🦋 Estrategia: Mariposa Vendida (Short Butterfly)")
-            
-                st.markdown("""
+                st.write("""
                 Esta estrategia consiste en **comprar 2 calls ATM** (de base central)  
                 y **vender un call con base inferior** junto con **otro con base superior**.  
                 Limita las ganancias, pero reduce el costo del armado.
@@ -1788,9 +1777,7 @@ if st.session_state.calculado:
                 st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
 
             elif recommended_strategy == "Venta CALL":
-                st.subheader("📉 Estrategia: Venta de CALL")
-            
-                st.markdown("""
+                st.write("""
                 Al vender un **call (opción de compra)** se cobra la **prima** que abona el comprador.  
                 Si se espera **baja volatilidad con tendencia bajista**, es probable que el call no se ejerza,  
                 permitiendo al lanzador quedarse con la prima.  
@@ -1869,7 +1856,7 @@ if st.session_state.calculado:
                 st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
 
             elif recommended_strategy == "Venta sintético":
-                st.markdown("""
+                st.write("""
                 Esta estrategia consiste en comprar un **put** y vender un **call** de misma base.  
                 El objetivo es replicar el resultado de la **venta de una acción en corto**, pero con una inversión significativamente menor (apalancamiento).  
                 
@@ -1961,7 +1948,7 @@ if st.session_state.calculado:
                 st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
 
             elif recommended_strategy == "Cuna vendida":
-                st.markdown("""
+                st.write("""
                 Esta estrategia consiste en **vender un call OTM** con una base superior al precio actual  
                 y **vender un put OTM** con una base inferior al precio actual del mismo subyacente.  
                 
@@ -2055,7 +2042,7 @@ if st.session_state.calculado:
                 st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
 
             elif recommended_strategy == "Venta CALL, compra tasa":
-                st.markdown("""
+                st.write("""
                 Si se espera que el activo se mantenga estable con **volatilidad baja**,  
                 se puede optar por **vender opciones CALL** para cobrar la prima  
                 y **reinvertir ese dinero** en la **tasa libre de riesgo** si ésta fuera atractiva.
@@ -2139,7 +2126,7 @@ if st.session_state.calculado:
                 st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
 
             elif recommended_strategy == "Mariposa comprada":
-                st.markdown("""
+                st.write("""
                 Para implementar esta estrategia debemos **vender 2 calls** con una determinada base y **comprar un call** de base inferior y **otro de base superior**.  
                 Estas compras van a cumplir la función de limitar nuestras pérdidas pero, por supuesto, a costa de obtener un ingreso neto menor.  
                 **Recomendación:** consultar los requerimientos de garantía por el lanzamiento de las opciones.
@@ -2240,7 +2227,7 @@ if st.session_state.calculado:
                 st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
 
             elif recommended_strategy == "Ratio put spread":
-                st.markdown("""
+                st.write("""
                 Esta estrategia se basa en **comprar 1 put** de una determinada base y **vender 2 puts** de una base inferior,  
                 lo que nos permite financiar la compra del put.  
                 Es importante destacar que la **ganancia máxima** proviene de las primas netas cobradas.  
