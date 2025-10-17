@@ -6,6 +6,7 @@ from scipy.stats import norm, skew, kurtosis
 import math
 import pandas as pd
 from datetime import date, timedelta
+import plotly.express as px
 
 # ==========================
 # Encabezado
@@ -557,17 +558,12 @@ if st.session_state.calculado:
     
     else:
         st.warning("⚠️ Aún no se cargaron datos. Presioná *Calcular* primero.")
-
     
-    """Momentum - Variaciones"""
+    st.subheader(f"📊 Momentum de `{ticker}`")
     
-    import numpy as np
-    import pandas as pd
-    
-    # Create a new DataFrame for the momentum variations
+    # ---------------- PASO 1: Preparar datos ----------------
     momentum_data = pd.DataFrame(index=data.index)
     
-    # Paso 1: clasificar retorno actual y agregar a momentum_data
     condiciones = [
         data['Return'] > 0,
         data['Return'] < 0,
@@ -576,17 +572,85 @@ if st.session_state.calculado:
     valores = ['Positivo', 'Negativo', 'Sin variación']
     momentum_data['Return_class'] = np.select(condiciones, valores, default='Sin variación')
     
-    # Paso 2: clasificación del retorno anterior y agregar a momentum_data
-    momentum_data['Return_lag1'] = momentum_data['Return_class'].shift(1)
-    momentum_data['Return_lag1'] = momentum_data['Return_lag1'].fillna('Sin dato previo')
+    for lag in range(1, 5):
+        momentum_data[f'Return_lag{lag}'] = momentum_data['Return_class'].shift(lag).fillna('Sin dato previo')
     
-    # Paso 3: retornos de días previos y agregar a momentum_data
-    momentum_data['Return_lag2'] = momentum_data['Return_class'].shift(2)
-    momentum_data['Return_lag2'] = momentum_data['Return_lag2'].fillna('Sin dato previo')
-    momentum_data['Return_lag3'] = momentum_data['Return_class'].shift(3)
-    momentum_data['Return_lag3'] = momentum_data['Return_lag3'].fillna('Sin dato previo')
-    momentum_data['Return_lag4'] = momentum_data['Return_class'].shift(4)
-    momentum_data['Return_lag4'] = momentum_data['Return_lag4'].fillna('Sin dato previo')
+    # ---------------- FUNCIONES AUXILIARES ----------------
+    def contar_transiciones(df, actual, lag_anterior):
+        filtrado = df[df['Return_class'] == actual]
+        conteo = filtrado['Return_lag1'].value_counts()
+        total = conteo.sum()
+        prob_pos = conteo.get('Positivo', 0) / total if total > 0 else 0
+        prob_neg = conteo.get('Negativo', 0) / total if total > 0 else 0
+        return prob_pos, prob_neg
+    
+    # Calcular probabilidades básicas (Lag 1)
+    prob_pp, prob_pn = contar_transiciones(momentum_data, 'Positivo', 'Return_lag1')
+    prob_nn, prob_np = contar_transiciones(momentum_data, 'Negativo', 'Return_lag1')
+    
+    avg_return_pp = returns[(momentum_data['Return_lag1'] == 'Positivo') & (momentum_data['Return_class'] == 'Positivo')].mean()
+    avg_return_nn = returns[(momentum_data['Return_lag1'] == 'Negativo') & (momentum_data['Return_class'] == 'Negativo')].mean()
+    
+    # ---------------- VISUALIZACIÓN ----------------
+    st.subheader("📈 Resumen del momentum reciente")
+    
+    momentum_actual = momentum_data['Return_class'].iloc[-1]
+    tendencia = "Alcista" if momentum_actual == "Positivo" else "Bajista" if momentum_actual == "Negativo" else "Neutral"
+    emoji = "🟢" if tendencia == "Alcista" else "🔴" if tendencia == "Bajista" else "⚪"
+    
+    st.markdown(f"""
+    **Tendencia actual:** {emoji} **{tendencia.upper()}**  
+    Basado en los retornos recientes de `{ticker}`.
+    """)
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric("Probabilidad de continuación (Pos→Pos)", f"{prob_pp*100:.1f}%", f"{avg_return_pp*100:.2f}% retorno esperado")
+    with col2:
+        st.metric("Probabilidad de continuación (Neg→Neg)", f"{prob_nn*100:.1f}%", f"{avg_return_nn*100:.2f}% retorno esperado")
+    
+    # ---------------- GRÁFICO DE TRANSICIONES ----------------
+    st.subheader("🔄 Probabilidades de transición (Lag 1)")
+    
+    transiciones = pd.DataFrame({
+        'Transición': ['Pos→Pos', 'Pos→Neg', 'Neg→Neg', 'Neg→Pos'],
+        'Probabilidad (%)': [prob_pp*100, prob_pn*100, prob_nn*100, prob_np*100]
+    })
+    
+    fig = px.bar(
+        transiciones,
+        x='Transición',
+        y='Probabilidad (%)',
+        color='Transición',
+        text='Probabilidad (%)',
+        title='Probabilidades de cambio de signo de retorno (Lag 1)',
+        color_discrete_sequence=px.colors.qualitative.Set2
+    )
+    fig.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
+    fig.update_layout(yaxis_title='Probabilidad (%)', xaxis_title='Tipo de transición')
+    st.plotly_chart(fig, use_container_width=True)
+    
+    # ---------------- TABLA DE ESCENARIOS ----------------
+    st.subheader("📋 Tabla comparativa de escenarios")
+    
+    tabla_momentum = pd.DataFrame({
+        'Escenario': ['Pos→Pos', 'Pos→Neg', 'Neg→Neg', 'Neg→Pos'],
+        'Probabilidad': [f"{prob_pp*100:.2f}%", f"{prob_pn*100:.2f}%", f"{prob_nn*100:.2f}%", f"{prob_np*100:.2f}%"],
+        'Retorno esperado': [f"{avg_return_pp*100:.2f}%", "-", f"{avg_return_nn*100:.2f}%", "-"]
+    })
+    st.dataframe(tabla_momentum, use_container_width=True)
+    
+    # ---------------- SECUENCIA RECIENTE ----------------
+    st.subheader("🧭 Secuencia reciente de retornos")
+    
+    ultimos = momentum_data['Return_class'].tail(5).tolist()
+    emojis = {'Positivo':'🟢','Negativo':'🔴','Sin variación':'⚪'}
+    cadena = " → ".join([emojis.get(i, '⚪') for i in ultimos])
+    st.markdown(f"**Últimos 5 días:** {cadena}")
+    
+    # Mostrar últimos valores de retorno
+    st.caption("Retornos diarios más recientes:")
+    st.dataframe(data[['Return']].tail(5))
     
     # ------------------------------------------------------------------------LAG1-----------------------------------------------------------------------------------------------
     
