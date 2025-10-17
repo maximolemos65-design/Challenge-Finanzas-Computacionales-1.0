@@ -558,80 +558,80 @@ if st.session_state.calculado:
     else:
         st.warning("⚠️ Aún no se cargaron datos. Presioná *Calcular* primero.")
     
-        # ==========================
-        # 8. Diagrama de Secuencias (Lag Chains)
-        # ==========================
-        st.markdown("### 🔄 Análisis de Secuencias de Momentum (Lag Chains)")
-    
-        # Crear DataFrame base con retornos
-        momentum_data = pd.DataFrame({
-            'Return': returns,
-            'Return_class': np.where(returns > 0, 'Positivo',
-                                     np.where(returns < 0, 'Negativo', 'Sin variación'))
-        })
-    
-        # Slider interactivo para definir profundidad del lag
-        max_lag = st.slider("Elegí la cantidad de días a analizar (lags):", 1, 5, 3)
-    
-        # ---------------- FUNCIÓN PRINCIPAL ----------------
-        def calcular_probabilidades_lags(df, max_lag=5):
-            resultados = []
-            for lag in range(1, max_lag+1):
-                df_lag = df.copy()
-                for i in range(1, lag+1):
-                    df_lag[f'Lag{i}'] = df_lag['Return_class'].shift(i)
-                df_lag.dropna(inplace=True)
-    
-                grupos = df_lag.groupby([f'Lag{i}' for i in range(lag, 0, -1)])
-                for secuencia, grupo in grupos:
-                    actual = grupo['Return_class']
-                    prob_pos = (actual == 'Positivo').mean()
-                    prob_neg = (actual == 'Negativo').mean()
-                    retorno_esperado = grupo['Return'].mean() * 100
-                    ret_min, ret_max = grupo['Return'].quantile([0.05, 0.95]).values * 100
-    
-                    # Secuencia de emojis
-                    if isinstance(secuencia, str):
-                        secuencia = [secuencia]
-                    emojis = ''.join(['🟢' if s == 'Positivo' else '🔴' if s == 'Negativo' else '⚪' for s in secuencia])
-    
-                    # Interpretación automática
-                    if all(s == 'Positivo' for s in secuencia):
-                        interpretacion = f"Tras {lag} días positivos consecutivos, la probabilidad de continuación alcista es del {prob_pos*100:.1f}%."
-                    elif all(s == 'Negativo' for s in secuencia):
-                        interpretacion = f"Tras {lag} días negativos consecutivos, la probabilidad de continuación bajista es del {prob_neg*100:.1f}%."
-                    else:
-                        interpretacion = f"Secuencia mixta detectada ({emojis}). Probabilidad alcista del {prob_pos*100:.1f}%."
-    
-                    resultados.append({
-                        '🧩 Secuencia': emojis,
-                        'Lag': lag,
-                        'Probabilidad + (%)': f"{prob_pos*100:.2f}%",
-                        'Probabilidad - (%)': f"{prob_neg*100:.2f}%",
-                        'Retorno esperado (%)': f"{retorno_esperado:.2f}",
-                        'Rango [5%-95%]': f"({ret_min:.2f} ; {ret_max:.2f})",
-                        'Interpretación': interpretacion
-                    })
-            return pd.DataFrame(resultados)
-    
-        # ---------------- CÁLCULO ----------------
-        resultados = calcular_probabilidades_lags(momentum_data, max_lag=max_lag)
-    
-        # ---------------- VISUALIZACIÓN ----------------
-        st.dataframe(
-            resultados[['🧩 Secuencia', 'Probabilidad + (%)', 'Retorno esperado (%)', 'Rango [5%-95%]', 'Interpretación']],
-            use_container_width=True,
-            hide_index=True
-        )
-    
-        # ---------------- EXPLICACIÓN ----------------
-        st.markdown("""
-        ### 🧠 Cómo leer el resultado
-        - Cada **secuencia de emojis** representa los últimos días observados (🟢 = positivo, 🔴 = negativo, ⚪ = neutro).  
-        - **Probabilidad +** muestra la chance de que el próximo día también sea positivo.  
-        - **Retorno esperado** estima el promedio de retorno diario tras esa secuencia.  
-        - La **Interpretación** resume el patrón observado en lenguaje natural.
-        """)
+    # ==========================
+    # 8. Diagrama de Secuencias (Lag Chains)
+    # ==========================
+    st.markdown("### 🔄 Análisis de Secuencias de Momentum (Lag Chains)")
+
+    # Crear DataFrame base con retornos
+    momentum_data = pd.DataFrame({
+        'Return': returns,
+        'Return_class': np.where(returns > 0, 'Positivo',
+                                 np.where(returns < 0, 'Negativo', 'Sin variación'))
+    })
+
+    # Slider interactivo para definir profundidad del lag
+    max_lag = st.slider("Elegí la cantidad de días a analizar (lags):", 1, 5, 3)
+
+    # ---------------- FUNCIÓN PRINCIPAL ----------------
+    def calcular_probabilidades_lags(df, max_lag=5):
+        resultados = []
+        for lag in range(1, max_lag+1):
+            df_lag = df.copy()
+            for i in range(1, lag+1):
+                df_lag[f'Lag{i}'] = df_lag['Return_class'].shift(i)
+            df_lag.dropna(inplace=True)
+
+            grupos = df_lag.groupby([f'Lag{i}' for i in range(lag, 0, -1)])
+            for secuencia, grupo in grupos:
+                actual = grupo['Return_class']
+                prob_pos = (actual == 'Positivo').mean()
+                prob_neg = (actual == 'Negativo').mean()
+                retorno_esperado = grupo['Return'].mean() * 100
+                ret_min, ret_max = grupo['Return'].quantile([0.05, 0.95]).values * 100
+
+                # Secuencia de emojis
+                if isinstance(secuencia, str):
+                    secuencia = [secuencia]
+                emojis = ''.join(['🟢' if s == 'Positivo' else '🔴' if s == 'Negativo' else '⚪' for s in secuencia])
+
+                # Interpretación automática
+                if all(s == 'Positivo' for s in secuencia):
+                    interpretacion = f"Tras {lag} días positivos consecutivos, la probabilidad de continuación alcista es del {prob_pos*100:.1f}%."
+                elif all(s == 'Negativo' for s in secuencia):
+                    interpretacion = f"Tras {lag} días negativos consecutivos, la probabilidad de continuación bajista es del {prob_neg*100:.1f}%."
+                else:
+                    interpretacion = f"Secuencia mixta detectada ({emojis}). Probabilidad alcista del {prob_pos*100:.1f}%."
+
+                resultados.append({
+                    '🧩 Secuencia': emojis,
+                    'Lag': lag,
+                    'Probabilidad + (%)': f"{prob_pos*100:.2f}%",
+                    'Probabilidad - (%)': f"{prob_neg*100:.2f}%",
+                    'Retorno esperado (%)': f"{retorno_esperado:.2f}",
+                    'Rango [5%-95%]': f"({ret_min:.2f} ; {ret_max:.2f})",
+                    'Interpretación': interpretacion
+                })
+        return pd.DataFrame(resultados)
+
+    # ---------------- CÁLCULO ----------------
+    resultados = calcular_probabilidades_lags(momentum_data, max_lag=max_lag)
+
+    # ---------------- VISUALIZACIÓN ----------------
+    st.dataframe(
+        resultados[['🧩 Secuencia', 'Probabilidad + (%)', 'Retorno esperado (%)', 'Rango [5%-95%]', 'Interpretación']],
+        use_container_width=True,
+        hide_index=True
+    )
+
+    # ---------------- EXPLICACIÓN ----------------
+    st.markdown("""
+    ### 🧠 Cómo leer el resultado
+    - Cada **secuencia de emojis** representa los últimos días observados (🟢 = positivo, 🔴 = negativo, ⚪ = neutro).  
+    - **Probabilidad +** muestra la chance de que el próximo día también sea positivo.  
+    - **Retorno esperado** estima el promedio de retorno diario tras esa secuencia.  
+    - La **Interpretación** resume el patrón observado en lenguaje natural.
+    """)
 
     # ------------------------------------------------------------------------LAG1-----------------------------------------------------------------------------------------------
     
