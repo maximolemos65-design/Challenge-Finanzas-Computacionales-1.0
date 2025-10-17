@@ -1467,7 +1467,7 @@ if st.session_state.calculado:
                 st.markdown(f"""
                 **Ejemplo práctico**  
             
-                1. Venta de un **put** de `{ticker}` con base **`{K2:.2f}`** a **`{K2:.2f}`**.
+                1️⃣ Venta de un **put** de `{ticker}` con base **`{K2:.2f}`** a **`{K2:.2f}`**.
                 2. Compra de un **put** de `{ticker}` con base **`${K1:.2f}`** a **`{K1:.2f}`**. 
                 3. Venta de un **call** de `{ticker}` con base **`{K3:.2f}`** a **`{K3:.2f}`**.
                 4. Compra de un **call** de `{ticker}` con base **`{K4:.2f}`** a **`{K4:.2f}`**.
@@ -1729,9 +1729,9 @@ if st.session_state.calculado:
                 st.markdown(f"""
                 **Ejemplo práctico**  
             
-                Venta de un **call** de `{ticker}` base **`${K1:.2f}`** con prima **`${prima_K1:.2f}`**,  
-                compra de **dos calls** base **`${K2:.2f}`** con prima **`${prima_K2:.2f}`**,  
-                y venta de un **call** base **`${K3:.2f}`** con prima **`${prima_K3:.2f}`**,  
+                1️⃣ Venta de un **call** de `{ticker}` base **`${K1:.2f}`** con prima **`${prima_K1:.2f}`**  
+                Compra de **dos calls** base **`${K2:.2f}`** con prima **`${prima_K2:.2f}`**,  
+                Venta de un **call** base **`${K3:.2f}`** con prima **`${prima_K3:.2f}`**,  
                 todos con vencimiento en **`{T*12:.0f}` meses**,  
                 tendría el siguiente resultado:
                 """)
@@ -2274,7 +2274,7 @@ if st.session_state.calculado:
                 st.markdown(f"""
                 **Ejemplo práctico**  
             
-                Compra de un **put** de `{ticker}` base **`${K1:.2f}`** a **`${prima_put_long:.2f}`**,  
+                1️⃣ Compra de un **put** de `{ticker}` base **`${K1:.2f}`** a **`${prima_put_long:.2f}`**,  
                 y venta de **dos puts** base **`${K2:.2f}`** a **`${prima_put_short:.2f}`**,  
                 ambos con vencimiento en **`{T*12:.0f}` meses**,  
                 tendría el siguiente resultado:
