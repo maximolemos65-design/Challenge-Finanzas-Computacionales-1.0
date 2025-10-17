@@ -570,9 +570,6 @@ if st.session_state.calculado:
                                  np.where(returns < 0, 'Negativo', 'Sin variación'))
     })
 
-    # Slider interactivo para definir profundidad del lag
-    max_lag = st.slider("Elegí la cantidad de días a analizar (lags):", 1, 5, 3)
-
     # ---------------- FUNCIÓN PRINCIPAL ----------------
     def calcular_probabilidades_lags(df, max_lag=5):
         resultados = []
@@ -603,23 +600,25 @@ if st.session_state.calculado:
                 else:
                     interpretacion = f"Secuencia mixta detectada ({emojis}). Probabilidad alcista del {prob_pos*100:.1f}%."
 
+                # Columna combinada de retornos
+                rango_str = f"{retorno_esperado:.2f}%  ({ret_min:.2f}% ; {ret_max:.2f}%)"
+
                 resultados.append({
                     '🧩 Secuencia': emojis,
-                    'Lag': lag,
+                    'Días previos': lag,
                     'Probabilidad + (%)': f"{prob_pos*100:.2f}%",
                     'Probabilidad - (%)': f"{prob_neg*100:.2f}%",
-                    'Retorno esperado (%)': f"{retorno_esperado:.2f}",
-                    'Rango [5%-95%]': f"({ret_min:.2f} ; {ret_max:.2f})",
+                    'Retorno esperado [5%-95%]': rango_str,
                     'Interpretación': interpretacion
                 })
         return pd.DataFrame(resultados)
 
     # ---------------- CÁLCULO ----------------
-    resultados = calcular_probabilidades_lags(momentum_data, max_lag=max_lag)
+    resultados = calcular_probabilidades_lags(momentum_data, max_lag=5)
 
     # ---------------- VISUALIZACIÓN ----------------
     st.dataframe(
-        resultados[['🧩 Secuencia', 'Probabilidad + (%)', 'Retorno esperado (%)', 'Rango [5%-95%]', 'Interpretación']],
+        resultados[['🧩 Secuencia', 'Días previos', 'Probabilidad + (%)', 'Retorno esperado [5%-95%]', 'Interpretación']],
         use_container_width=True,
         hide_index=True
     )
@@ -628,8 +627,9 @@ if st.session_state.calculado:
     st.markdown("""
     ### 🧠 Cómo leer el resultado
     - Cada **secuencia de emojis** representa los últimos días observados (🟢 = positivo, 🔴 = negativo, ⚪ = neutro).  
+    - **Días previos** indica cuántos días consecutivos se analizaron antes del movimiento actual.  
     - **Probabilidad +** muestra la chance de que el próximo día también sea positivo.  
-    - **Retorno esperado** estima el promedio de retorno diario tras esa secuencia.  
+    - **Retorno esperado [5%-95%]** combina el retorno promedio con su rango de confianza.  
     - La **Interpretación** resume el patrón observado en lenguaje natural.
     """)
     
