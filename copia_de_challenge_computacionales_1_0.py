@@ -1945,10 +1945,11 @@ if st.session_state.calculado:
                 # ==========================
                 st.markdown(f"""
                 **Detalles de la estrategia:**
-                
-                - Put comprado Strike **`${K:.2f}`** → Prima = **`${prima_put:.2f}`**  
-                - Call vendido Strike **`${K:.2f}`** → Prima = **`${prima_call:.2f}`**  
-                - Prima neta recibida: **`${prima_neta:.2f}`**  
+
+                - **Último precio observado del subyacente: `{S:.2f}`**
+                - **Prima put comprado: `${prima_put:.2f}`**  
+                - **Prima call vendido: `${prima_call:.2f}`**  
+                - **Prima neta recibida: `${prima_neta:.2f}`**  
             
                 La posición replica el payoff de una **venta del subyacente**.
                 """)
@@ -2036,13 +2037,14 @@ if st.session_state.calculado:
                 # ==========================
                 st.markdown(f"""
                 **Detalles de la estrategia:**
-                
-                - Prima **put** vendida: **`${prima_put:.2f}`**  
-                - Prima **call** vendida: **`${prima_call:.2f}`**  
-                - **Ganancia máxima:** **`${prima_total:.2f}`** (si el precio se mantiene entre `${K_put:.2f}` y `${K_call:.2f}`)  
-                - **Pérdida máxima:** Ilimitada ⚠️    
-                - **Breakeven inferior:** **`${BE_lower:.2f}`**  → Variación necesaria del subyacente: **{(BE_lower/S - 1)*100:.2f}%**  
-                - **Breakeven superior:** **`${BE_upper:.2f}`**  → Variación necesaria del subyacente: **{(BE_upper/S - 1)*100:.2f}%**
+
+                - **Último precio observado del subyacente: `{S:.2f}`**
+                - **Prima put vendido: `${prima_put:.2f}`**  
+                - **Prima call vendido: `${prima_call:.2f}`**  
+                - **Ganancia máxima:`${prima_total:.2f}`** (si **`{K_put:.2f}< S < {K_call:.2f}`**)  
+                - **Pérdida máxima: Ilimitada ⚠️**    
+                - **Breakeven inferior: `{BE_lower:.2f}`**  → Variación necesaria del subyacente: **{(BE_lower/S - 1)*100:.2f}%**  
+                - **Breakeven superior: `{BE_upper:.2f}`**  → Variación necesaria del subyacente: **{(BE_upper/S - 1)*100:.2f}%**
                 """)
 
                 st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
