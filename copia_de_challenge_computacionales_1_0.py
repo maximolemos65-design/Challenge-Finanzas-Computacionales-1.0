@@ -581,6 +581,14 @@ if st.session_state.calculado:
 
             grupos = df_lag.groupby([f'Lag{i}' for i in range(lag, 0, -1)])
             for secuencia, grupo in grupos:
+                # Convertir la secuencia en lista si es string
+                if isinstance(secuencia, str):
+                    secuencia = [secuencia]
+
+                # ⚠️ Omitir secuencias que incluyan días sin variación
+                if any(s == 'Sin variación' for s in secuencia):
+                    continue
+
                 actual = grupo['Return_class']
                 prob_pos = (actual == 'Positivo').mean()
                 prob_neg = (actual == 'Negativo').mean()
@@ -588,9 +596,7 @@ if st.session_state.calculado:
                 ret_min, ret_max = grupo['Return'].quantile([0.05, 0.95]).values * 100
 
                 # Secuencia de emojis
-                if isinstance(secuencia, str):
-                    secuencia = [secuencia]
-                emojis = ''.join(['🟢' if s == 'Positivo' else '🔴' if s == 'Negativo' else '⚪' for s in secuencia])
+                emojis = ''.join(['🟢' if s == 'Positivo' else '🔴' for s in secuencia])
 
                 # Interpretación automática
                 if all(s == 'Positivo' for s in secuencia):
@@ -611,10 +617,15 @@ if st.session_state.calculado:
                     'Retorno esperado [5%-95%]': rango_str,
                     'Interpretación': interpretacion
                 })
+
         return pd.DataFrame(resultados)
 
     # ---------------- CÁLCULO ----------------
     resultados = calcular_probabilidades_lags(momentum_data, max_lag=5)
+
+    # Ordenar por cantidad de días previos y probabilidad descendente
+    resultados['Probabilidad + (num)'] = resultados['Probabilidad + (%)'].str.replace('%', '').astype(float)
+    resultados = resultados.sort_values(by=['Días previos', 'Probabilidad + (num)'], ascending=[True, False])
 
     # ---------------- VISUALIZACIÓN ----------------
     st.dataframe(
@@ -626,12 +637,14 @@ if st.session_state.calculado:
     # ---------------- EXPLICACIÓN ----------------
     st.markdown("""
     ### 🧠 Cómo leer el resultado
-    - Cada **secuencia de emojis** representa los últimos días observados (🟢 = positivo, 🔴 = negativo, ⚪ = neutro).  
+    - Cada **secuencia de emojis** representa los últimos días observados (🟢 = positivo, 🔴 = negativo).  
+    - Las secuencias que incluyen días sin variación **no se muestran**, aunque sí se consideran en los cálculos.  
     - **Días previos** indica cuántos días consecutivos se analizaron antes del movimiento actual.  
     - **Probabilidad +** muestra la chance de que el próximo día también sea positivo.  
     - **Retorno esperado [5%-95%]** combina el retorno promedio con su rango de confianza.  
     - La **Interpretación** resume el patrón observado en lenguaje natural.
     """)
+
     
         # --- Selector de Estrategias ---
     st.subheader("🔎 Selector de Estrategias con Opciones")
