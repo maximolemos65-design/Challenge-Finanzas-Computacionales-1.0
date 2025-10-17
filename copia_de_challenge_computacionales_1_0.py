@@ -861,7 +861,7 @@ if st.session_state.calculado:
 
                 - **Último precio observado del subyacente: `{S:.2f}`**
                 - **Prima del call: `${prima:.2f}`** 
-                - **Costo inicial: `${prima:.2f}`** 
+                - **Costo total: `${prima:.2f}`** 
                 - **Pérdida máxima: `${prima:.2f}`** (si **`S < {K:.2f}`**) 
                 - **Ganancia máxima:** Ilimitada 🚀 
                 - **Breakeven: `{breakeven:.2f}`**  →  Variación necesaria del subyacente: {(breakeven/S - 1)*100:.2f}%
@@ -953,7 +953,7 @@ if st.session_state.calculado:
                 - **Último precio observado del subyacente: `{S:.2f}`**
                 - **Prima call comprado: `${prima_call_compra:.2f}`**
                 - **Prima call vendido: `${prima_call_venta:.2f}`**
-                - **Costo neto inicial (prima total): `${costo_total:.2f}`**
+                - **Costo neto total (prima total): `${costo_total:.2f}`**
                 - **Breakeven: `{BE:.2f}`**  → Variación necesaria del subyacente: {(BE/S - 1)*100:.2f}%
                 - **Ganancia Máxima: `{ganancia_max:.2f}`**
                 - **Pérdida Máxima: `{perdida_max:.2f}`**
@@ -1211,13 +1211,14 @@ if st.session_state.calculado:
                 # ==========================
                 st.markdown(f"""
                 **Detalles de la estrategia:**
-                
-                - **Put comprado (strike alto):** ${K_compra:.2f}")
-                - **Put vendido (strike bajo):** ${K_venta:.2f}")
-                - **Costo neto (prima total):** ${costo_total:.2f}")
-                - **Breakeven:** ${BE:.2f} → Variación necesaria del subyacente: {(BE/S - 1)*100:.2f}%")
-                - **Ganancia máxima:** ${ganancia_max:.2f}")
-                - **Pérdida máxima:** ${perdida_max:.2f}")
+
+                - **Último precio observado del subyacente: `{S:.2f}`**
+                - **Prima put comprado: `${prima_put_compra:.2f}`**
+                - **Prima put vendido: `${prima_put_venta:.2f}`**
+                - **Costo neto (prima total): `${costo_total:.2f}`**
+                - **Breakeven: `${BE:.2f}`** → Variación necesaria del subyacente: {(BE/S - 1)*100:.2f}%
+                - **Ganancia máxima: `${ganancia_max:.2f}`**
+                - **Pérdida máxima: `${perdida_max:.2f}`**
                 """)
         
                 st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
