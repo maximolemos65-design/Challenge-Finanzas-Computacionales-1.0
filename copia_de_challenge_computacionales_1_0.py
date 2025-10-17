@@ -558,14 +558,25 @@ if st.session_state.calculado:
     else:
         st.warning("⚠️ Aún no se cargaron datos. Presioná *Calcular* primero.")
     
-    st.subheader(f"📊 Momentum de {ticker}")
+    import streamlit as st
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    
+    # -------------------------------------------------------
+    # SUPONEMOS QUE YA TENÉS:
+    # - data: DataFrame con columna 'Return'
+    # - ticker: símbolo seleccionado
+    # -------------------------------------------------------
+    
+    st.header(f"🔄 Secuencia de Momentum en `{ticker}`")
     
     # Validar datos
     if 'Return' not in data.columns or len(data) < 5:
-        st.warning("⚠️ No hay suficientes datos en `data` para calcular el momentum.")
+        st.warning("⚠️ No hay suficientes datos en `data` para analizar secuencias.")
         st.stop()
     
-    # Crear DataFrame auxiliar
+    # Clasificar retornos
     momentum_data = pd.DataFrame(index=data.index)
     condiciones = [
         data['Return'] > 0,
@@ -574,64 +585,65 @@ if st.session_state.calculado:
     ]
     valores = ['Positivo', 'Negativo', 'Sin variación']
     momentum_data['Return_class'] = np.select(condiciones, valores, default='Sin variación')
-    momentum_data['Return_lag1'] = momentum_data['Return_class'].shift(1).fillna('Sin dato previo')
     
-    # Función auxiliar
-    def contar_transiciones(df, actual, lag_anterior):
-        filtrado = df[df['Return_class'] == actual]
-        conteo = filtrado[lag_anterior].value_counts()
-        total = conteo.sum()
-        prob_pos = conteo.get('Positivo', 0) / total if total > 0 else 0
-        prob_neg = conteo.get('Negativo', 0) / total if total > 0 else 0
-        return prob_pos, prob_neg
+    # Codificar colores
+    colores = {'Positivo': 'green', 'Negativo': 'red', 'Sin variación': 'grey'}
+    momentum_data['color'] = momentum_data['Return_class'].map(colores)
     
-    # Calcular probabilidades
-    prob_pp, prob_pn = contar_transiciones(momentum_data, 'Positivo', 'Return_lag1')
-    prob_nn, prob_np = contar_transiciones(momentum_data, 'Negativo', 'Return_lag1')
+    # Crear vector de secuencia (Lag chain)
+    momentum_data['Seq'] = (
+        (momentum_data['Return_class'] != momentum_data['Return_class'].shift(1))
+        .cumsum()
+    )
+    momentum_data['GroupCount'] = momentum_data.groupby('Seq').cumcount() + 1
     
-    # Crear DataFrame para gráfico
-    transiciones = pd.DataFrame({
-        'Transición': ['Pos→Pos', 'Pos→Neg', 'Neg→Neg', 'Neg→Pos'],
-        'Probabilidad (%)': [prob_pp*100, prob_pn*100, prob_nn*100, prob_np*100]
-    })
+    # Calcular longitud de cada cadena (cuántos días consecutivos)
+    chain_lengths = momentum_data.groupby('Seq').size().reset_index(name='Duración')
+    chain_labels = momentum_data.groupby('Seq')['Return_class'].first().reset_index()
+    chains = pd.merge(chain_labels, chain_lengths, on='Seq')
     
-    # ---------------- VISUALIZACIÓN ----------------
-    st.subheader("🔄 Probabilidades de transición (Lag 1)")
+    # Mostrar resumen de cadenas
+    st.subheader("📋 Resumen de secuencias consecutivas")
+    st.dataframe(chains, use_container_width=True)
     
-    fig, ax = plt.subplots(figsize=(6, 4))
-    bars = ax.bar(transiciones['Transición'], transiciones['Probabilidad (%)'])
+    # ---------------- DIAGRAMA DE SECUENCIAS ----------------
+    st.subheader("📈 Diagrama de secuencia de retornos")
     
-    # Etiquetas sobre las barras
-    for bar in bars:
-        yval = bar.get_height()
-        ax.text(bar.get_x() + bar.get_width()/2, yval + 0.5, f"{yval:.1f}%", ha='center', va='bottom')
+    fig, ax = plt.subplots(figsize=(10, 2.5))
+    ax.scatter(
+        range(len(momentum_data)),
+        [0]*len(momentum_data),
+        c=momentum_data['color'],
+        s=80,
+        edgecolor='black'
+    )
     
-    ax.set_title("Probabilidades de cambio de signo de retorno (Lag 1)")
-    ax.set_xlabel("Tipo de transición")
-    ax.set_ylabel("Probabilidad (%)")
+    # Títulos y detalles
+    ax.set_yticks([])
+    ax.set_xlabel("Días (orden cronológico)")
+    ax.set_title(f"Secuencia de días positivos/negativos — {ticker}")
+    ax.grid(False)
+    
+    # Etiquetas con emojis
+    for i, row in enumerate(momentum_data['Return_class']):
+        emoji = '🟢' if row == 'Positivo' else '🔴' if row == 'Negativo' else '⚪'
+        ax.text(i, 0.1, emoji, ha='center', va='bottom', fontsize=10)
     
     st.pyplot(fig)
     
-    # ---------------- TABLA DE ESCENARIOS ----------------
-    st.subheader("📋 Tabla comparativa de escenarios")
+    # ---------------- INTERPRETACIÓN ----------------
+    st.markdown("""
+    ### 🧠 Interpretación
     
-    tabla_momentum = pd.DataFrame({
-        'Escenario': ['Pos→Pos', 'Pos→Neg', 'Neg→Neg', 'Neg→Pos'],
-        'Probabilidad': [f"{prob_pp*100:.2f}%", f"{prob_pn*100:.2f}%", f"{prob_nn*100:.2f}%", f"{prob_np*100:.2f}%"]
-    })
-    st.dataframe(tabla_momentum, use_container_width=True)
+    Cada punto representa un día:
+    - 🟢 **Día con retorno positivo**
+    - 🔴 **Día con retorno negativo**
+    - ⚪ **Sin variación significativa**
     
-    # ---------------- SECUENCIA RECIENTE ----------------
-    st.subheader("🧭 Secuencia reciente de retornos")
-    
-    ultimos = momentum_data['Return_class'].tail(5).tolist()
-    emojis = {'Positivo': '🟢', 'Negativo': '🔴', 'Sin variación': '⚪'}
-    cadena = " → ".join([emojis.get(i, '⚪') for i in ultimos])
-    st.markdown(f"**Últimos 5 días:** {cadena}")
-    
-    # Mostrar últimos valores de retorno
-    st.caption("Retornos diarios más recientes:")
-    st.dataframe(data[['Return']].tail(5))
+    Las secuencias consecutivas del mismo color indican **persistencia del signo del retorno**.
+    Cuanto más largas sean las cadenas verdes o rojas, **mayor momentum** (alcista o bajista) presenta el activo.
+    """)
+
     
     # ------------------------------------------------------------------------LAG1-----------------------------------------------------------------------------------------------
     
