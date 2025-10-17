@@ -1639,8 +1639,8 @@ if st.session_state.calculado:
                 st.markdown(f"""
                 **Ejemplo práctico**  
             
-                Compra de **1 call** de `{ticker}` con strike **`${K1:.2f}`** a **`{T*12:.0f}` meses** por **`${prima_call_long:.2f}`**,  
-                y venta de **2 calls** de `{ticker}` con strike **`${K2:.2f}`** a **`{T*12:.0f}` meses** por **`${prima_call_short:.2f}`** cada uno,  
+                Compra de **1 call** de `{ticker}` con base**`{K1:.2f}`** a **`{T*12:.0f}` meses** por **`${prima_call_long:.2f}`**,  
+                y venta de **2 calls** de `{ticker}` con base **`${K2:.2f}`** a **`{T*12:.0f}` meses** por **`${prima_call_short:.2f}`** cada uno,  
                 tendría el siguiente resultado:
                 """)
             
@@ -1772,6 +1772,9 @@ if st.session_state.calculado:
                 **Detalles de la estrategia:** 
 
                 - **Último precio observado del subyacente: `{S:.2f}`**
+                - **Prima call lanzado base `{K1:.2f}`: `${prima_K1:.2f}`**  
+                - **Prima call comprado base `{K2:.2f}` (individual): `${prima_K2:.2f}`**  
+                - **Prima call lanzadoo base `{K3:.2f}`: `${prima_K3:.2f}`**
                 - **Prima neta pagada/recibida: `${-prima_total:.2f}`**  
                 - **Ganancia máxima: `${np.max(payoff):.2f}`**  
                 - **Pérdida máxima: `${np.min(payoff):.2f}`**  
@@ -2192,9 +2195,9 @@ if st.session_state.calculado:
                 st.markdown(f"""
                 **Ejemplo práctico**  
             
-                1️⃣ Compra de un **call** de `{ticker}` base **`${K1:.2f}`** a **`${prima_K1:.2f}`** con vencimiento en **`{T*12:.0f}` meses**.  
-                2️⃣ Venta de **dos calls** de `{ticker}` base **`${K2:.2f}`** a **`${prima_K2:.2f}`** con vencimiento en **`{T*12:.0f}` meses**.  
-                3️⃣ Compra de un **call** de `{ticker}` base **`${K3:.2f}`** a **`${prima_K3:.2f}`** con vencimiento en **`{T*12:.0f}` meses**.  
+                1️⃣ Compra de un **call** de `{ticker}` base **`{K1:.2f}`** a **`${prima_K1:.2f}`** con vencimiento en **`{T*12:.0f}` meses**.  
+                2️⃣ Venta de **dos calls** de `{ticker}` base **`{K2:.2f}`** a **`${prima_K2:.2f}`** con vencimiento en **`{T*12:.0f}` meses**.  
+                3️⃣ Compra de un **call** de `{ticker}` base **`{K3:.2f}`** a **`${prima_K3:.2f}`** con vencimiento en **`{T*12:.0f}` meses**.  
             
                 Tendría el siguiente resultado:
                 """)
@@ -2234,12 +2237,13 @@ if st.session_state.calculado:
                 - **Breakeven superior: `{BE_upper:.2f}`** → Variación necesaria del subyacente: **{(BE_upper/S-1)*100:.2f}%**  
                 """)
 
+                st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
+
             elif recommended_strategy == "Ratio put spread":
                 st.markdown("""
                 Esta estrategia se basa en **comprar 1 put** de una determinada base y **vender 2 puts** de una base inferior,  
                 lo que nos permite financiar la compra del put.  
                 Es importante destacar que la **ganancia máxima** proviene de las primas netas cobradas.  
-                **Recomendación:** consultar los requerimientos de garantía por el lanzamiento de las opciones.
                 """)
             
                 # ==========================
@@ -2318,6 +2322,8 @@ if st.session_state.calculado:
                 - **Ganancia máxima: {max(payoff_ratio_put):.2f}** (si **`S = {K2:.2f}`**)
                 - **Breakeven: `{breakeven:.2f}`** → Variación necesaria del subyacente: **{(breakeven/S-1)*100:.2f}%**
                 """)
+
+                st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
                 
         else:
             st.warning("⚠️ No se encontró una estrategia que cumpla esas condiciones.")
