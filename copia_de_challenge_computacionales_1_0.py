@@ -558,20 +558,9 @@ if st.session_state.calculado:
     else:
         st.warning("⚠️ Aún no se cargaron datos. Presioná *Calcular* primero.")
     
-    import streamlit as st
-    import pandas as pd
-    import numpy as np
-    import plotly.express as px
+    st.subheader(f"📊 Momentum de {ticker}")
     
-    # -------------------------------------------------------
-    # SUPONEMOS QUE YA TENÉS:
-    # - data: DataFrame con columna 'Return'
-    # - ticker: símbolo seleccionado
-    # -------------------------------------------------------
-    
-    st.header(f"📊 Momentum de `{ticker}`")
-    
-    # Validar que haya suficientes datos
+    # Validar datos
     if 'Return' not in data.columns or len(data) < 5:
         st.warning("⚠️ No hay suficientes datos en `data` para calcular el momentum.")
         st.stop()
@@ -606,29 +595,43 @@ if st.session_state.calculado:
         'Probabilidad (%)': [prob_pp*100, prob_pn*100, prob_nn*100, prob_np*100]
     })
     
-    # Si el DataFrame está vacío o NaN, mostrar aviso
-    if transiciones['Probabilidad (%)'].isna().all():
-        st.warning("⚠️ No se pudieron calcular probabilidades (verifica los datos de retorno).")
-        st.stop()
-    
-    # ---------------- GRÁFICO ----------------
+    # ---------------- VISUALIZACIÓN ----------------
     st.subheader("🔄 Probabilidades de transición (Lag 1)")
     
-    try:
-        fig = px.bar(
-            transiciones,
-            x='Transición',
-            y='Probabilidad (%)',
-            color='Transición',
-            text='Probabilidad (%)',
-            title='Probabilidades de cambio de signo de retorno (Lag 1)',
-            color_discrete_sequence=px.colors.qualitative.Set2
-        )
-        fig.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
-        fig.update_layout(yaxis_title='Probabilidad (%)', xaxis_title='Tipo de transición')
-        st.plotly_chart(fig, use_container_width=True)
-    except Exception as e:
-        st.error(f"❌ Error al generar el gráfico: {e}")
+    fig, ax = plt.subplots(figsize=(6, 4))
+    bars = ax.bar(transiciones['Transición'], transiciones['Probabilidad (%)'])
+    
+    # Etiquetas sobre las barras
+    for bar in bars:
+        yval = bar.get_height()
+        ax.text(bar.get_x() + bar.get_width()/2, yval + 0.5, f"{yval:.1f}%", ha='center', va='bottom')
+    
+    ax.set_title("Probabilidades de cambio de signo de retorno (Lag 1)")
+    ax.set_xlabel("Tipo de transición")
+    ax.set_ylabel("Probabilidad (%)")
+    
+    st.pyplot(fig)
+    
+    # ---------------- TABLA DE ESCENARIOS ----------------
+    st.subheader("📋 Tabla comparativa de escenarios")
+    
+    tabla_momentum = pd.DataFrame({
+        'Escenario': ['Pos→Pos', 'Pos→Neg', 'Neg→Neg', 'Neg→Pos'],
+        'Probabilidad': [f"{prob_pp*100:.2f}%", f"{prob_pn*100:.2f}%", f"{prob_nn*100:.2f}%", f"{prob_np*100:.2f}%"]
+    })
+    st.dataframe(tabla_momentum, use_container_width=True)
+    
+    # ---------------- SECUENCIA RECIENTE ----------------
+    st.subheader("🧭 Secuencia reciente de retornos")
+    
+    ultimos = momentum_data['Return_class'].tail(5).tolist()
+    emojis = {'Positivo': '🟢', 'Negativo': '🔴', 'Sin variación': '⚪'}
+    cadena = " → ".join([emojis.get(i, '⚪') for i in ultimos])
+    st.markdown(f"**Últimos 5 días:** {cadena}")
+    
+    # Mostrar últimos valores de retorno
+    st.caption("Retornos diarios más recientes:")
+    st.dataframe(data[['Return']].tail(5))
     
     # ------------------------------------------------------------------------LAG1-----------------------------------------------------------------------------------------------
     
