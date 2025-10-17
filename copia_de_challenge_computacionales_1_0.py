@@ -558,93 +558,81 @@ if st.session_state.calculado:
     else:
         st.warning("⚠️ Aún no se cargaron datos. Presioná *Calcular* primero.")
     
-    import streamlit as st
-    import pandas as pd
-    import numpy as np
-    import matplotlib.pyplot as plt
+        # ==========================
+        # 8. Diagrama de Secuencias (Lag Chains)
+        # ==========================
+        st.markdown("### 🔄 Análisis de Secuencias de Momentum (Lag Chains)")
     
-    # -------------------------------------------------------
-    # SUPONEMOS QUE YA TENÉS:
-    # - data: DataFrame con columna 'Return'
-    # - ticker: símbolo seleccionado
-    # -------------------------------------------------------
+        # Crear DataFrame base con retornos
+        momentum_data = pd.DataFrame({
+            'Return': returns,
+            'Return_class': np.where(returns > 0, 'Positivo',
+                                     np.where(returns < 0, 'Negativo', 'Sin variación'))
+        })
     
-    st.header(f"🔄 Secuencia de Momentum en `{ticker}`")
+        # Slider interactivo para definir profundidad del lag
+        max_lag = st.slider("Elegí la cantidad de días a analizar (lags):", 1, 5, 3)
     
-    # Validar datos
-    if 'Return' not in data.columns or len(data) < 5:
-        st.warning("⚠️ No hay suficientes datos en `data` para analizar secuencias.")
-        st.stop()
+        # ---------------- FUNCIÓN PRINCIPAL ----------------
+        def calcular_probabilidades_lags(df, max_lag=5):
+            resultados = []
+            for lag in range(1, max_lag+1):
+                df_lag = df.copy()
+                for i in range(1, lag+1):
+                    df_lag[f'Lag{i}'] = df_lag['Return_class'].shift(i)
+                df_lag.dropna(inplace=True)
     
-    # Clasificar retornos
-    momentum_data = pd.DataFrame(index=data.index)
-    condiciones = [
-        data['Return'] > 0,
-        data['Return'] < 0,
-        data['Return'] == 0
-    ]
-    valores = ['Positivo', 'Negativo', 'Sin variación']
-    momentum_data['Return_class'] = np.select(condiciones, valores, default='Sin variación')
+                grupos = df_lag.groupby([f'Lag{i}' for i in range(lag, 0, -1)])
+                for secuencia, grupo in grupos:
+                    actual = grupo['Return_class']
+                    prob_pos = (actual == 'Positivo').mean()
+                    prob_neg = (actual == 'Negativo').mean()
+                    retorno_esperado = grupo['Return'].mean() * 100
+                    ret_min, ret_max = grupo['Return'].quantile([0.05, 0.95]).values * 100
     
-    # Codificar colores
-    colores = {'Positivo': 'green', 'Negativo': 'red', 'Sin variación': 'grey'}
-    momentum_data['color'] = momentum_data['Return_class'].map(colores)
+                    # Secuencia de emojis
+                    if isinstance(secuencia, str):
+                        secuencia = [secuencia]
+                    emojis = ''.join(['🟢' if s == 'Positivo' else '🔴' if s == 'Negativo' else '⚪' for s in secuencia])
     
-    # Crear vector de secuencia (Lag chain)
-    momentum_data['Seq'] = (
-        (momentum_data['Return_class'] != momentum_data['Return_class'].shift(1))
-        .cumsum()
-    )
-    momentum_data['GroupCount'] = momentum_data.groupby('Seq').cumcount() + 1
+                    # Interpretación automática
+                    if all(s == 'Positivo' for s in secuencia):
+                        interpretacion = f"Tras {lag} días positivos consecutivos, la probabilidad de continuación alcista es del {prob_pos*100:.1f}%."
+                    elif all(s == 'Negativo' for s in secuencia):
+                        interpretacion = f"Tras {lag} días negativos consecutivos, la probabilidad de continuación bajista es del {prob_neg*100:.1f}%."
+                    else:
+                        interpretacion = f"Secuencia mixta detectada ({emojis}). Probabilidad alcista del {prob_pos*100:.1f}%."
     
-    # Calcular longitud de cada cadena (cuántos días consecutivos)
-    chain_lengths = momentum_data.groupby('Seq').size().reset_index(name='Duración')
-    chain_labels = momentum_data.groupby('Seq')['Return_class'].first().reset_index()
-    chains = pd.merge(chain_labels, chain_lengths, on='Seq')
+                    resultados.append({
+                        '🧩 Secuencia': emojis,
+                        'Lag': lag,
+                        'Probabilidad + (%)': f"{prob_pos*100:.2f}%",
+                        'Probabilidad - (%)': f"{prob_neg*100:.2f}%",
+                        'Retorno esperado (%)': f"{retorno_esperado:.2f}",
+                        'Rango [5%-95%]': f"({ret_min:.2f} ; {ret_max:.2f})",
+                        'Interpretación': interpretacion
+                    })
+            return pd.DataFrame(resultados)
     
-    # Mostrar resumen de cadenas
-    st.subheader("📋 Resumen de secuencias consecutivas")
-    st.dataframe(chains, use_container_width=True)
+        # ---------------- CÁLCULO ----------------
+        resultados = calcular_probabilidades_lags(momentum_data, max_lag=max_lag)
     
-    # ---------------- DIAGRAMA DE SECUENCIAS ----------------
-    st.subheader("📈 Diagrama de secuencia de retornos")
+        # ---------------- VISUALIZACIÓN ----------------
+        st.dataframe(
+            resultados[['🧩 Secuencia', 'Probabilidad + (%)', 'Retorno esperado (%)', 'Rango [5%-95%]', 'Interpretación']],
+            use_container_width=True,
+            hide_index=True
+        )
     
-    fig, ax = plt.subplots(figsize=(10, 2.5))
-    ax.scatter(
-        range(len(momentum_data)),
-        [0]*len(momentum_data),
-        c=momentum_data['color'],
-        s=80,
-        edgecolor='black'
-    )
-    
-    # Títulos y detalles
-    ax.set_yticks([])
-    ax.set_xlabel("Días (orden cronológico)")
-    ax.set_title(f"Secuencia de días positivos/negativos — {ticker}")
-    ax.grid(False)
-    
-    # Etiquetas con emojis
-    for i, row in enumerate(momentum_data['Return_class']):
-        emoji = '🟢' if row == 'Positivo' else '🔴' if row == 'Negativo' else '⚪'
-        ax.text(i, 0.1, emoji, ha='center', va='bottom', fontsize=10)
-    
-    st.pyplot(fig)
-    
-    # ---------------- INTERPRETACIÓN ----------------
-    st.markdown("""
-    ### 🧠 Interpretación
-    
-    Cada punto representa un día:
-    - 🟢 **Día con retorno positivo**
-    - 🔴 **Día con retorno negativo**
-    - ⚪ **Sin variación significativa**
-    
-    Las secuencias consecutivas del mismo color indican **persistencia del signo del retorno**.
-    Cuanto más largas sean las cadenas verdes o rojas, **mayor momentum** (alcista o bajista) presenta el activo.
-    """)
+        # ---------------- EXPLICACIÓN ----------------
+        st.markdown("""
+        ### 🧠 Cómo leer el resultado
+        - Cada **secuencia de emojis** representa los últimos días observados (🟢 = positivo, 🔴 = negativo, ⚪ = neutro).  
+        - **Probabilidad +** muestra la chance de que el próximo día también sea positivo.  
+        - **Retorno esperado** estima el promedio de retorno diario tras esa secuencia.  
+        - La **Interpretación** resume el patrón observado en lenguaje natural.
+        """)
 
-    
     # ------------------------------------------------------------------------LAG1-----------------------------------------------------------------------------------------------
     
     # Filter momentum_data where 'Return_class' is 'Positivo'
