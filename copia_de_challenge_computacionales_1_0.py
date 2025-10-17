@@ -1016,7 +1016,7 @@ if st.session_state.calculado:
                 **Ejemplo práctico**  
                 
                 Compra de un **call** de **{ticker}** a **`${call_price:.2f}`** y un **put** a **`${put_price:.2f}`**,  
-                ambos con base **`${K:.2f}`** y vencimiento en **`{T*12:.0f}` meses**,  
+                ambos con base **`{K:.2f}`** y vencimiento en **`{T*12:.0f}` meses**,  
                 tendría el siguiente resultado:
                 """)
 
@@ -1182,8 +1182,8 @@ if st.session_state.calculado:
                 st.markdown(f"""
                 **Ejemplo práctico**  
             
-                Venta de un **put** de `{ticker}` con base **`${K_venta:.2f}`** (prima **`${prima_put_venta:.2f}`**)  
-                y compra de un **put** con base **`${K_compra:.2f}`** (prima **`${prima_put_compra:.2f}`**)  
+                Venta de un **put** de `{ticker}` con base **`{K_venta:.2f}`** a **`${prima_put_venta:.2f}`**  
+                y compra de un **put** con base **`{K_compra:.2f}`** a **`${prima_put_compra:.2f}`**  
                 con vencimiento en **`{T*12:.0f}` meses**, tendría el siguiente resultado:
                 """)
             
@@ -1276,8 +1276,8 @@ if st.session_state.calculado:
                 st.markdown(f"""
                 **Ejemplo práctico**  
             
-                Compra de un **put** de `{ticker}` con base **`${K_put:.2f}`** a **`${prima_put:.2f}`**,  
-                y un **call** de `{ticker}` con base **`${K_call:.2f}`** a **`${prima_call:.2f}`**,  
+                Compra de un **put** de `{ticker}` con base **`{K_put:.2f}`** a **`${prima_put:.2f}`**,  
+                y un **call** de `{ticker}` con base **`{K_call:.2f}`** a **`${prima_call:.2f}`**,  
                 ambos con vencimiento en **`{T*12:.0f}` meses**,  
                 tendría el siguiente resultado:
                 """)
@@ -1373,8 +1373,8 @@ if st.session_state.calculado:
                 **Ejemplo práctico**  
             
                 Compra de `{ticker}` a **`${S:.2f}`**,  
-                venta de un **call** de `{ticker}` con base **`${K_call:.2f}`** a **`{T*12:.0f}` meses** por **`${prima_call:.2f}`**,  
-                y compra de un **put** de `{ticker}` con base **`${K_put:.2f}`** a **`{T*12:.0f}` meses** por **`${prima_put:.2f}`**,  
+                venta de un **call** de `{ticker}` con base **`{K_call:.2f}`** a **`{T*12:.0f}` meses** por **`${prima_call:.2f}`**,  
+                y compra de un **put** de `{ticker}` con base **`{K_put:.2f}`** a **`{T*12:.0f}` meses** por **`${prima_put:.2f}`**,  
                 tendría el siguiente resultado:
                 """)
             
@@ -1472,10 +1472,12 @@ if st.session_state.calculado:
                 st.markdown(f"""
                 **Ejemplo práctico**  
             
-                Venta de un **put** de `{ticker}` con base **`${K2:.2f}`** y compra de un **put** con base **`${K1:.2f}`**,  
-                junto con la venta de un **call** de `{ticker}` con base **`${K3:.2f}`** y compra de un **call** con base **`${K4:.2f}`**,  
-                todos con vencimiento a **`{T*12:.0f}` meses**,  
-                resultaría en el siguiente payoff:
+                1. Venta de un **put** de `{ticker}` con base **`{K2:.2f}`** a **`{K2:.2f}`**.
+                2. Compra de un **put** de `{ticker}` con base **`${K1:.2f}`** a **`{K1:.2f}`**. 
+                3. Venta de un **call** de `{ticker}` con base **`{K3:.2f}`** a **`{K3:.2f}`**.
+                4. Compra de un **call** de `{ticker}` con base **`{K4:.2f}`** a **`{K4:.2f}`**.
+                Todos con vencimiento a **`{T*12:.0f}` meses**  
+                Resultaría en el siguiente payoff:
                 """)
             
                 # ==========================
@@ -1504,10 +1506,10 @@ if st.session_state.calculado:
                 **Detalles de la estrategia:**
 
                 - **Último precio observado del subyacente: `{S:.2f}`**
-                - **Prima put comprada (`{K1:.2f}`): `${prima_put_long:.2f}`**
-                - **Prima put vendida (`{K2:.2f}`): `${prima_put_short:.2f}`**
-                - **Prima call vendida (`{K3:.2f}`): `${prima_call_short:.2f}`**
-                - **Prima call comprada (`{K4:.2f}`): `${prima_call_long:.2f}`**
+                - **Prima put comprado (`{K1:.2f}`): `${prima_put_long:.2f}`**
+                - **Prima put vendido (`{K2:.2f}`): `${prima_put_short:.2f}`**
+                - **Prima call vendido (`{K3:.2f}`): `${prima_call_short:.2f}`**
+                - **Prima call comprado (`{K4:.2f}`): `${prima_call_long:.2f}`**
                 - **Crédito neto recibido: `${credito_neto:.2f}`**
                 - **Ganancia máxima: `${credito_neto:.2f}`** (si **`{K2:.2f} < S < {K3:.2f}`**)
                 - **Pérdida máxima: `${min(K2 - K1 - credito_neto, K4 - K3 - credito_neto):.2f}`** (limitada por los spreads)
@@ -1553,7 +1555,7 @@ if st.session_state.calculado:
                 st.markdown(f"""
                 **Ejemplo práctico**  
                 
-                Venta de un **put** de `{ticker}` con strike **`${K:.2f}`**,  
+                Venta de un **put** de `{ticker}` con strike **`{K:.2f}`**,  
                 vencimiento en **`{T*12:.0f}` meses** y prima **`${prima:.2f}`**,  
                 tendría el siguiente resultado:
                 """)
