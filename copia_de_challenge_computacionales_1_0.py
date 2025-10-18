@@ -925,8 +925,8 @@ if st.session_state.calculado:
                 - **Prima call vendido: `${prima_call_venta:.2f}`**
                 - **Costo neto total (prima total): `${costo_total:.2f}`**
                 - **Breakeven: `{BE:.2f}`**  → Variación necesaria del subyacente: **{(BE/S - 1)*100:.2f}%**
-                - **Ganancia Máxima: `{ganancia_max:.2f}`**
-                - **Pérdida Máxima: `{perdida_max:.2f}`**
+                - **Ganancia Máxima: `${ganancia_max:.2f}`**
+                - **Pérdida Máxima: `${perdida_max:.2f}`**
                 """)
             
                 st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
