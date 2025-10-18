@@ -1553,9 +1553,9 @@ if st.session_state.calculado:
                 - **Último precio observado del subyacente: `{S:.2f}`**
                 - **Prima del put: `${prima:.2f}`**  
                 - **Costo total: `0`**  
-                - **Ganancia máxima: `${prima:.2f}`** (si **`S > `{K:.2f}`**)  
+                - **Ganancia máxima: `${prima:.2f}`** (si **`S > {K:.2f}`**)  
                 - **Pérdida máxima: Ilimitada ⚠️**  
-                - **Punto de equilibrio (Breakeven): `{breakeven:.2f}`** → Variación necesaria del subyacente: **`{(breakeven/S-1)*100:.2f}%`**  
+                - **Punto de equilibrio (Breakeven): `{breakeven:.2f}`** → Variación necesaria del subyacente: **{(breakeven/S-1)*100:.2f}%**  
                 """)
 
                 st.info("💡 **Recomendación:** Consultar requerimientos de garantía con su agente de bolsa por el lanzamiento de las opciones.")
