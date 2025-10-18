@@ -211,7 +211,7 @@ if st.session_state.calculado:
     # 2.3 Histograma de Z-Scores
     # ==========================
     
-    st.markdown("##### 🌪️ Distribución de Z-Scores")
+    st.markdown("##### 📉 Distribución de Z-Scores")
     st.write()
     st.write(f"Media z-scores: {mean_z:.6f}")
     st.write(f"Desvío z-scores: {std_z:.6f}")
@@ -261,7 +261,7 @@ if st.session_state.calculado:
     asimetriaz = skew(z_scores)
     curtosisz_val = kurtosis(z_scores, fisher=False)  # fisher=True → curtosis "exceso" (0 = normal)
     
-    st.write("\n📊 Asimetría y Curtosis de la serie de Z-Scores")
+    st.write("\n📉 Asimetría y Curtosis de la serie de Z-Scores")
     st.write(f"Asimetría: {asimetria:.4f}")
     st.write(f"Curtosis: {curtosis_val:.4f}")
 
@@ -303,7 +303,7 @@ if st.session_state.calculado:
         last_std250 = std_250.dropna().iloc[-1] if std_250.dropna().size > 0 else np.nan
     
         # --- Mostrar estadísticas ---
-        st.markdown("##### 🌪️ Estadísticas de Volatilidades Anualizadas Recientes")
+        st.markdown("##### 📉 Estadísticas de Volatilidades Anualizadas Recientes")
         st.write(f"**Último Std 20:** {(last_std20 * np.sqrt(factor) * 100):.4f}%")
         st.write(f"**Último Std 250:** {(last_std250 * np.sqrt(factor) * 100):.4f}%")
         st.write(f"**Volatilidad constante (anualizada):** {(vol_annual * 100):.4f}%")
