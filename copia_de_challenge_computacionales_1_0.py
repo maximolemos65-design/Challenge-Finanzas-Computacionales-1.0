@@ -206,6 +206,8 @@ if st.session_state.calculado:
     # Media y desvío de los Z-scores
     mean_z = z_scores.mean()
     std_z  = z_scores.std()
+    asimetria_z = skew(z_scores, bias=False)
+    curtosis_z = kurtosis(z_scores, fisher=False, bias=False)  # total (no Fisher)
    
     # ==========================
     # 2.3 Histograma de Z-Scores
