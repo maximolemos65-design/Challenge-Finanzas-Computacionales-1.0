@@ -2313,5 +2313,25 @@ if st.session_state.calculado:
             st.warning("⚠️ No se encontró una estrategia que cumpla esas condiciones.")
 
 
+st.markdown("""
+    <style>
+    .print-button {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    .print-button:hover {
+        background-color: #45a049;
+    }
+    </style>
+
+    <center>
+        <button class="print-button" onclick="window.print()">📄 Descargar/Imprimir Informe</button>
+    </center>
+""", unsafe_allow_html=True)
 
     
