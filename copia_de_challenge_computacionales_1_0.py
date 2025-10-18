@@ -212,9 +212,16 @@ if st.session_state.calculado:
     # ==========================
     
     st.markdown("##### 📉 Distribución de Z-Scores")
-    st.write()
-    st.write(f"Media z-scores: {mean_z:.6f}")
-    st.write(f"Desvío z-scores: {std_z:.6f}")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.write(f"↕️ **Asimetría**")
+        st.write(f"{asimetria_z:.6f}")
+    
+    with col2:
+        st.write(f"🎯 **Curtosis (total)**")
+        st.write(f"{curtosis_z:.6f}")
     
     # Verificar que existan los z-scores
     if "z_scores" in locals() and not isinstance(z_scores, type(None)) and len(z_scores) > 0:
