@@ -267,17 +267,6 @@ if st.session_state.calculado:
     else:
         st.warning("⚠️ No hay datos de Z-Scores disponibles. Calculá los retornos primero.")
 
-    
-    # ==========================
-    # 2.4 Asimetría y curtosis de Z-Scores
-    # ==========================
-    asimetriaz = skew(z_scores)
-    curtosisz_val = kurtosis(z_scores, fisher=False)  # fisher=True → curtosis "exceso" (0 = normal)
-    
-    st.write("\n📉 Asimetría y Curtosis de la serie de Z-Scores")
-    st.write(f"Asimetría: {asimetria:.4f}")
-    st.write(f"Curtosis: {curtosis_val:.4f}")
-
     # ==========================
     #  Volatilidad móvil
     # ==========================
