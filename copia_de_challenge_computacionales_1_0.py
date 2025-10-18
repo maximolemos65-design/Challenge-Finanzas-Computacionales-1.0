@@ -68,6 +68,7 @@ if st.session_state.calculado:
     std_return  = returns.std()
     
     st.subheader(f"\n📊 Retornos y distribución de {ticker}")
+    st.write(f"En este apartado se analiza la distribución de los retornos de `{ticker}` en el período seleccionado y se lo compara con la típica distribución normal estándar.")
     
     col1, col2 = st.columns(2)
     with col1:
