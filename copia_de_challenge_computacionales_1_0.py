@@ -124,7 +124,7 @@ if st.session_state.calculado:
     curtosis_val = kurtosis(returns, fisher=False)  # fisher=True → curtosis "exceso" (0 = normal)
     curtosis_total = kurtosis(returns, fisher=True)
     
-    st.caption("\n📊 Características de la serie de retornos")
+    st.markdown("##### 📊 Características de la serie de retornos")
 
     col_a, col_b, col_c = st.columns(3)
     
@@ -166,7 +166,8 @@ if st.session_state.calculado:
     Nd1 = norm.cdf(d1)
     Nd2 = norm.cdf(d2)
     
-    st.caption(f"\n📊 Black-Scholes")
+    st.markdown("##### 📊 Black-Scholes")
+    
     st.write(f"d1 = {d1:.4f}")
     st.write(f"d2 = {d2:.4f}")
     st.write(f"Nd1 = {Nd1:.4f}")
