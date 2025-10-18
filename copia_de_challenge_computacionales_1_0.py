@@ -77,7 +77,7 @@ if st.session_state.calculado:
     # 5. Histograma con campana normal
     # ==========================
     
-    st.markdown("#### 📈 Distribución de Retornos con Campana Normal")
+    st.markdown("##### 📈 Distribución de Retornos con Campana Normal")
     
     # Verificar que existan datos de retornos
     if "returns" in locals() and not returns.empty:
@@ -260,7 +260,7 @@ if st.session_state.calculado:
     #  Volatilidad móvil
     # ==========================
     
-    st.markdown("#### 📉 Volatilidad Móvil de los Retornos")
+    st.markdown("##### 📉 Volatilidad Móvil de los Retornos")
     
     # Verificar que existan los retornos en el DataFrame
     if "Return" in data.columns and not data["Return"].dropna().empty:
@@ -294,7 +294,7 @@ if st.session_state.calculado:
         last_std250 = std_250.dropna().iloc[-1] if std_250.dropna().size > 0 else np.nan
     
         # --- Mostrar estadísticas ---
-        st.markdown("#### 📊 Estadísticas de Volatilidades Anualizadas Recientes")
+        st.markdown("##### 📊 Estadísticas de Volatilidades Anualizadas Recientes")
         st.write(f"**Último Std 20:** {(last_std20 * np.sqrt(factor) * 100):.4f}%")
         st.write(f"**Último Std 250:** {(last_std250 * np.sqrt(factor) * 100):.4f}%")
         st.write(f"**Volatilidad constante (anualizada):** {(vol_annual * 100):.4f}%")
@@ -661,19 +661,19 @@ if st.session_state.calculado:
 
     secuencia_actual = ''.join(ret_to_emoji(x) for x in ultimos)
 
-    st.markdown("### 📈 Últimos 5 movimientos del activo")
+    st.markdown("##### 📈 Últimos 5 movimientos del activo")
     st.markdown(
         f"Secuencia reciente: **{secuencia_actual}**  "
         f"*(más antiguo → más reciente)*"
     )
 
     st.markdown("""
-    ### 🧠 Nota sobre las probabilidades
+    ##### 🧠 Nota sobre las probabilidades
     - Las probabilidades `subida`, `caída` y `neutra` se calculan directamente a partir de la frecuencia observada del **día siguiente** tras cada secuencia histórica.
     - No se asume `P(caída) = 1 - P(subida)`: la probabilidad `neutra` también forma parte del universo y se muestra explícitamente.
     - `Observaciones (n)` indica cuántos casos históricos contribuyeron a cada estimación (útil para evaluar robustez).
     
-    ### 🧠 Cómo leer el resultado
+    ##### 🧠 Cómo leer el resultado
     - Cada **secuencia de emojis** representa los últimos días observados (🟢 = positivo, 🔴 = negativo).  
     - Las secuencias que incluyen días sin variación **no se muestran**, aunque sí se consideran en los cálculos.  
     - **Días previos** indica cuántos días consecutivos se analizaron antes del movimiento actual.  
