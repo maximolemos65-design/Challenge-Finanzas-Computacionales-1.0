@@ -397,7 +397,7 @@ if st.session_state.calculado:
     # 📈 Simulación de Montecarlo
     # =====================================================
     st.subheader("🎲 Simulación de Montecarlo")
-    
+    st.write("El objetivo de este apartado es hacer 500 simulaciones del precio estimado en un año vista, considerando que el activo sigue un movimiento browniano geométrico y en base los parámetros calculados en un principio (retorno y volatilidad)."
     # --- Gráfico combinado: histórico + simulaciones ---
     fig1, ax1 = plt.subplots(figsize=(12, 6))
     
