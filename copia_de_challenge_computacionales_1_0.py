@@ -218,8 +218,7 @@ if st.session_state.calculado:
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
-        st.write(f"📌 **Media**")
-        st.write(f"{mean_z:.6f}")
+        st.metric("📌 **Media**", f"{mean_z:.2f}") 
     
     with col2:
         st.write(f"📏 **Desvío**")
