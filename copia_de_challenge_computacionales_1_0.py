@@ -125,8 +125,14 @@ if st.session_state.calculado:
     curtosis_total = kurtosis(returns, fisher=True)
     
     st.caption("\n📊 Características de la serie de retornos")
-    st.write(f"Asimetría: {asimetria:.4f}")
-    st.write(f"Curtosis (total): {curtosis_val:.4f}")
+
+    col_a, col_b, col_c = st.columns(3)
+    
+    with col_a:
+        st.metric("📐 Asimetría", f"{asimetria:.4f}")
+    
+    with col_b:
+        st.metric("🏔️ Curtosis", f"{curtosis_val:.4f}")
     
     # ==========================
     # 7. Volatilidad histórica y ajuste por intervalo
@@ -147,7 +153,8 @@ if st.session_state.calculado:
     vol_daily = std_return
     vol_annual = vol_daily * np.sqrt(factor)
     
-    st.write(f"Volatilidad anualizada: {vol_annual*100:.2f}%")
+    with col_c:
+        st.metric("🌪️ Volatilidad anualizada", f"{vol_annual*100:.2f}%")
     
     # ==========================
     # 8. Black-Scholes
