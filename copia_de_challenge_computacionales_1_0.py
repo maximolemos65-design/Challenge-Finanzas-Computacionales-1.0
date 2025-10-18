@@ -2314,5 +2314,40 @@ if st.session_state.calculado:
         else:
             st.warning("⚠️ No se encontró una estrategia que cumpla esas condiciones.")
 
+# ==========================
+# 📄 Botón para imprimir o guardar como PDF
+# ==========================
+components.html("""
+<style>
+@media print {
+  header, footer, [data-testid="stSidebar"], .stButton { display: none !important; }
+  body { background: white !important; color: black !important; margin: 1cm; }
+  img, table { page-break-inside: avoid; }
+}
+</style>
+
+<div style="text-align:center; margin: 32px 0;">
+  <button id="print-btn" style="
+    background:#4CAF50;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;">
+    📄 Descargar / Imprimir Informe
+  </button>
+</div>
+
+<script>
+document.getElementById("print-btn").addEventListener("click", function(){
+  if (parent && parent.window) {
+    parent.window.print();
+  } else {
+    window.print();
+  }
+});
+</script>
+""", height=90)
 
     
