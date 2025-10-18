@@ -1604,8 +1604,8 @@ if st.session_state.calculado:
                 st.markdown(f"""
                 **Ejemplo práctico**  
             
-                Compra de **1 call** de `{ticker}` con base**`{K1:.2f}`** a **`{T*12:.0f}` meses** por **`${prima_call_long:.2f}`**,  
-                y venta de **2 calls** de `{ticker}` con base **`${K2:.2f}`** a **`{T*12:.0f}` meses** por **`${prima_call_short:.2f}`** cada uno,  
+                Compra de **1 call** de `{ticker}` con base **`{K1:.2f}`** a **`{T*12:.0f}` meses** por **`${prima_call_long:.2f}`**,  
+                y venta de **2 calls** de `{ticker}` con base **`{K2:.2f}`** a **`{T*12:.0f}` meses** por **`${prima_call_short:.2f}`** cada uno,  
                 tendría el siguiente resultado:
                 """)
             
