@@ -218,19 +218,16 @@ if st.session_state.calculado:
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
-        st.metric("📌 **Media**", f"{mean_z:.2f}") 
+        st.metric("📈 Media", f"{mean_z:.3f}") 
     
     with col2:
-        st.write(f"📏 **Desvío**")
-        st.write(f"{std_z:.6f}")
+        st.metric("🌪️ Desvío", f"{std_z:.3f}")
     
     with col3:
-        st.write(f"↕️ **Asimetría**")
-        st.write(f"{asimetria_z:.6f}")
+        st.metric("📐 Asimetría", f"{asimetria_z:.3f}")
     
     with col4:
-        st.write(f"🎯 **Curtosis (total)**")
-        st.write(f"{curtosis_z:.6f}")
+        st.metric(f"🏔️ Curtosis (total)", f"{curtosis_z:.3f}")
     
     # Verificar que existan los z-scores
     if "z_scores" in locals() and not isinstance(z_scores, type(None)) and len(z_scores) > 0:
