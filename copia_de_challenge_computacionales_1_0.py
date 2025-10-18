@@ -1466,10 +1466,10 @@ if st.session_state.calculado:
                 st.markdown(f"""
                 **Ejemplo práctico**  
             
-                1️⃣ Venta de un **put** de `{ticker}` con base **`{K2:.2f}`** a **`{K2:.2f}`**.
-                2️⃣ Compra de un **put** de `{ticker}` con base **`${K1:.2f}`** a **`{K1:.2f}`**. 
-                3️⃣ Venta de un **call** de `{ticker}` con base **`{K3:.2f}`** a **`{K3:.2f}`**.
-                4️⃣ Compra de un **call** de `{ticker}` con base **`{K4:.2f}`** a **`{K4:.2f}`**.
+                1️⃣ Venta de un **put** de `{ticker}` con base **`{K2:.2f}`** a **`{K2:.2f}`**. 
+                2️⃣ Compra de un **put** de `{ticker}` con base **`${K1:.2f}`** a **`{K1:.2f}`**.  
+                3️⃣ Venta de un **call** de `{ticker}` con base **`{K3:.2f}`** a **`{K3:.2f}`**. 
+                4️⃣ Compra de un **call** de `{ticker}` con base **`{K4:.2f}`** a **`{K4:.2f}`**. 
                 Todos con vencimiento a **`{T*12:.0f}` meses**  
                 Resultaría en el siguiente payoff:
                 """)
