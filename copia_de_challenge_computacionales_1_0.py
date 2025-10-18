@@ -650,6 +650,14 @@ if st.session_state.calculado:
     - Las probabilidades `subida`, `caída` y `neutra` se calculan directamente a partir de la frecuencia observada del **día siguiente** tras cada secuencia histórica.
     - No se asume `P(caída) = 1 - P(subida)`: la probabilidad `neutra` también forma parte del universo y se muestra explícitamente.
     - `Observaciones (n)` indica cuántos casos históricos contribuyeron a cada estimación (útil para evaluar robustez).
+    
+    ###🧠 Cómo leer el resultado
+    - Cada **secuencia de emojis** representa los últimos días observados (🟢 = positivo, 🔴 = negativo).  
+    - Las secuencias que incluyen días sin variación **no se muestran**, aunque sí se consideran en los cálculos.  
+    - **Días previos** indica cuántos días consecutivos se analizaron antes del movimiento actual.  
+    - **Probabilidad +** muestra la chance de que el próximo día también sea positivo.  
+    - **Retorno esperado [5%-95%]** combina el retorno promedio con su rango de confianza.  
+    - La **Interpretación** resume el patrón observado en lenguaje natural.
     """)
 
         # --- Selector de Estrategias ---
