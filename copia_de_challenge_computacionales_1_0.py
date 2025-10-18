@@ -517,12 +517,9 @@ if st.session_state.calculado:
     st.markdown("#### ⚖️ Escenarios Positivos / Negativos")
     
     st.markdown(f"""
-    **📈 Escenarios Positivos:** `{pct_positivos:.1f}%`  
-    **📉 Escenarios Negativos:** `{pct_negativos:.1f}%`  
-    
-    > 🔍 *Indica el porcentaje de simulaciones donde el precio final supera o cae respecto al inicial.*
+    **📈 Escenarios con Retornos Positivos:** `{pct_positivos:.1f}%`  
+    **📉 Escenarios con Retornos Negativos:** `{pct_negativos:.1f}%`  
     """)
-
            
     # ==========================
     # 1. Preparar datos
@@ -531,6 +528,7 @@ if st.session_state.calculado:
     # Calcular cambio porcentual en volumen
     
     st.subheader("📊Volumen")
+    st.write("El análisis del volumen negociado implica ver su relación con los retornos y su comportamiento a lo largo del tiempo.")
     
     # Verificar que existan los datos
     if "data" in locals() and not data.empty:
