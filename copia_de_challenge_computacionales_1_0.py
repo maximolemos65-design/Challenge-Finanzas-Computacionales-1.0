@@ -207,7 +207,7 @@ if st.session_state.calculado:
     1. **Volatilidad constante**, asumiendo que el precio sigue un Movimiento Browniano Geométrico:
     """
     )
-    st.latex(r"\left( dS_t = \mu S_t \, dt + \sigma S_t \, dB_t \right)")
+    st.latex(r"\left( dS_t = \mu S_t \, dt + \sigma S_t \, dZ_t \right)")
     st.markdown(
         """
     2. **Volatilidad dinámica**, estimada mediante medias móviles a lo largo del tiempo.
@@ -229,7 +229,7 @@ if st.session_state.calculado:
     # 2.3 Histograma de Z-Scores
     # ==========================
     
-    st.markdown("##### 📉 Distribución de Z-Scores")
+    st.markdown("##### 📉 Volatilidad Constante (distribución de Z-Scores)")
 
     col1, col2, col3, col4 = st.columns(4)
 
