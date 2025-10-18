@@ -559,93 +559,99 @@ if st.session_state.calculado:
         st.warning("⚠️ Aún no se cargaron datos. Presioná *Calcular* primero.")
     
     # ==========================
-    # 8. Diagrama de Secuencias (Lag Chains)
+    # 8. Diagrama de Secuencias (Lag Chains) - CORREGIDO con P_negativo directo
     # ==========================
     st.markdown("### 🔄 Análisis de Secuencias de Momentum (Lag Chains)")
 
-    # Crear DataFrame base con retornos
+    # DataFrame base (usa 'returns' que ya tenés)
     momentum_data = pd.DataFrame({
         'Return': returns,
         'Return_class': np.where(returns > 0, 'Positivo',
                                  np.where(returns < 0, 'Negativo', 'Sin variación'))
     })
 
-    # ---------------- FUNCIÓN PRINCIPAL ----------------
     def calcular_probabilidades_lags(df, max_lag=5):
         resultados = []
-        for lag in range(1, max_lag+1):
+        for lag in range(1, max_lag + 1):
             df_lag = df.copy()
-            for i in range(1, lag+1):
+            # crear columnas Lag1..LagN (Lag1 = día anterior, etc.)
+            for i in range(1, lag + 1):
                 df_lag[f'Lag{i}'] = df_lag['Return_class'].shift(i)
             df_lag.dropna(inplace=True)
 
-            grupos = df_lag.groupby([f'Lag{i}' for i in range(lag, 0, -1)])
-            for secuencia, grupo in grupos:
-                # Convertir la secuencia en lista si es string
-                if isinstance(secuencia, str):
-                    secuencia = [secuencia]
+            lag_cols = [f'Lag{i}' for i in range(lag, 0, -1)]  # orden LagN ... Lag1 para clave legible
+            grupos = df_lag.groupby(lag_cols)
 
-                # ⚠️ Omitir secuencias que incluyan días sin variación
-                if any(s == 'Sin variación' for s in secuencia):
+            for secuencia, grupo in grupos:
+                # convertir secuencia a lista para poder inspeccionarla
+                if isinstance(secuencia, str):
+                    seq_list = [secuencia]
+                else:
+                    seq_list = list(secuencia)
+
+                # Omitir secuencias que incluyan 'Sin variación' en los días previos (no queremos mostrarlas)
+                if any(s == 'Sin variación' for s in seq_list):
                     continue
 
-                actual = grupo['Return_class']
-                prob_pos = (actual == 'Positivo').mean()
-                prob_neg = (actual == 'Negativo').mean()
+                # Conteos directos para el día siguiente (la columna 'Return_class' del grupo corresponde al "hoy" dado los lags)
+                total = len(grupo)
+                cnt_pos = (grupo['Return_class'] == 'Positivo').sum()
+                cnt_neg = (grupo['Return_class'] == 'Negativo').sum()
+                cnt_neu = (grupo['Return_class'] == 'Sin variación').sum()
+
+                # Probabilidades directas
+                p_pos = cnt_pos / total if total > 0 else 0.0
+                p_neg = cnt_neg / total if total > 0 else 0.0
+                p_neu = cnt_neu / total if total > 0 else 0.0
+
+                # Retorno esperado (del "hoy" dado la secuencia) y rango 5%-95% (expresados en %)
                 retorno_esperado = grupo['Return'].mean() * 100
                 ret_min, ret_max = grupo['Return'].quantile([0.05, 0.95]).values * 100
+                rango_str = f"{retorno_esperado:.2f}% ({ret_min:.2f}% ; {ret_max:.2f}%)"
 
-                # Secuencia de emojis
-                emojis = ''.join(['🟢' if s == 'Positivo' else '🔴' for s in secuencia])
-
-                # Interpretación automática
-                if all(s == 'Positivo' for s in secuencia):
-                    interpretacion = f"Tras {lag} días positivos consecutivos, la probabilidad de continuación alcista es del {prob_pos*100:.1f}%."
-                elif all(s == 'Negativo' for s in secuencia):
-                    interpretacion = f"Tras {lag} días negativos consecutivos, la probabilidad de continuación bajista es del {prob_neg*100:.1f}%."
-                else:
-                    interpretacion = f"Secuencia mixta detectada ({emojis}). Probabilidad alcista del {prob_pos*100:.1f}%."
-
-                # Columna combinada de retornos
-                rango_str = f"{retorno_esperado:.2f}%  ({ret_min:.2f}% ; {ret_max:.2f}%)"
+                # Secuencia como emojis (solo Positivo/Negativo, porque ya descartamos secuencias con neutros)
+                emojis = ''.join('🟢' if s == 'Positivo' else '🔴' for s in seq_list)
 
                 resultados.append({
                     '🧩 Secuencia': emojis,
                     'Días previos': lag,
-                    'Probabilidad + (%)': f"{prob_pos*100:.2f}%",
-                    'Probabilidad - (%)': f"{prob_neg*100:.2f}%",
+                    'Probabilidad subida (%)': f"{p_pos*100:.2f}%",
+                    'Probabilidad caída (%)': f"{p_neg*100:.2f}%",
+                    'Probabilidad neutra (%)': f"{p_neu*100:.2f}%",
                     'Retorno esperado [5%-95%]': rango_str,
-                    'Interpretación': interpretacion
+                    'Observaciones (n)': total
                 })
 
         return pd.DataFrame(resultados)
 
-    # ---------------- CÁLCULO ----------------
+    # Cálculo (lags 1 a 5)
     resultados = calcular_probabilidades_lags(momentum_data, max_lag=5)
 
-    # Ordenar por cantidad de días previos y probabilidad descendente
-    resultados['Probabilidad + (num)'] = resultados['Probabilidad + (%)'].str.replace('%', '').astype(float)
-    resultados = resultados.sort_values(by=['Días previos', 'Probabilidad + (num)'], ascending=[True, False])
+    # Orden: por Días previos ascendente y por Probabilidad subida descendente
+    if not resultados.empty:
+        resultados['Prob subida (num)'] = resultados['Probabilidad subida (%)'].str.replace('%', '').astype(float)
+        resultados = resultados.sort_values(by=['Días previos', 'Prob subida (num)'], ascending=[True, False])
+        resultados = resultados.drop(columns=['Prob subida (num)'])
 
-    # ---------------- VISUALIZACIÓN ----------------
-    st.dataframe(
-        resultados[['🧩 Secuencia', 'Días previos', 'Probabilidad + (%)', 'Retorno esperado [5%-95%]', 'Interpretación']],
-        use_container_width=True,
-        hide_index=True
-    )
+    # Mostrar en Streamlit (columnas seleccionadas)
+    mostrar_cols = [
+        'Días previos',
+        '🧩 Secuencia',
+        'Probabilidad subida (%)',
+        'Probabilidad caída (%)',
+        'Probabilidad neutra (%)',
+        'Retorno esperado [5%-95%]',
+        'Observaciones (n)'
+    ]
+    st.dataframe(resultados[mostrar_cols].reset_index(drop=True), use_container_width=True, hide_index=True)
 
-    # ---------------- EXPLICACIÓN ----------------
     st.markdown("""
-    ### 🧠 Cómo leer el resultado
-    - Cada **secuencia de emojis** representa los últimos días observados (🟢 = positivo, 🔴 = negativo).  
-    - Las secuencias que incluyen días sin variación **no se muestran**, aunque sí se consideran en los cálculos.  
-    - **Días previos** indica cuántos días consecutivos se analizaron antes del movimiento actual.  
-    - **Probabilidad +** muestra la chance de que el próximo día también sea positivo.  
-    - **Retorno esperado [5%-95%]** combina el retorno promedio con su rango de confianza.  
-    - La **Interpretación** resume el patrón observado en lenguaje natural.
+    ### 🧠 Nota sobre las probabilidades
+    - Las probabilidades `subida`, `caída` y `neutra` se calculan directamente a partir de la frecuencia observada del **día siguiente** tras cada secuencia histórica.
+    - No se asume `P(caída) = 1 - P(subida)`: la probabilidad `neutra` también forma parte del universo y se muestra explícitamente.
+    - `Observaciones (n)` indica cuántos casos históricos contribuyeron a cada estimación (útil para evaluar robustez).
     """)
 
-    
         # --- Selector de Estrategias ---
     st.subheader("🔎 Selector de Estrategias con Opciones")
     
