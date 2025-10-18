@@ -646,6 +646,27 @@ if st.session_state.calculado:
     ]
     st.dataframe(resultados[mostrar_cols].reset_index(drop=True), use_container_width=True, hide_index=True)
 
+    # ==========================
+    # 9. Últimos 5 movimientos (contexto actual)
+    # ==========================
+    ultimos = returns.tail(5).tolist()
+
+    def ret_to_emoji(x):
+        if x > 0:
+            return "🟢"
+        elif x < 0:
+            return "🔴"
+        else:
+            return "⚪"
+
+    secuencia_actual = ''.join(ret_to_emoji(x) for x in ultimos)
+
+    st.markdown("### 📈 Últimos 5 movimientos del activo")
+    st.markdown(
+        f"Secuencia reciente: **{secuencia_actual}**  "
+        f"*(más antiguo → más reciente)*"
+    )
+
     st.markdown("""
     ### 🧠 Nota sobre las probabilidades
     - Las probabilidades `subida`, `caída` y `neutra` se calculan directamente a partir de la frecuencia observada del **día siguiente** tras cada secuencia histórica.
