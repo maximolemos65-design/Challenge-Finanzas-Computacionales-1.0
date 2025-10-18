@@ -1908,7 +1908,7 @@ if st.session_state.calculado:
                 st.markdown(f"""
                 **Ejemplo práctico**  
             
-                Venta sintética de `{ticker}`:  
+                Venta sintética de `{ticker}`  
                 Compra de un **put** a **`${prima_put:.2f}`** y venta de un **call** a **`${prima_call:.2f}`**,  
                 ambos con base **`{K:.2f}`** y vencimiento en **`{T*12:.0f}` meses**,  
                 replicando la **venta del subyacente en corto** con menor capital.
