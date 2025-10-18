@@ -168,6 +168,7 @@ if st.session_state.calculado:
     Nd2 = norm.cdf(d2)
     
     st.markdown("##### 📊 Black-Scholes")
+    st.write("En base a los datos proporcionados, se calculan los inputs principales para poder valuar opciones mediante el método de Black-Scholes.")
     
     st.write(f"d1 = {d1:.4f}")
     st.write(f"d2 = {d2:.4f}")
@@ -198,6 +199,7 @@ if st.session_state.calculado:
     st.write(f"   - Extrínseco: {put_extrinsic:.2f}")
     
     st.subheader("🌪️ Volatilidad")
+    st.write("Se calcula tanto la volatilidad constante del activo, suponiendo que sigue un movimiento browniano geométrico ((\(dS_{t}=\mu S_{t}dt+\sigma S_{t}dB_{t}\)), y también mediante medias móviles a lo largo del tiempo.")
     
     # ==========================
     # 2.1 Calcular Z-scores
