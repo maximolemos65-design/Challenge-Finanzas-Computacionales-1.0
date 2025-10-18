@@ -68,10 +68,11 @@ if st.session_state.calculado:
     
     st.subheader(f"\n📊 Retornos y distribución de {ticker}")
     
-    st.write(f"**Promedio retorno:** {mean_return*100:.2f}%")
-    st.write(f"**Desvío retorno:**   {std_return*100:.2f}%")
-    st.write()
-    
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric("📈 Promedio retorno", f"{mean_return*100:.2f}%")
+    with col2:
+        st.metric("📉 Desvío retorno", f"{std_return*100:.2f}%")
     
    # ==========================
     # 5. Histograma con campana normal
