@@ -199,12 +199,20 @@ if st.session_state.calculado:
     st.write(f"   - Extrínseco: {put_extrinsic:.2f}")
     
     st.subheader("🌪️ Volatilidad")
-    st.write(f"Se calcula tanto la volatilidad constante del activo, suponiendo que sigue un movimiento browniano geométrico
+    st.markdown(
+        """
+    La volatilidad se calcula de dos formas complementarias:
     
-    {st.latex(r"\left( dS_t = \mu S_t \, dt + \sigma S_t \, dB_t \right)")}
-    
-    También, se estima la volatilidad mediante medias móviles a lo largo del tiempo.")
-    
+    1. **Volatilidad constante**, asumiendo que el precio sigue un Movimiento Browniano Geométrico:
+    """
+    )
+    st.latex(r"\left( dS_t = \mu S_t \, dt + \sigma S_t \, dB_t \right)")
+    st.markdown(
+        """
+    2. **Volatilidad dinámica**, estimada mediante medias móviles a lo largo del tiempo.
+    """
+    )
+
     # ==========================
     # 2.1 Calcular Z-scores
     # ==========================
