@@ -558,10 +558,10 @@ if st.session_state.calculado:
         # --- 3. Gráfico de dispersión ---
         st.markdown("##### 🔹 Dispersión: Retornos vs Proporción del Volumen Promedio")
         fig1, ax1 = plt.subplots(figsize=(8, 5))
-        ax1.scatter(df_aux["Return"], df_aux["Vol_Ratio"], alpha=0.5, color="purple")
-        ax1.set_title(f"Relación entre Retornos y Volumen Promedio - {ticker}")
-        ax1.set_xlabel("Retornos")
-        ax1.set_ylabel("Volumen observado / Promedio")
+        ax1.scatter(df_aux["Vol_Ratio"], df_aux["Return"], alpha=0.5, color="purple")
+        ax1.set_title(f"Relación entre Volumen Promedio y Retornos - {ticker}")
+        ax1.set_xlabel("Volumen observado / Promedio")
+        ax1.set_ylabel("Retornos")
         ax1.grid(alpha=0.3)
         st.pyplot(fig1)
     
