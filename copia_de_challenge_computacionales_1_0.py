@@ -14,7 +14,7 @@ st.title("📊 Calculadora Financiera")
 st.caption("UADE • Challenge Computacionales")
 
 st.markdown(
-    "Esta app calcula estadísticas de retornos, volatilidad anualizada y precios de opciones con **Black-Scholes**. "
+    "Esta app calcula diferentes estadísticas (retornos, volatilidad, VaR, volumen, precios de opciones con **Black-Scholes**, etc.) con el fin de que el usuario pueda tener una perspectiva del activo elegido. En base a esa opinión construida del usuario, la calculadora le sugiere una estrategia con opciones."
     "Cargá los parámetros y apretá **Calcular**."
 )
 
