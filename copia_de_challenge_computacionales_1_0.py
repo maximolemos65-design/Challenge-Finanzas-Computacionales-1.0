@@ -78,7 +78,7 @@ if st.session_state.calculado:
     # 5. Histograma con campana normal
     # ==========================
     
-    st.markdown("##### 📈 Distribución de Retornos con Campana Normal")
+    st.markdown("##### 📊 Distribución de Retornos con Campana Normal")
     
     # Verificar que existan datos de retornos
     if "returns" in locals() and not returns.empty:
@@ -196,7 +196,7 @@ if st.session_state.calculado:
     st.write(f"   - Intrínseco: {put_intrinsic:.2f}")
     st.write(f"   - Extrínseco: {put_extrinsic:.2f}")
     
-    st.subheader("📈 Volatilidad")
+    st.subheader("🌪️ Volatilidad")
     
     # ==========================
     # 2.1 Calcular Z-scores
@@ -211,7 +211,7 @@ if st.session_state.calculado:
     # 2.3 Histograma de Z-Scores
     # ==========================
     
-    st.markdown("##### 🧮 Distribución de Z-Scores")
+    st.markdown("##### 🌪️ Distribución de Z-Scores")
     st.write()
     st.write(f"Media z-scores: {mean_z:.6f}")
     st.write(f"Desvío z-scores: {std_z:.6f}")
@@ -303,7 +303,7 @@ if st.session_state.calculado:
         last_std250 = std_250.dropna().iloc[-1] if std_250.dropna().size > 0 else np.nan
     
         # --- Mostrar estadísticas ---
-        st.markdown("##### 📊 Estadísticas de Volatilidades Anualizadas Recientes")
+        st.markdown("##### 🌪️ Estadísticas de Volatilidades Anualizadas Recientes")
         st.write(f"**Último Std 20:** {(last_std20 * np.sqrt(factor) * 100):.4f}%")
         st.write(f"**Último Std 250:** {(last_std250 * np.sqrt(factor) * 100):.4f}%")
         st.write(f"**Volatilidad constante (anualizada):** {(vol_annual * 100):.4f}%")
