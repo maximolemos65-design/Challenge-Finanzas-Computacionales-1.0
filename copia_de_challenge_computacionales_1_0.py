@@ -67,8 +67,9 @@ if st.session_state.calculado:
     std_return  = returns.std()
     
     st.subheader(f"\n📊 Retornos y distribución de {ticker}")
-    st.write(f"\nPromedio retorno: {mean_return*100:.2f}%")
-    st.write(f"Desvío retorno:   {std_return*100:.2f}%")
+    
+    st.write(f"**Promedio retorno:** {mean_return*100:.2f}%")
+    st.write(f"**Desvío retorno:**   {std_return*100:.2f}%")
     st.write()
     
     
@@ -125,7 +126,6 @@ if st.session_state.calculado:
     st.caption("\n📊 Asimetría y Curtosis de la serie de retornos")
     st.write(f"Asimetría: {asimetria:.4f}")
     st.write(f"Curtosis (total): {curtosis_val:.4f}")
-    st.write(f"Curtosis (exceso): {curtosis_total:.4f}")
     
     # ==========================
     # 7. Volatilidad histórica y ajuste por intervalo
@@ -202,7 +202,7 @@ if st.session_state.calculado:
     # 2.3 Histograma de Z-Scores
     # ==========================
     
-    st.markdown("#### 🧮 Distribución de Z-Scores")
+    st.markdown("##### 🧮 Distribución de Z-Scores")
     st.write()
     st.write(f"Media z-scores: {mean_z:.6f}")
     st.write(f"Desvío z-scores: {std_z:.6f}")
@@ -432,7 +432,7 @@ if st.session_state.calculado:
     # =====================================================
     # 📊 Histograma de precios finales
     # =====================================================
-    st.markdown("#### 🎲 Histograma de Simulación de Precios")
+    st.markdown("##### 🎲 Histograma de Simulación de Precios")
     
     final_prices = simulaciones[-1, :]  # últimos precios de cada simulación
     
@@ -460,7 +460,7 @@ if st.session_state.calculado:
     # 📊 Resultados Monte Carlo
     # ==========================
     
-    st.markdown("#### 🎲 Resultados de la Simulación Montecarlo")
+    st.markdown("##### 🎲 Resultados de la Simulación Montecarlo")
     
     # 1️⃣ Cálculos básicos
     precio_inicial = S0
