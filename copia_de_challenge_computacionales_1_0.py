@@ -2318,7 +2318,7 @@ if st.session_state.calculado:
 # 📄 Botón para imprimir o guardar como PDF
 # ==========================
 
-components.html("""
+#components.html("""
 <style>
 /* 1) Quitar márgenes de página al imprimir */
 @page {
