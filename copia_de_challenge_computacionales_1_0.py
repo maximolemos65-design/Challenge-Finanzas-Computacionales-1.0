@@ -1399,8 +1399,8 @@ if st.session_state.calculado:
                 - **Prima put: `${prima_put:.2f}`**
                 - **Prima call: `${prima_call:.2f}`**
                 - **Costo total neto: `${costo_total:.2f}`**
-                - **Breakeven inferior: `{K_put:.2f}`** → Variación necesaria del subyacente: **{(K_put/S - 1)*100:.2f}%** (pérdida limitada más allá de este punto)
-                - **Breakeven superior: `{K_call:.2f}`** → Variación necesaria del subyacente: **{(K_call/S - 1)*100:.2f}%** (ganancia limitada más allá de este punto)
+                - **Pérdida máxima: `${min(payoff_total):.2f}`** → Variación necesaria del subyacente: **{(K_put/S - 1)*100:.2f}%** (pérdida limitada más allá de este punto)
+                - **Ganancia máxima: `${max(payoff_total):.2f}`** → Variación necesaria del subyacente: **{(K_call/S - 1)*100:.2f}%** (ganancia limitada más allá de este punto)
                 """)
 
             elif recommended_strategy == "Iron condor vendido":
